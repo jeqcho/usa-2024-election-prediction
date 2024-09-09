@@ -1,0 +1,303 @@
+---
+title: Past US Elections
+author: Je Qin Chooi
+date: '2024-09-08'
+slug: past-us-elections
+categories: []
+tags: []
+---
+
+```{r}
+# Load libraries.
+## install via `install.packages("name")`
+library(ggplot2)
+library(maps)
+library(tidyverse)
+```
+
+```{r}
+# Read presidential popular vote. 
+d_popvote <- read_csv("data/popvote_1948-2020.csv")
+```
+
+```{r}
+d_popvote |>
+  ggplot(aes(x = year, y = pv2p, fill = party)) +
+  geom_bar(stat = "identity") +
+  geom_hline(yintercept = 50, linetype="dashed", color="black") +
+  geom_hline(yintercept = 45, linetype="dashed", color="black") +
+  geom_hline(yintercept = 55, linetype="dashed", color="black") +
+  scale_fill_manual(values = c("dodgerblue4", "firebrick1")) +
+  labs(y="Two-party vote share",
+       x="Year",
+       fill="Party",
+       title="Two-party vote share over time") +
+  theme_bw()
+```
+
+```{r}
+# Read wide version of dataset that can be used to compare candidate votes with one another. 
+d_pvstate_wide <- read_csv("data/clean_wide_state_2pv_1948_2020.csv")
+
+# Merge d_pvstate_wide with state_map.
+d_pvstate_wide$region <- tolower(d_pvstate_wide$state)
+
+ec <- read_csv("data/ec_full.csv")
+
+# no data for 1960
+pv2p_states <- d_pvstate_wide |> 
+  left_join(ec, by = c("state", "year")) |>
+  filter(year>=min(ec$year)) |>
+  mutate(d_win=D_pv>R_pv) |>
+  mutate(d_evotes=d_win*electors) |>
+  group_by(year)|>
+  summarize(d_total_evotes=sum(d_evotes))
+
+d_pvstate_wide |> 
+  left_join(ec, by = c("state", "year")) |>
+  filter(year==1960) |>
+  select(electors)
+
+# no data for 1960
+ec |>
+  filter(year==1960)
+
+(ec |>
+  filter(year==2016) |>
+  select(state,electors) |>
+  mutate(electors=ifelse(is.na(electors),0,electors)) )$electors
+
+a <- (ec |>
+  filter(year==2008) |>
+  select(state,electors) )
+a[order(a$electors,decreasing=TRUE),]
+# 2008 cal has 40
+a <- (ec |>
+  filter(year==2016) |>
+  select(state,electors) )
+a[order(a$electors,decreasing=TRUE),]
+# 2016 cal has 32
+
+a <- (ec |>
+  filter(year==2020) |>
+  select(state,electors) )
+a[order(a$electors,decreasing=TRUE),]
+# 2016 cal has 32
+```
+Make maps
+```{r}
+states_map <- map_data("state")
+
+d_pvstate_wide <- read_csv("data/clean_wide_state_2pv_1948_2020.csv")
+
+d_pvstate_wide$region <- tolower(d_pvstate_wide$state)
+
+d_pvstate_wide$vote_bucket = cut(
+  d_pvstate_wide$D_pv2p,
+  breaks = seq(0,100,10),
+  labels = c(
+    "0-10%",
+    "10-20%",
+    "20-30%",
+    "30-40%",
+    "40-50%",
+    "50-60%",
+    "60-70%",
+    "70-80%",
+    "80-90%",
+    "90-100%"
+  )
+)
+
+d_pvstate_wide |>
+    filter(year >= 2012) |>
+    left_join(states_map, by = "region") |>
+    ggplot(aes(long, lat, group = group)) +
+    facet_wrap(facets = year ~.) + ## specify a grid by year
+    geom_polygon(aes(fill = vote_bucket), color = "white") +
+    scale_fill_manual(values = c(
+        "0-10%" = "#67000d",   # Dark red
+        "10-20%" = "#a50f15",
+        "20-30%" = "#cb181d",
+        "30-40%" = "#ef3b2c",
+        "40-50%" = "#fb6a4a",
+        "50-60%" = "#6baed6",  # Light blue
+        "60-70%" = "#4292c6",
+        "70-80%" = "#2171b5",
+        "80-90%" = "#08519c",
+        "90-100%" = "#08306b"  # Dark blue
+    ))+
+  labs(fill="Democratic two-party \nvote share")+
+    theme_void() +
+    ggtitle("Presidential Vote Share by State (1980-2020)") + 
+    theme(legend.text = element_text(size = 6),  # Smaller legend text
+        legend.title = element_text(size = 8),  # Smaller legend title
+          legend.position = "bottom",
+        aspect.ratio=0.7)
+```
+```{r}
+std_vote_share <- d_pvstate_wide |>
+  filter(year>=1980)|>
+  group_by(region) |>
+  summarize(std=sd(D_pv2p))
+
+pv_map <- std_vote_share|>
+  left_join(states_map, by = "region")
+
+library(viridis)
+# Generate map of two-party vote share for Republican candidates. 
+pv_map |> # N.B. You can pipe (|>) data directly into `ggplot()`!
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = std), color = "white")+
+  scale_fill_viridis() +
+  theme_void()
+```
+```{r}
+std_vote_share <- d_pvstate_wide |>
+  filter(year>=2000)|>
+  group_by(region) |>
+  summarize(std=sd(D_pv2p))
+
+pv_map <- std_vote_share|>
+  left_join(states_map, by = "region")
+
+# Generate map of two-party vote share for Republican candidates. 
+pv_map |> # N.B. You can pipe (|>) data directly into `ggplot()`!
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = std), color = "white")+
+  scale_fill_viridis() +
+  theme_void()
+```
+
+```{r}
+std_vote_share <- d_pvstate_wide |>
+  filter(year>=2012)|>
+  group_by(region) |>
+  summarize(std=sd(D_pv2p))
+
+pv_map <- std_vote_share|>
+  left_join(states_map, by = "region")
+
+# Generate map of two-party vote share for Republican candidates. 
+pv_map |> # N.B. You can pipe (|>) data directly into `ggplot()`!
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon(aes(fill = std), color = "white")+
+  scale_fill_viridis() +
+  theme_void()
+```
+
+```{r}
+states_map <- map_data("state")
+
+d_pvstate_wide <- read_csv("data/clean_wide_state_2pv_1948_2020.csv")
+
+d_pvstate_wide$region <- tolower(d_pvstate_wide$state)
+
+prev_years <- data.frame(
+  prev_years=d_pvstate_wide$year,
+  prev_D_pv2p=d_pvstate_wide$D_pv2p,
+  region=d_pvstate_wide$region
+)
+
+d_pvstate_wide$prev_years <- d_pvstate_wide$year - 4
+d_pvstate_wide <- d_pvstate_wide |>
+  left_join(prev_years, by=c("region","prev_years"))
+d_pvstate_wide$delta <- d_pvstate_wide$D_pv2p - d_pvstate_wide$prev_D_pv2p
+
+d_pvstate_wide$delta_bucket = cut(
+  d_pvstate_wide$delta,
+  breaks = seq(-50,50,10),
+  labels = c(
+    "-50 to -40%",
+    "-40 to -30%",
+    "-30 to -20%",
+    "-20 to -10%",
+    "-10 to 0%",
+    "+0 to 10%",
+    "+10 to 20%",
+    "+20 to 30%",
+    "+30 to 40%",
+    "+40 to 50%"
+  )
+)
+
+
+d_pvstate_wide |>
+  filter(year >= 2000) |>
+  left_join(states_map, by = "region") |>
+  ggplot(aes(long, lat, group = group)) +
+  facet_wrap(facets = year ~ .) + ## specify a grid by year
+  geom_polygon(aes(fill = delta_bucket), color = "white") +
+  scale_fill_manual(
+    values = c(
+      "-50 to -40%" = "#67000d",
+      # Dark red
+      "-40 to -30%" = "#a50f15",
+      "-30 to -20%" = "#cb181d",
+      "-20 to -10%" = "#ef3b2c",
+      "-10 to 0%"  = "#fb6a4a",
+      "+0 to 10%"  = "#6baed6",
+      # Light blue
+      "+10 to 20%" = "#4292c6",
+      "+20 to 30%" = "#2171b5",
+      "+30 to 40%" = "#08519c",
+      "+40 to 50%" = "#08306b"  # Dark blue
+    )
+  ) +
+  labs(fill = "Democratic two-party \nvote share change") +
+  theme_void() +
+  ggtitle("Presidential Vote Share Changes by State (1980-2020)") +
+  theme(
+    legend.text = element_text(size = 6),
+    # Smaller legend text
+    legend.title = element_text(size = 8),
+    # Smaller legend title
+    legend.position = "bottom",
+    aspect.ratio = 0.7
+  )
+```
+
+Swing states
+```{r}
+swing <- std_vote_share|>
+  left_join(d_pvstate_wide, by="region") |>
+  filter(year=="2020") |>
+  mutate(min_share=pmin(D_pv2p,R_pv2p))|>
+  mutate(best_share=pmin(D_pv2p,R_pv2p)+std)|>
+  mutate(swing=ifelse(pmin(D_pv2p,R_pv2p)+std>50,1,0))
+swing$swing
+swing|>
+  select(D_pv2p,R_pv2p,std,swing,min_share)
+(swing|>subset(swing==1))$region
+
+A <- swing|>select(-min_share)
+B <- swing|>select(-std)
+B$value <- B$min_share
+B$is_min_share <- "Vote share of losing party in 2020"
+A$value <- A$std
+A$is_min_share <- "Standard deviation"
+A <- A|>select(-std)
+B <- B|>select(-min_share)
+C <- rbind(A, B)
+C$rank <- rank(-C$best_share, ties="first")
+
+# install.packages("ggtext")
+library(ggtext)
+
+factor_vector <- c(rep(1, 7), rep(0, 44))
+
+ggplot(C, aes(
+  fill = is_min_share,
+  y = value,
+  x = reorder(region, -best_share)
+)) +
+  geom_bar(position =position_stack((reverse=TRUE)), stat = "identity") +
+  geom_hline(yintercept = 50, linetype="dashed", size=0.3) +
+  labs(x="State", y="Vote share",fill="Vote share") +
+  theme(legend.position = "bottom") +
+  theme(axis.text.x = ggtext::element_markdown(  # Use markdown text
+      size = 7, angle = 45, hjust = 1, 
+      colour = ifelse(factor_vector, "red", "black")
+    ))
+```
+
