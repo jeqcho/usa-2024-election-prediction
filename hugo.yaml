@@ -1,7 +1,7 @@
 baseurl: "https://example.org/"  # please update this to your actual URL
 languageCode: "en-us"
 title: "A minimal Hugo website"
-theme: "paper"
+theme: "hugo-xmin"
 googleAnalytics: ""
 disqusShortname: ""
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
