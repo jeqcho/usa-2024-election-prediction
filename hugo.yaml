@@ -1,6 +1,6 @@
-baseurl: "https://example.org/"  # please update this to your actual URL
+baseurl: "https://chojeq.com/usa-2024-election-prediction"  # please update this to your actual URL
 languageCode: "en-us"
-title: "A minimal Hugo website"
+title: "Jay's 2024 Election Prediction"
 theme: "hugo-xmin"
 googleAnalytics: ""
 disqusShortname: ""
@@ -13,25 +13,13 @@ permalinks:
 
 menu:
   main:
-    - name: Home
+    - name: Main page
       url: ""
       weight: 1
-    - name: About
-      url: "about/"
-      weight: 2
-    - name: Categories
-      url: "categories/"
-      weight: 3
-    - name: Tags
-      url: "tags/"
-      weight: 4
-    - name: Subscribe
-      url: "index.xml"
 
 params:
-  description: "A website built through Hugo and blogdown."
-  footer: "&copy; [Yihui Xie](https://yihui.org) 2017 -- {Year} | [Github](https://github.com/yihui) | [Twitter](https://twitter.com/xieyihui)"
-
+  description: "Predicting the 2024 US presidential election with Harvard's GOV 1347"
+  footer: "&copy; Jay Chooi 2024 -- {Year} | [Github](https://github.com/jeqcho/usa-2024-election-prediction)"
 markup:
   highlight:
     codeFences: false

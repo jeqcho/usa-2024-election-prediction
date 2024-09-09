@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=4321&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Past US Elections | A minimal Hugo website</title>
+    <title>Past US Elections | Jay&#39;s 2024 Election Prediction</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -13,15 +13,7 @@
     <nav>
     <ul class="menu">
       
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/categories/">Categories</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
+      <li><a href="/">Main page</a></li>
       
     </ul>
     <hr/>
@@ -34,14 +26,14 @@
 </div>
 
 <main>
-<p>We begin by examining recent US elections. (Code for this post is available on <a href="https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-08-past-us-elections/index.Rmd">GitHub</a>). Here I have plotted the two-party vote share of the democratic party and the republican party since 1948 until 2020. The data is provided by the course staff. A dashed line is drawn at the 50% mark and two other dashed lines are drawn at a 5% interval. Notice that since 2000, the margin of winning is within 5% for the past 6 elections, while in fact in the past we see elections where the margins are more than 5% (like 1984 and 1968). Elections in the US are getting very close following <a href="https://academic.oup.com/book/27424/chapter-abstract/197266061?redirectedFrom=fulltext">Pendulum Politics</a>.
-<img src="http://localhost:1313/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>We can look into more granularity by investigating the vote share in each state for the past three elections. It turns out that the coastal cities vote blue alongside Colorado and New Mexico, and this trend is stable over time. The heartland of Republicans are in the middle of the country forming a &ldquo;red wall&rdquo; in the middle from North Dakota to Texas.
-<img src="http://localhost:1313/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>We begin by examining recent US elections. (Code for this post is available on <a href="https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-08-past-us-elections/index.Rmd">GitHub</a>). Here I have plotted the two-party vote share of the democratic party and the republican party since 1948 until 2020. The data is provided by the course staff. A dashed line is drawn at the 50% mark and two other dashed lines are drawn at a 5% interval. Notice that since 2000, the margin of winning is within 5% for the past 6 elections, while in fact in the past we see elections where the margins are more than 5% (like 1984 and 1968). Elections in the US are getting very close following <a href="https://academic.oup.com/book/27424/chapter-abstract/197266061?redirectedFrom=fulltext">Pendulum Politics</a>.</p>
+<img src="/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<p>We can look into more granularity by investigating the vote share in each state for the past three elections. It turns out that the coastal cities vote blue alongside Colorado and New Mexico, and this trend is stable over time. The heartland of Republicans are in the middle of the country forming a &ldquo;red wall&rdquo; in the middle from North Dakota to Texas.</p>
+<img src="/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 <p>Let&rsquo;s explore deeper into how these vote shares change over time across states. Here we see an interesting pattern: in 2000 most states see an increase in Republican votes, while in 2004 voters start to vote Democratic back, and in 2008 we see the vote share of Democrats increase across the board. In 2012 which is Obama&rsquo;s re-election bid we see most states seeing an increase share of Republican votes. In 2016 the same situation in 2004 arises again where states are mixed in their increase of democratic or republican votes, and finally in 2020 we see an increase of democratic vote share across the board. It might be tempting to &ldquo;fill in the blanks&rdquo; and assume that in 2024 we will see an increase in Republican votes across all states, but 2024 has a very different situation (post-COVID, dropout incumbents, Trump) so it remains to be seen whether this cycle is stable or merely transient. It is also important to note that most states only see a single-digit movement in terms of vote share changes across elections.</p>
-<img src="http://localhost:1313/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 <p>As we have seen that most states are stable in terms of vote share, the most interesting states will be those with a close margin. In those states known as swing states, both parties stand to win their electoral votes. But how do we know which states are swing states? Here I use an approach where I measure the standard deviation of two-party vote shares for the past three elections (2012, 2016, 2020) and then apply it to vote share of the losing party in 2020 by state to see which states has potential to be flipped. By this heuristic, it turns out that Arizona, Georgia, Wisconsin, Michigan, Pennsylvania, Iowa and Nevada has potential to flip in the next election based on this model. Note that this agreesly largely with the current consensus with the exception of North Carolina (which has a total share of 49.9% after adding in the standard deviation and ranks right after Nevada) and the addition of Iowa (which has a high standard deviation of 4%).</p>
-<img src="http://localhost:1313/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 </main>
 
@@ -53,7 +45,7 @@
 
   
   <hr/>
-  © <a href="https://yihui.org">Yihui Xie</a> 2017 &ndash; 2024 | <a href="https://github.com/yihui">Github</a> | <a href="https://twitter.com/xieyihui">Twitter</a>
+  © Jay Chooi 2024 &ndash; 2024 | <a href="https://github.com/jeqcho/usa-2024-election-prediction">Github</a>
   
   </footer>
   </body>

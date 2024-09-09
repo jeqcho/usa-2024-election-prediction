@@ -12,11 +12,13 @@ tags: []
 
 
 We begin by examining recent US elections. (Code for this post is available on [GitHub](https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-08-past-us-elections/index.Rmd)). Here I have plotted the two-party vote share of the democratic party and the republican party since 1948 until 2020. The data is provided by the course staff. A dashed line is drawn at the 50% mark and two other dashed lines are drawn at a 5% interval. Notice that since 2000, the margin of winning is within 5% for the past 6 elections, while in fact in the past we see elections where the margins are more than 5% (like 1984 and 1968). Elections in the US are getting very close following [Pendulum Politics](https://academic.oup.com/book/27424/chapter-abstract/197266061?redirectedFrom=fulltext).
+
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 
 
 We can look into more granularity by investigating the vote share in each state for the past three elections. It turns out that the coastal cities vote blue alongside Colorado and New Mexico, and this trend is stable over time. The heartland of Republicans are in the middle of the country forming a "red wall" in the middle from North Dakota to Texas.
+
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 

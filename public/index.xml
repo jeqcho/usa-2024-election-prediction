@@ -1,39 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Home on A minimal Hugo website</title>
-    <link>http://localhost:1313/</link>
-    <description>Recent content in Home on A minimal Hugo website</description>
+    <title>Home on Jay&#39;s 2024 Election Prediction</title>
+    <link>http://localhost:4321/</link>
+    <description>Recent content in Home on Jay&#39;s 2024 Election Prediction</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 08 Sep 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:4321/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Past US Elections</title>
-      <link>http://localhost:1313/post/2024/09/08/past-us-elections/</link>
+      <link>http://localhost:4321/post/2024/09/08/past-us-elections/</link>
       <pubDate>Sun, 08 Sep 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/post/2024/09/08/past-us-elections/</guid>
-      <description>&lt;p&gt;We begin by examining recent US elections. (Code for this post is available on &lt;a href=&#34;https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-08-past-us-elections/index.Rmd&#34;&gt;GitHub&lt;/a&gt;). Here I have plotted the two-party vote share of the democratic party and the republican party since 1948 until 2020. The data is provided by the course staff. A dashed line is drawn at the 50% mark and two other dashed lines are drawn at a 5% interval. Notice that since 2000, the margin of winning is within 5% for the past 6 elections, while in fact in the past we see elections where the margins are more than 5% (like 1984 and 1968). Elections in the US are getting very close following &lt;a href=&#34;https://academic.oup.com/book/27424/chapter-abstract/197266061?redirectedFrom=fulltext&#34;&gt;Pendulum Politics&lt;/a&gt;.&#xA;&lt;img src=&#34;http://localhost:1313/post/2024/09/08/past-us-elections/index_files/figure-html/unnamed-chunk-3-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Another Note on A blogdown Tutorial</title>
-      <link>http://localhost:1313/note/2017/06/14/another-note/</link>
-      <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/note/2017/06/14/another-note/</guid>
-      <description>&lt;p&gt;I just discovered &lt;a href=&#34;https://www.apreshill.com/blog/2020-12-new-year-new-blogdown/&#34;&gt;an awesome tutorial&lt;/a&gt; on &lt;strong&gt;blogdown&lt;/strong&gt; written by Alison. I have to admit this is &lt;em&gt;the&lt;/em&gt; best &lt;strong&gt;blogdown&lt;/strong&gt; tutorial I have seen so far.&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://www.apreshill.com/blog/2020-12-new-year-new-blogdown/03-blogdown-2021.png&#34; alt=&#34;Alison&amp;rsquo;s blogdown tutorial&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>A Quick Note on Two Beautiful Websites</title>
-      <link>http://localhost:1313/note/2017/06/13/a-quick-note/</link>
-      <pubDate>Tue, 13 Jun 2017 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/note/2017/06/13/a-quick-note/</guid>
-      <description>&lt;p&gt;To me, the two most impressive websites based on &lt;strong&gt;blogdown&lt;/strong&gt; are:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;a href=&#34;https://robjhyndman.com&#34;&gt;Rob J Hyndman&lt;/a&gt;&amp;rsquo;s personal website.&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;http://livefreeordichotomize.com&#34;&gt;Live Free or Dichotomize&lt;/a&gt; by Lucy and Nick &lt;em&gt;et al&lt;/em&gt;.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;I&amp;rsquo;m sure there will be more.&lt;/p&gt;</description>
+      <guid>http://localhost:4321/post/2024/09/08/past-us-elections/</guid>
+      <description>&lt;p&gt;We begin by examining recent US elections. (Code for this post is available on &lt;a href=&#34;https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-08-past-us-elections/index.Rmd&#34;&gt;GitHub&lt;/a&gt;). Here I have plotted the two-party vote share of the democratic party and the republican party since 1948 until 2020. The data is provided by the course staff. A dashed line is drawn at the 50% mark and two other dashed lines are drawn at a 5% interval. Notice that since 2000, the margin of winning is within 5% for the past 6 elections, while in fact in the past we see elections where the margins are more than 5% (like 1984 and 1968). Elections in the US are getting very close following &lt;a href=&#34;https://academic.oup.com/book/27424/chapter-abstract/197266061?redirectedFrom=fulltext&#34;&gt;Pendulum Politics&lt;/a&gt;.&lt;/p&gt;</description>
     </item>
     <item>
       <title>About Hugo XMin</title>
-      <link>http://localhost:1313/about/</link>
+      <link>http://localhost:4321/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/about/</guid>
+      <guid>http://localhost:4321/about/</guid>
       <description>&lt;p&gt;&lt;strong&gt;XMin&lt;/strong&gt; is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  &lt;a href=&#34;https://github.com/rstudio/blogdown&#34;&gt;&lt;strong&gt;blogdown&lt;/strong&gt;&lt;/a&gt; book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal. In fact, this theme does not contain any JavaScript code at all, although on this example website I did introduce some JavaScript code (still relatively simple anyway). The theme does not contain any images, either, and is pretty much a plain-text theme.&lt;/p&gt;</description>
     </item>
   </channel>

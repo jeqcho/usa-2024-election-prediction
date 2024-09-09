@@ -1,4 +1,4 @@
 ---
 title: Home
 ---
-Better styling coming soon.
+Predicting the 2024 US Presidential Election.
