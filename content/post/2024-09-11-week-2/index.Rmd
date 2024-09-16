@@ -11,6 +11,7 @@ The code for this page can be found [here](https://github.com/jeqcho/usa-2024-el
 
 
 ```{r include=FALSE}
+options(warn=-1)
 library(tidyverse)
 
 # Load popular vote data. 

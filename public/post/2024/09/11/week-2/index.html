@@ -28,12 +28,6 @@
 <main>
 <p>The code for this page can be found <a href="https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-11-week-2/index.Rmd">here</a>.</p>
 <p>One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth <strong>throughout</strong> their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.</p>
-<pre><code>## Warning: The following aesthetics were dropped during statistical transformation: label.
-## ℹ This can happen when ggplot fails to infer the correct grouping structure in
-##   the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-##   variable into a factor?
-</code></pre>
 <img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 <p>In our best-fit lines above, we have removed 2020 as an outlier. The plot shows that there is a strong positive correlation between second quarter GDP growth and the incumbent&rsquo;s party vote share, particularly so when the candidate is also incumbent! This is fair, since the voters might not judge a new non-incumbent candidate with the current economy. Another interesting feature is that the best-fit line almost cross the center of 50% vote share for 0% growth. This suggests that the voters only reward the incumbent with more votes if the economy grows, and punishes when not, with no established baseline that the president is expected to perform. Let&rsquo;s look at the <code>\(R^2\)</code> to get an idea of how powerful is the prediction. Here&rsquo;s the <code>\(R^2\)</code> for non-incumbent candidates.</p>
 <pre><code class="language-r">summary(lm(pv2p~GDP_growth_quarterly,
@@ -51,18 +45,6 @@
 </code></pre>
 <p>It turns out that second quarter GDP growth can explain up to 44% of the change in vote shares across time! Now, how about long term GDP growth? Instead of looking at the GDP growth during the election year, let&rsquo;s compare the GDP growth from the start of their term to the end of the term.</p>
 <pre><code>## `geom_smooth()` using formula = 'y ~ x'
-</code></pre>
-<pre><code>## Warning: Removed 1 row containing non-finite outside the scale range
-## (`stat_smooth()`).
-</code></pre>
-<pre><code>## Warning: The following aesthetics were dropped during statistical transformation: label.
-## ℹ This can happen when ggplot fails to infer the correct grouping structure in
-##   the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-##   variable into a factor?
-</code></pre>
-<pre><code>## Warning: Removed 1 row containing missing values or values outside the scale range
-## (`geom_text()`).
 </code></pre>
 <img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 <p>Here&rsquo;s the <code>\(R^2\)</code> for non-incumbents.</p>
@@ -83,12 +65,6 @@
 <p>How about other measures of the economy like unemployment rate? Here we took seasonally-adjusted unemployment rate for each state and see if the vote share of the incumbet party in each state changes in response to the unemployment rate.</p>
 <pre><code>## `geom_smooth()` using formula = 'y ~ x'
 </code></pre>
-<pre><code>## Warning: Removed 359 rows containing non-finite outside the scale range
-## (`stat_smooth()`).
-</code></pre>
-<pre><code>## Warning: Removed 359 rows containing missing values or values outside the scale range
-## (`geom_point()`).
-</code></pre>
 <img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 <p>Here&rsquo;s the <code>\(R^2\)</code> for non-incumbents.</p>
 <pre><code class="language-r">summary(lm(pv2p~q2_unrate_growth,
@@ -108,9 +84,9 @@
 <p>Let&rsquo;s put all the economic indicators we have into a machine learning model and see which indicators are most effective in predicting the national vote share. We build a random forest model with 100 trees and look at the importance plot which shows how good each indicator is in predicting vote share.</p>
 <img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 <p>The random forest confirms our hypothesis and crowns the second quarter GDP growth as the strongest economic predictor of the election, followed by the S&amp;P 500 open and the incumbency effect. Let&rsquo;s use these three predictors to predict the next election and check the leave-one-out cross-validation (LOO-CV) error.</p>
-<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  26.6900005242331&quot;
+<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  26.0508651010266&quot;
 </code></pre>
-<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  5.16623659197225&quot;
+<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  5.10400481005128&quot;
 </code></pre>
 <p>The RMS is 5.05 which can be interpreted as saying that the prediction is usually within 5% of the truth. Let&rsquo;s use this model to predict the current election.</p>
 <pre><code class="language-r">data2024 &lt;- d_fred|&gt;filter(year==2024,quarter==2)
@@ -122,7 +98,7 @@ rf_model &lt;- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent
 predict(rf_model, data2024)
 </code></pre>
 <pre><code>##        1 
-## 49.62457
+## 49.53043
 </code></pre>
 <p>The model suggests a vote share of 49.5% for Kamala Harris using GDP growth rate, S&amp;P 500 and the fact of non-incumbency. It can be interesting to note that the economic indicators itself are on the fence in this election and not particularly strong. Even if an incumbent runs, the vote share is 50.6%.</p>
 <pre><code class="language-r">data2024 &lt;- d_fred|&gt;filter(year==2024,quarter==2)
@@ -134,7 +110,7 @@ rf_model &lt;- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent
 predict(rf_model, data2024)
 </code></pre>
 <pre><code>##        1 
-## 50.89044
+## 50.36307
 </code></pre>
 <p>Since the economic indicators are not vocal, both Harris and Trump have no edge in terms of the economy.</p>
 

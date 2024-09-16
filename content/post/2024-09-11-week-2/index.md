@@ -14,15 +14,6 @@ The code for this page can be found [here](https://github.com/jeqcho/usa-2024-el
 
 One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth **throughout** their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.
 
-
-```
-## Warning: The following aesthetics were dropped during statistical transformation: label.
-## ℹ This can happen when ggplot fails to infer the correct grouping structure in
-##   the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-##   variable into a factor?
-```
-
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
 In our best-fit lines above, we have removed 2020 as an outlier. The plot shows that there is a strong positive correlation between second quarter GDP growth and the incumbent's party vote share, particularly so when the candidate is also incumbent! This is fair, since the voters might not judge a new non-incumbent candidate with the current economy. Another interesting feature is that the best-fit line almost cross the center of 50% vote share for 0% growth. This suggests that the voters only reward the incumbent with more votes if the economy grows, and punishes when not, with no established baseline that the president is expected to perform. Let's look at the `\(R^2\)` to get an idea of how powerful is the prediction. Here's the `\(R^2\)` for non-incumbent candidates.
@@ -60,24 +51,6 @@ It turns out that second quarter GDP growth can explain up to 44% of the change 
 ## `geom_smooth()` using formula = 'y ~ x'
 ```
 
-```
-## Warning: Removed 1 row containing non-finite outside the scale range
-## (`stat_smooth()`).
-```
-
-```
-## Warning: The following aesthetics were dropped during statistical transformation: label.
-## ℹ This can happen when ggplot fails to infer the correct grouping structure in
-##   the data.
-## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
-##   variable into a factor?
-```
-
-```
-## Warning: Removed 1 row containing missing values or values outside the scale range
-## (`geom_text()`).
-```
-
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 Here's the `\(R^2\)` for non-incumbents.
@@ -111,16 +84,6 @@ How about other measures of the economy like unemployment rate? Here we took sea
 
 ```
 ## `geom_smooth()` using formula = 'y ~ x'
-```
-
-```
-## Warning: Removed 359 rows containing non-finite outside the scale range
-## (`stat_smooth()`).
-```
-
-```
-## Warning: Removed 359 rows containing missing values or values outside the scale range
-## (`geom_point()`).
 ```
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
@@ -165,11 +128,11 @@ The random forest confirms our hypothesis and crowns the second quarter GDP grow
 
 
 ```
-## [1] "LOO-CV Mean Squared Error:  26.6900005242331"
+## [1] "LOO-CV Mean Squared Error:  26.0508651010266"
 ```
 
 ```
-## [1] "LOO-CV Root Mean Squared Error:  5.16623659197225"
+## [1] "LOO-CV Root Mean Squared Error:  5.10400481005128"
 ```
 
 The RMS is 5.05 which can be interpreted as saying that the prediction is usually within 5% of the truth. Let's use this model to predict the current election.
@@ -187,7 +150,7 @@ predict(rf_model, data2024)
 
 ```
 ##        1 
-## 49.62457
+## 49.53043
 ```
 
 The model suggests a vote share of 49.5% for Kamala Harris using GDP growth rate, S&P 500 and the fact of non-incumbency. It can be interesting to note that the economic indicators itself are on the fence in this election and not particularly strong. Even if an incumbent runs, the vote share is 50.6%.
@@ -205,7 +168,7 @@ predict(rf_model, data2024)
 
 ```
 ##        1 
-## 50.89044
+## 50.36307
 ```
 
 Since the economic indicators are not vocal, both Harris and Trump have no edge in terms of the economy.
