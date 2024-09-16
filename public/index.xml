@@ -9,11 +9,11 @@
     <lastBuildDate>Wed, 11 Sep 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:4321/usa-2024-election-prediction/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Economy influences elections</title>
+      <title>How economy influences elections</title>
       <link>http://localhost:4321/usa-2024-election-prediction/post/2024/09/11/week-2/</link>
       <pubDate>Wed, 11 Sep 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:4321/usa-2024-election-prediction/post/2024/09/11/week-2/</guid>
-      <description>&lt;p&gt;woooo&lt;/p&gt;</description>
+      <description>&lt;p&gt;The code for this page can be found &lt;a href=&#34;https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-11-week-2/index.Rmd&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth &lt;strong&gt;throughout&lt;/strong&gt; their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Past US Elections</title>

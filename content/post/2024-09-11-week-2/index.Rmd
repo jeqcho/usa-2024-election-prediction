@@ -1,5 +1,5 @@
 ---
-title: Economy influences elections
+title: How economy influences elections
 author: Jay Chooi
 date: '2024-09-11'
 slug: week-2
@@ -7,4 +7,347 @@ categories: []
 tags: []
 ---
 
-woooo
+The code for this page can be found [here](https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-11-week-2/index.Rmd).
+
+
+```{r include=FALSE}
+library(tidyverse)
+
+# Load popular vote data. 
+d_popvote <- read_csv("popvote_1948-2020.csv")
+d_state <- read_csv("clean_wide_state_2pv_1948_2020.csv")
+d_ec <- read_csv("corrected_ec_1948_2024.csv")
+
+# Load economic data from FRED: https://fred.stlouisfed.org. 
+# Variables, units, & ranges: 
+# GDP, billions $, 1947-2024
+# GDP_growth_quarterly, %
+# RDPI, $, 1959-2024
+# RDPI_growth_quarterly, %
+# CPI, $ index, 1947-2024
+# unemployment, %, 1948-2024
+# sp500_, $, 1927-2024 
+d_fred <- read_csv("fred_econ.csv")
+
+# source: https://www.kaggle.com/datasets/justin2028/unemployment-in-america-per-us-state
+# here we simply take the quarter data as the last month
+d_unrate <- read_csv("UNRATE.csv") |>
+  rename(unrate = "Percent (%) of Labor Force Unemployed in State/Area",
+         year = "Year",
+         month = "Month",
+         state = "State/Area") |>
+  select(c(unrate,year,month,state))|>
+  arrange(year, month) |>
+  mutate(q2_unrate_growth=((unrate-lag(unrate,3))/unrate*100)) |>
+  mutate(midly_unrate_growth=((unrate-lag(unrate,9))/unrate*100)) |>
+  mutate(termly_unrate_growth=((unrate-lag(unrate,16))/unrate*100)) |>
+  filter(month == "10")
+
+d_unrate_enc <- d_unrate |> 
+  right_join(d_state, by=c("year","state")) |> # to get pop vote by state
+  right_join(d_popvote, by=c("year")) |> # to get incumbent flag
+  filter(incumbent_party==TRUE) |>
+  mutate(pv2p=ifelse(party=="democrat",D_pv2p,R_pv2p)) # get the pv2p
+
+# to compare states we need to compare by their mean
+# to isolate the local (temporal) effect, get the mean of the nearest 5 elections.
+# source: https://stackoverflow.com/questions/743812/calculating-moving-average
+ma <- function(x, n = 3){stats::filter(x, rep(1 / n, n), sides = 2)}
+d_unrate_enc <- d_unrate_enc |>
+  arrange(year) |>
+  group_by(state) |>
+  mutate(avg5=ma(pv2p)) |>
+  mutate(pvinc=(pv2p-avg5)/pv2p*100)
+  
+
+# Load economic data from the BEA: https://apps.bea.gov/iTable/?reqid=19&step=2&isuri=1&categories=survey#eyJhcHBpZCI6MTksInN0ZXBzIjpbMSwyLDMsM10sImRhdGEiOltbImNhdGVnb3JpZXMiLCJTdXJ2ZXkiXSxbIk5JUEFfVGFibGVfTGlzdCIsIjI2NCJdLFsiRmlyc3RfWWVhciIsIjE5NDciXSxbIkxhc3RfWWVhciIsIjIwMjQiXSxbIlNjYWxlIiwiMCJdLFsiU2VyaWVzIiwiUSJdXX0=.
+# GDP, 1947-2024 (all)
+# GNP
+# RDPI
+# Personal consumption expenditures
+# Goods
+# Durable goods
+# Nondurable goods
+# Services 
+# Population (midperiod, thousands)
+d_bea <- read_csv("bea_econ.csv") |> 
+  rename(year = "Year",
+         quarter = "Quarter", 
+         gdp = "Gross domestic product", 
+         gnp = "Gross national product", 
+         dpi = "Disposable personal income", 
+         consumption = "Personal consumption expenditures", 
+         goods = "Goods", 
+         durables = "Durable goods", 
+         nondurables = "Nondurable goods", 
+         services = "Services", 
+         pop = "Population (midperiod, thousands)")
+
+# add 4-year growth
+# use the percentage since fred incorporated inflation
+# 16 quarters
+d_fred <- d_fred |>
+  arrange(year, quarter) |>
+  mutate(GDP_growth_termly = ((Reduce(
+    `*`, lapply(0:15, function(x) {
+      (lag(GDP_growth_quarterly, x)/100 + 1)
+    })
+  ) - 1) * 100))
+
+# Filter and merge data. 
+d_inc_econ <- d_popvote |> 
+  filter(incumbent_party == TRUE) |> 
+  select(year, pv, pv2p, winner, incumbent, incumbent_party) |> 
+  left_join(d_fred |> filter(quarter == 2)) |> 
+  left_join(d_bea |> filter(quarter == "Q2") |> select(year, dpi))
+  # N.B. two different sources of data to use, FRED & BEA. 
+  # We are using second-quarter data since that is the latest 2024 release.
+```
+
+One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth **throughout** their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.
+
+```{r echo=FALSE}
+d_inc_econ |> filter(year!=2020)|>
+  ggplot(aes(x = GDP_growth_quarterly, y = pv2p, 
+             label = year, color = incumbent)) + 
+  geom_text(show.legend = FALSE) + 
+  geom_hline(yintercept = 50, lty = 2) + 
+  geom_vline(xintercept = 0.01, lty = 2) +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression lines
+  labs(x = "Second Quarter GDP Growth (%)", 
+       y = "Incumbent Party's Popular Vote Share",
+       title = "Incumbent Party Vote Share vs Q2 GDP Growth",
+      color = "Incumbent candidate?") + 
+  scale_color_manual(values = c("TRUE" = "#00BA38", "FALSE" = "#F8766D"), 
+                     labels = c("FALSE" = "No", "TRUE" = "Yes")) +  # Change legend labels
+  theme_bw() +
+  
+  # Add the 2020 point
+  geom_text(data = d_inc_econ |> filter(year == 2020), 
+            aes(x = GDP_growth_quarterly, y = pv2p, label = year), 
+            color = "#00BA38")  # Add label for 2020 point
+```
+
+In our best-fit lines above, we have removed 2020 as an outlier. The plot shows that there is a strong positive correlation between second quarter GDP growth and the incumbent's party vote share, particularly so when the candidate is also incumbent! This is fair, since the voters might not judge a new non-incumbent candidate with the current economy. Another interesting feature is that the best-fit line almost cross the center of 50% vote share for 0% growth. This suggests that the voters only reward the incumbent with more votes if the economy grows, and punishes when not, with no established baseline that the president is expected to perform. Let's look at the $R^2$ to get an idea of how powerful is the prediction. Here's the $R^2$ for non-incumbent candidates.
+
+```{r}
+summary(lm(pv2p~GDP_growth_quarterly,
+           data=(d_inc_econ|>filter(incumbent==FALSE))
+           ))$r.squared
+```
+
+Here's the $R^2$ for incumbent candidates.
+
+```{r}
+summary(lm(pv2p~GDP_growth_quarterly,
+           data=(d_inc_econ|>filter(incumbent==TRUE, year!=2020))
+           ))$r.squared
+```
+
+It turns out that second quarter GDP growth can explain up to 44% of the change in vote shares across time! Now, how about long term GDP growth? Instead of looking at the GDP growth during the election year, let's compare the GDP growth from the start of their term to the end of the term.
+
+
+```{r echo=FALSE}
+d_inc_econ |> 
+  ggplot(aes(x = GDP_growth_termly, y = pv2p, 
+             label = year, color = incumbent)) + 
+  geom_text(show.legend = FALSE) + 
+  geom_hline(yintercept = 50, lty = 2) + 
+  geom_vline(xintercept = 0.01, lty = 2) +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression lines
+  labs(x = "GDP Growth over 16 Quarters (%)", 
+       y = "Incumbent Party's Popular Vote Share",
+       title = "Incumbent Party Vote Share vs GDP Growth during Term",
+      color = "Incumbent candidate?") + 
+  scale_color_manual(values = c("TRUE" = "#00BA38", "FALSE" = "#F8766D"), 
+                     labels = c("FALSE" = "No", "TRUE" = "Yes")) +  # Change legend labels
+  theme_bw()
+```
+
+Here's the $R^2$ for non-incumbents.
+```{r}
+summary(lm(pv2p~GDP_growth_termly,
+           data=(d_inc_econ|>filter(incumbent==FALSE))
+           ))$r.squared
+```
+
+Here's the $R^2$ for incumbents.
+```{r}
+summary(lm(pv2p~GDP_growth_termly,
+           data=(d_inc_econ|>filter(incumbent==TRUE, year!=2020))
+           ))$r.squared
+```
+
+Interestingly, the effect on non-incumbent candidates essentially flattens out. Voters do not judge new candidates based on how well the economy performed over the years. For incumbent candidates, we still see a strong positive correlation, but the explanatory power decreases from 44 to 29. This suggests that the short-term national economy has more influence on elections that the long-term trajectory. Another interesting feature is that the best-fit line crosses the 50% mark when the GDP growth is 29.6%. This means that in contrast to the second-quarter GDP growth, the voters impose a baseline performance for the president to sustain the growth of the economy.
+
+How about other measures of the economy like unemployment rate? Here we took seasonally-adjusted unemployment rate for each state and see if the vote share of the incumbet party in each state changes in response to the unemployment rate.
+
+```{r echo=FALSE}
+d_unrate_enc |> 
+  ggplot(aes(x = q2_unrate_growth, y = pv2p,  color = incumbent)) + 
+  geom_point()+
+  geom_hline(yintercept = 50, lty = 2) + 
+  geom_vline(xintercept = 0.01, lty = 2) +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression lines
+  labs(x = "Q2 Change in Unemployment Rate", 
+       y = "Incumbent Party Popular Vote Share",
+       title = "Incumbent Party Vote Share vs Change in Unemployment Rate",
+      color = "Incumbent candidate?") + 
+  scale_color_manual(values = c("TRUE" = "#00BA38", "FALSE" = "#F8766D"), 
+                     labels = c("FALSE" = "No", "TRUE" = "Yes")) +  # Change legend labels
+  theme_bw() +
+  scale_y_continuous(limits = c(0, 100))
+```
+
+Here's the $R^2$ for non-incumbents.
+```{r}
+summary(lm(pv2p~q2_unrate_growth,
+           data=(d_unrate_enc|>filter(incumbent==FALSE))
+           ))$r.squared
+```
+
+Here's the $R^2$ for incumbents.
+```{r}
+summary(lm(pv2p~q2_unrate_growth,
+           data=(d_unrate_enc|>filter(incumbent==TRUE, year!=2020))
+           ))$r.squared
+```
+
+The flat line and low $R^2$ in both cases suggest that unemployment rate does not have a huge say on who becomes president. This suggest that voters do not associate employment with the president, since they might see more as a personal matter.
+
+```{r include=FALSE}
+# termly, no new conclusions
+d_unrate_enc |> 
+  ggplot(aes(x = termly_unrate_growth, y = pv2p, color = incumbent)) + 
+  geom_point()+
+  geom_hline(yintercept = 0, lty = 2) + 
+  geom_vline(xintercept = 0.01, lty = 2) +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression lines
+  labs(x = "q2_unrate_growth", 
+       y = "Change in Vote Share",
+       title = "Incumbent Party Vote Share vs Q2 GDP Growth",
+      color = "Incumbent candidate?") + 
+  scale_color_manual(values = c("TRUE" = "#00BA38", "FALSE" = "#F8766D"), 
+                     labels = c("FALSE" = "No", "TRUE" = "Yes")) +  # Change legend labels
+  theme_bw() +
+  scale_y_continuous(limits = c(-100, 100))
+```
+```{r include=FALSE}
+# midly, no new conclusions
+d_unrate_enc |> 
+  ggplot(aes(x = midly_unrate_growth, y = pvinc, color = incumbent)) + 
+  geom_point()+
+  geom_hline(yintercept = 0, lty = 2) + 
+  geom_vline(xintercept = 0.01, lty = 2) +
+  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression lines
+  labs(x = "q2_unrate_growth", 
+       y = "Change in Vote Share",
+       title = "Incumbent Party Vote Share vs Q2 GDP Growth",
+      color = "Incumbent candidate?") + 
+  scale_color_manual(values = c("TRUE" = "#00BA38", "FALSE" = "#F8766D"), 
+                     labels = c("FALSE" = "No", "TRUE" = "Yes")) +  # Change legend labels
+  theme_bw() +
+  scale_y_continuous(limits = c(-100, 100))
+```
+
+Let's put all the economic indicators we have into a machine learning model and see which indicators are most effective in predicting the national vote share. We build a random forest model with 100 trees and look at the importance plot which shows how good each indicator is in predicting vote share.
+
+```{r include=FALSE}
+# install.packages("randomForest")
+# install.packages("caret")
+# Load necessary libraries
+library(randomForest)
+library(caret)  # For evaluation and data splitting
+
+
+# Train the Random Forest model
+d_inc_econ_rf <- d_inc_econ |>
+  select(-c(RDPI,GDP_growth_termly, winner, pv))
+
+rf_model <- randomForest(pv2p ~ ., data = d_inc_econ_rf, ntree = 100, mtry = 2, importance = TRUE)
+
+# Print the trained model details
+print(rf_model)
+```
+```{r include=FALSE}
+# Check feature importance
+importance(rf_model)
+```
+```{r echo=FALSE}
+# Extract variable importance and convert to data frame
+importance_df <- as.data.frame(importance(rf_model))
+importance_df$Variable <- rownames(importance_df)
+
+# Arrange the data in descending order of MeanDecreaseAccuracy
+importance_df <- importance_df %>%
+  rename(MeanDecreaseAccuracy="%IncMSE") |>
+  arrange(desc(MeanDecreaseAccuracy))
+
+# Plot using ggplot2
+ggplot(importance_df, aes(x = reorder(Variable, MeanDecreaseAccuracy), y = MeanDecreaseAccuracy)) +
+  geom_bar(stat = "identity", fill = "steelblue") +              # Create a bar plot
+  coord_flip() +                                                 # Flip the axes for better readability
+  labs(title = "Variable Importance - Random Forest",            # Add a title
+       x = "Variables",                                          # Customize x-axis label
+       y = "Mean Decrease in Accuracy") +                        # Customize y-axis label
+  theme_minimal(base_size = 10) +                                # Use a clean theme
+  geom_text(aes(label = round(MeanDecreaseAccuracy, 2)),         # Add labels to the bars
+            hjust = -0.2, size = 5) 
+```
+
+
+The random forest confirms our hypothesis and crowns the second quarter GDP growth as the strongest economic predictor of the election, followed by the S&P 500 open and the incumbency effect. Let's use these three predictors to predict the next election and check the leave-one-out cross-validation (LOO-CV) error.
+
+```{r echo=FALSE}
+# Initialize a vector to store predictions from the LOOCV
+loo_predictions <- rep(NA, nrow(d_inc_econ_rf))
+
+# Loop through each observation for Leave-One-Out Cross-Validation
+for (i in 1:nrow(d_inc_econ_rf)) {
+  # Create training and test sets
+  trainData <- d_inc_econ_rf[-i, ]  # Use all data except the i-th observation for training
+  testData <- d_inc_econ_rf[i, ]    # Use the i-th observation as the test case
+  
+  # Train the Random Forest model using only the specified predictors
+  rf_model <- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent, 
+                           data = trainData, ntree = 100)
+  
+  # Predict on the left-out observation
+  loo_predictions[i] <- predict(rf_model, testData)
+}
+
+# Calculate the actual error
+actual_labels <- d_inc_econ_rf$pv2p
+loo_error_rate <- mean((loo_predictions - actual_labels)^2)  # Mean Squared Error (MSE)
+print(paste("LOO-CV Mean Squared Error: ", loo_error_rate))
+
+# Optionally, calculate the Root Mean Squared Error (RMSE)
+loo_rmse <- sqrt(loo_error_rate)
+print(paste("LOO-CV Root Mean Squared Error: ", loo_rmse))
+```
+
+The RMS is 5.05 which can be interpreted as saying that the prediction is usually within 5% of the truth. Let's use this model to predict the current election.
+
+```{r}
+data2024 <- d_fred|>filter(year==2024,quarter==2)
+data2024$incumbent <- FALSE
+
+rf_model <- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent, 
+                           data = d_inc_econ, ntree = 100)
+
+predict(rf_model, data2024)
+```
+
+The model suggests a vote share of 49.5% for Kamala Harris using GDP growth rate, S&P 500 and the fact of non-incumbency. It can be interesting to note that the economic indicators itself are on the fence in this election and not particularly strong. Even if an incumbent runs, the vote share is 50.6%.
+
+```{r}
+data2024 <- d_fred|>filter(year==2024,quarter==2)
+data2024$incumbent <- TRUE
+
+rf_model <- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent, 
+                           data = d_inc_econ, ntree = 100)
+
+predict(rf_model, data2024)
+```
+
+Since the economic indicators are not vocal, both Harris and Trump have no edge in terms of the economy.
