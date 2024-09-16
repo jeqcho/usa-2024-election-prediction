@@ -28,8 +28,6 @@
 <main>
 <p>The code for this page can be found <a href="https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-11-week-2/index.Rmd">here</a>.</p>
 <p>One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth <strong>throughout</strong> their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.</p>
-<pre><code>## `geom_smooth()` using formula = 'y ~ x'
-</code></pre>
 <pre><code>## Warning: The following aesthetics were dropped during statistical transformation: label.
 ## ℹ This can happen when ggplot fails to infer the correct grouping structure in
 ##   the data.
@@ -110,9 +108,9 @@
 <p>Let&rsquo;s put all the economic indicators we have into a machine learning model and see which indicators are most effective in predicting the national vote share. We build a random forest model with 100 trees and look at the importance plot which shows how good each indicator is in predicting vote share.</p>
 <img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 <p>The random forest confirms our hypothesis and crowns the second quarter GDP growth as the strongest economic predictor of the election, followed by the S&amp;P 500 open and the incumbency effect. Let&rsquo;s use these three predictors to predict the next election and check the leave-one-out cross-validation (LOO-CV) error.</p>
-<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  27.2609975374995&quot;
+<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  26.6900005242331&quot;
 </code></pre>
-<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  5.22120652124578&quot;
+<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  5.16623659197225&quot;
 </code></pre>
 <p>The RMS is 5.05 which can be interpreted as saying that the prediction is usually within 5% of the truth. Let&rsquo;s use this model to predict the current election.</p>
 <pre><code class="language-r">data2024 &lt;- d_fred|&gt;filter(year==2024,quarter==2)
@@ -123,8 +121,8 @@ rf_model &lt;- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent
 
 predict(rf_model, data2024)
 </code></pre>
-<pre><code>##       1 
-## 49.4978
+<pre><code>##        1 
+## 49.62457
 </code></pre>
 <p>The model suggests a vote share of 49.5% for Kamala Harris using GDP growth rate, S&amp;P 500 and the fact of non-incumbency. It can be interesting to note that the economic indicators itself are on the fence in this election and not particularly strong. Even if an incumbent runs, the vote share is 50.6%.</p>
 <pre><code class="language-r">data2024 &lt;- d_fred|&gt;filter(year==2024,quarter==2)
@@ -136,7 +134,7 @@ rf_model &lt;- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent
 predict(rf_model, data2024)
 </code></pre>
 <pre><code>##        1 
-## 50.73917
+## 50.89044
 </code></pre>
 <p>Since the economic indicators are not vocal, both Harris and Trump have no edge in terms of the economy.</p>
 
@@ -147,6 +145,10 @@ predict(rf_model, data2024)
 <script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
 
 <script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 
   
   <hr/>

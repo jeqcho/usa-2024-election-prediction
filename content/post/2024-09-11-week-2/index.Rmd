@@ -110,10 +110,10 @@ One measure of the economy is the GDP growth. But do voters care more about the 
 d_inc_econ |> filter(year!=2020)|>
   ggplot(aes(x = GDP_growth_quarterly, y = pv2p, 
              label = year, color = incumbent)) + 
-  geom_text(show.legend = FALSE) + 
+  geom_text(aes(label=year), show.legend = FALSE) + 
   geom_hline(yintercept = 50, lty = 2) + 
   geom_vline(xintercept = 0.01, lty = 2) +
-  geom_smooth(method = "lm", se = FALSE) +  # Add linear regression lines
+  geom_smooth(method = "lm", se = FALSE, formula = y~x) +  # Add linear regression lines
   labs(x = "Second Quarter GDP Growth (%)", 
        y = "Incumbent Party's Popular Vote Share",
        title = "Incumbent Party Vote Share vs Q2 GDP Growth",
@@ -125,7 +125,7 @@ d_inc_econ |> filter(year!=2020)|>
   # Add the 2020 point
   geom_text(data = d_inc_econ |> filter(year == 2020), 
             aes(x = GDP_growth_quarterly, y = pv2p, label = year), 
-            color = "#00BA38")  # Add label for 2020 point
+            color = "#00BA38", stat="identity")  # Add label for 2020 point
 ```
 
 In our best-fit lines above, we have removed 2020 as an outlier. The plot shows that there is a strong positive correlation between second quarter GDP growth and the incumbent's party vote share, particularly so when the candidate is also incumbent! This is fair, since the voters might not judge a new non-incumbent candidate with the current economy. Another interesting feature is that the best-fit line almost cross the center of 50% vote share for 0% growth. This suggests that the voters only reward the incumbent with more votes if the economy grows, and punishes when not, with no established baseline that the president is expected to perform. Let's look at the $R^2$ to get an idea of how powerful is the prediction. Here's the $R^2$ for non-incumbent candidates.
@@ -135,6 +135,7 @@ summary(lm(pv2p~GDP_growth_quarterly,
            data=(d_inc_econ|>filter(incumbent==FALSE))
            ))$r.squared
 ```
+
 
 Here's the $R^2$ for incumbent candidates.
 

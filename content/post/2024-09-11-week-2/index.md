@@ -16,10 +16,6 @@ One measure of the economy is the GDP growth. But do voters care more about the 
 
 
 ```
-## `geom_smooth()` using formula = 'y ~ x'
-```
-
-```
 ## Warning: The following aesthetics were dropped during statistical transformation: label.
 ## ℹ This can happen when ggplot fails to infer the correct grouping structure in
 ##   the data.
@@ -41,6 +37,7 @@ summary(lm(pv2p~GDP_growth_quarterly,
 ```
 ## [1] 0.1142466
 ```
+
 
 Here's the `\(R^2\)` for incumbent candidates.
 
@@ -168,11 +165,11 @@ The random forest confirms our hypothesis and crowns the second quarter GDP grow
 
 
 ```
-## [1] "LOO-CV Mean Squared Error:  27.2609975374995"
+## [1] "LOO-CV Mean Squared Error:  26.6900005242331"
 ```
 
 ```
-## [1] "LOO-CV Root Mean Squared Error:  5.22120652124578"
+## [1] "LOO-CV Root Mean Squared Error:  5.16623659197225"
 ```
 
 The RMS is 5.05 which can be interpreted as saying that the prediction is usually within 5% of the truth. Let's use this model to predict the current election.
@@ -189,8 +186,8 @@ predict(rf_model, data2024)
 ```
 
 ```
-##       1 
-## 49.4978
+##        1 
+## 49.62457
 ```
 
 The model suggests a vote share of 49.5% for Kamala Harris using GDP growth rate, S&P 500 and the fact of non-incumbency. It can be interesting to note that the economic indicators itself are on the fence in this election and not particularly strong. Even if an incumbent runs, the vote share is 50.6%.
@@ -208,7 +205,7 @@ predict(rf_model, data2024)
 
 ```
 ##        1 
-## 50.73917
+## 50.89044
 ```
 
 Since the economic indicators are not vocal, both Harris and Trump have no edge in terms of the economy.
