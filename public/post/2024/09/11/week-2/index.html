@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head><script src="/usa-2024-election-prediction/livereload.js?mindelay=10&amp;v=2&amp;port=4321&amp;path=usa-2024-election-prediction/livereload" data-no-instant defer></script>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>How economy influences elections | Jay&#39;s 2024 Election Prediction</title>
@@ -28,7 +28,7 @@
 <main>
 <p>The code for this page can be found <a href="https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-11-week-2/index.Rmd">here</a>.</p>
 <p>One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth <strong>throughout</strong> their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.</p>
-<img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<img src="https://chojeq.com/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 <p>In our best-fit lines above, we have removed 2020 as an outlier. The plot shows that there is a strong positive correlation between second quarter GDP growth and the incumbent&rsquo;s party vote share, particularly so when the candidate is also incumbent! This is fair, since the voters might not judge a new non-incumbent candidate with the current economy. Another interesting feature is that the best-fit line almost cross the center of 50% vote share for 0% growth. This suggests that the voters only reward the incumbent with more votes if the economy grows, and punishes when not, with no established baseline that the president is expected to perform. Let&rsquo;s look at the \(R^2\) to get an idea of how powerful is the prediction. Here&rsquo;s the \(R^2\) for non-incumbent candidates.</p>
 <pre><code class="language-r">summary(lm(pv2p~GDP_growth_quarterly,
            data=(d_inc_econ|&gt;filter(incumbent==FALSE))
@@ -44,7 +44,7 @@
 <pre><code>## [1] 0.4373633
 </code></pre>
 <p>It turns out that second quarter GDP growth can explain up to 44% of the change in vote shares across time! Now, how about long term GDP growth? Instead of looking at the GDP growth during the election year, let&rsquo;s compare the GDP growth from the start of their term to the end of the term.</p>
-<img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="https://chojeq.com/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 <p>Here&rsquo;s the \(R^2\) for non-incumbents.</p>
 <pre><code class="language-r">summary(lm(pv2p~GDP_growth_termly,
            data=(d_inc_econ|&gt;filter(incumbent==FALSE))
@@ -61,7 +61,7 @@
 </code></pre>
 <p>Interestingly, the effect on non-incumbent candidates essentially flattens out. Voters do not judge new candidates based on how well the economy performed over the years. For incumbent candidates, we still see a strong positive correlation, but the explanatory power decreases from 44 to 29. This suggests that the short-term national economy has more influence on elections that the long-term trajectory. Another interesting feature is that the best-fit line crosses the 50% mark when the GDP growth is 29.6%. This means that in contrast to the second-quarter GDP growth, the voters impose a baseline performance for the president to sustain the growth of the economy.</p>
 <p>How about other measures of the economy like unemployment rate? Here we took seasonally-adjusted unemployment rate for each state and see if the vote share of the incumbet party in each state changes in response to the unemployment rate.</p>
-<img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="https://chojeq.com/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 <p>Here&rsquo;s the \(R^2\) for non-incumbents.</p>
 <pre><code class="language-r">summary(lm(pv2p~q2_unrate_growth,
            data=(d_unrate_enc|&gt;filter(incumbent==FALSE))
@@ -78,7 +78,7 @@
 </code></pre>
 <p>The flat line and low <code>\(R^2\)</code> in both cases suggest that unemployment rate does not have a huge say on who becomes president. This suggest that voters do not associate employment with the president, since they might see more as a personal matter.</p>
 <p>Let&rsquo;s put all the economic indicators we have into a machine learning model and see which indicators are most effective in predicting the national vote share. We build a random forest model with 100 trees and look at the importance plot which shows how good each indicator is in predicting vote share.</p>
-<img src="/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="https://chojeq.com/usa-2024-election-prediction/post/2024/09/11/week-2/index_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 <p>The random forest confirms our hypothesis and crowns the second quarter GDP growth as the strongest economic predictor of the election, followed by the S&amp;P 500 open and the incumbency effect. Let&rsquo;s use these three predictors to predict the next election and check the leave-one-out cross-validation (LOO-CV) error.</p>
 <pre><code>## [1] &quot;LOO-CV Mean Squared Error:  23.7289823344239&quot;
 </code></pre>

@@ -3,7 +3,7 @@
   <head><script src="/usa-2024-election-prediction/livereload.js?mindelay=10&amp;v=2&amp;port=4321&amp;path=usa-2024-election-prediction/livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Week 3: Polls | Jay&#39;s 2024 Election Prediction</title>
+    <title>Polls | Jay&#39;s 2024 Election Prediction</title>
     <link rel="stylesheet" href="/usa-2024-election-prediction/css/style.css" />
     <link rel="stylesheet" href="/usa-2024-election-prediction/css/fonts.css" />
     
@@ -20,12 +20,13 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Week 3: Polls</span></h1>
+<h1><span class="title">Polls</span></h1>
 <h2 class="author">Jay Chooi</h2>
 <h2 class="date">2024/09/23</h2>
 </div>
 
 <main>
+<p>Code for this post can be found <a href="https://github.com/jeqcho/usa-2024-election-prediction/tree/main/content/post/2024-09-23-week-3-polls">here</a>.</p>
 <h2 id="today-we-are-getting-more-polls-than-before">Today, we are getting more polls than before</h2>
 <p>The number of polls conducted nationwide and in each state has increased across election cycles. In the plot below, we tallied the number of polls who were completed in August of each election cycle.</p>
 <img src="/usa-2024-election-prediction/post/2024/09/23/week-3-polls/index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
@@ -40,13 +41,14 @@ The number of nationwide polls increased 60\% from 525 in 2016 to 843 in 2024 (a
 <h2 id="predicting-the-2024-election-using-polls">Predicting the 2024 election using polls</h2>
 <p>Here we again used a random forest to predict the vote share of Trump in 2024. We initialized with 500 trees and trained it to predict state-level popular vote based on the following features: year, state, poll approval at 7 weeks before the election, 10 weeks and 15 weeks.</p>
 <p>We chose 7 weeks because it is the most current data we have for now as of 23 September. 15 weeks was chosen because Biden droppped out 15 weeks before the election, and it would not be accurate to predict the vote share involving Harris using poll approvals more than 15 weeks ago when she wasn&rsquo;t running. Here are the results.</p>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
-</code></pre>
 <img src="/usa-2024-election-prediction/post/2024/09/23/week-3-polls/index_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<p>Surprisingly, the random forest predicts that Democrats will win Georgia, Pennsylvania and Arizona, while Republicans will win Wisconsin, Michigan, North Carolina and Nevada. This is in contrast with betting markets, which forecasts the exact opposite except for Pennsylvania and Nevada.</p>
+<p>Let&rsquo;s take a closer look at the model through the RMSE of Leave-One-Out Cross-Validation.</p>
+<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  10.9223005760208&quot;
+</code></pre>
+<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  3.30489040302712&quot;
+</code></pre>
+<p>The RMSE is 3.3. Using this margin of error, our forecasts on the state winers is not certain to hold true, since all our forecasts gave vote shares where the 50% mark is within the margin of error. We simply do not have any certainty on the swing states right now.</p>
 
 </main>
 

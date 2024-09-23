@@ -1,11 +1,13 @@
 ---
-title: 'Week 3: Polls'
+title: 'Polls'
 author: Jay Chooi
 date: '2024-09-23'
 slug: week-3-polls
 categories: []
 tags: []
 ---
+
+Code for this post can be found [here](https://github.com/jeqcho/usa-2024-election-prediction/tree/main/content/post/2024-09-23-week-3-polls).
 
 ## Today, we are getting more polls than before
 
@@ -53,17 +55,19 @@ We chose 7 weeks because it is the most current data we have for now as of 23 Se
 
 
 
-
-```
-## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
-```
-
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
+Surprisingly, the random forest predicts that Democrats will win Georgia, Pennsylvania and Arizona, while Republicans will win Wisconsin, Michigan, North Carolina and Nevada. This is in contrast with betting markets, which forecasts the exact opposite except for Pennsylvania and Nevada.
+
+Let's take a closer look at the model through the RMSE of Leave-One-Out Cross-Validation.
 
 
+```
+## [1] "LOO-CV Mean Squared Error:  10.9223005760208"
+```
 
+```
+## [1] "LOO-CV Root Mean Squared Error:  3.30489040302712"
+```
+
+The RMSE is 3.3. Using this margin of error, our forecasts on the state winers is not certain to hold true, since all our forecasts gave vote shares where the 50\% mark is within the margin of error. We simply do not have any certainty on the swing states right now.
