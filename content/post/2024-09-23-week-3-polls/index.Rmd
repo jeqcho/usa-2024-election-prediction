@@ -1,5 +1,5 @@
 ---
-title: 'Week 3: Polls'
+title: 'Polls'
 author: Jay Chooi
 date: '2024-09-23'
 slug: week-3-polls
@@ -7,11 +7,17 @@ categories: []
 tags: []
 ---
 
-```{r}
+Code for this post can be found [here](https://github.com/jeqcho/usa-2024-election-prediction/tree/main/content/post/2024-09-23-week-3-polls).
+
+## Today, we are getting more polls than before
+
+The number of polls conducted nationwide and in each state has increased across election cycles. In the plot below, we tallied the number of polls who were completed in August of each election cycle.
+
+```{r include=FALSE}
 library(dplyr)
 library(ggplot2)
 
-swing_states <- c("Wisconsin", "Michigan", "Arizona", "Nevada", "North Carolina", "Georgia")
+swing_states <- c("Wisconsin", "Michigan", "Arizona", "Nevada", "North Carolina", "Georgia", "Pennsylvania")
 
 pp16 <- read.csv("president_polls_2016.csv")
 pp20 <- read.csv("president_polls_2020.csv")  |> mutate(state = ifelse(state=='', "U.S.", state))
@@ -19,7 +25,7 @@ pp24 <- read.csv("president_polls_2024.csv") |>
   mutate(state = ifelse(state=='', "U.S.", state))
 ```
 
-```{r}
+```{r include=FALSE}
 # Combine the dataframes into a list
 pp16$date <- as.character(pp16$enddate)
 pp20$date <- as.character(pp20$end_date)
@@ -51,7 +57,7 @@ cnt_polls <- cnt_polls |>
 cnt_polls
 ```
 
-```{r}
+```{r echo=FALSE}
 selected_cnt_polls <- cnt_polls |>
   filter(state == "U.S." | state %in% swing_states)
 
@@ -61,7 +67,13 @@ ggplot(data = selected_cnt_polls, aes(x = cycle, y = count, fill = state)) +
   theme_minimal() + 
   labs(title = "Number of polls ending in October in the U.S. and swing states", x = "Cycle", y = "Count", fill = "State")
 ``` 
-```{r}
+The number of nationwide polls increased 60\% from 525 in 2016 to 843 in 2024 (and take note that these are the ones ending in August). The same pattern of increase is also observed for each swing state. The question now is then how can we make use of this huge number of polls to predict the election? One way is to sort polls into different grades and use the polls that have higher grades in our predictive models.
+
+## Are some polls better than others?
+
+
+[538](https://projects.fivethirtyeight.com/polls/) employs a grading scheme to weigh each poll in their models. Here are the distributions of the grades of the polls. In 2024, they changed to using a numeric grade that factors in historical accuracy and methodological transparency.
+```{r echo=FALSE}
 # install.packages("patchwork")
 library(patchwork)
 
@@ -100,8 +112,9 @@ combined_plot <- (plot_pp16 | plot_pp20) / plot_pp24  # Side-by-side for pp16 an
 combined_plot
 ```
 
+According to their grading, not all polls are the same, with a small minority of polls getting the "A" grade under a unimodal distribution. When they switched to numeric grading in 2024, this distribution becomes bimodal, with an additional peak at the high-quality side. But how useful is the grading scheme?
 
-```{r}
+```{r echo=FALSE}
 # Function to get the top 20% of rows by grade
 get_top_20_percent <- function(df) {
   df |> filter(state=="U.S.") %>%
@@ -129,7 +142,7 @@ pp24_bottom20 <- get_bottom_20_percent(pp24)
 
 ```
 
-```{r}
+```{r echo=FALSE}
 pp16_top20_R_vote <- mean(pp16_top20$adjpoll_trump)
 pp20_top20_R_vote <- mean((pp20_top20|>filter(candidate_name=="Donald Trump"))$pct, na.rm = TRUE)
 pp24_top20_R_vote <- mean((pp24_top20|>filter(candidate_name=="Donald Trump"))$pct, na.rm = TRUE)
@@ -139,7 +152,9 @@ pp20_bottom20_R_vote <- mean((pp20_bottom20 |> filter(candidate_name == "Donald 
 pp24_bottom20_R_vote <- mean((pp24_bottom20 |> filter(candidate_name == "Donald Trump"))$pct, na.rm = TRUE)
 ```
 
-```{r}
+Here we plotted the national poll approval for Trump from 2016 to 2024, from the top 20% polls and the bottom 20% polls. Here the poll approval means the probability that a person chosen at random will vote for Trump.
+
+```{r echo=FALSE}
 # Create a dataframe with the top and bottom 20% Trump vote for each year
 trump_vote_df <- data.frame(
   year = c(2016, 2020, 2024, 2016, 2020, 2024),
@@ -153,32 +168,139 @@ trump_vote_df <- data.frame(
 # Plot the bar chart
 ggplot(trump_vote_df, aes(x = factor(year), y = vote, fill = group)) +
   geom_bar(stat = "identity", position = "dodge") +  # Dodge to place bars side by side
-  labs(title = "Trump Vote Percentage for Top 20% Polls vs Bottom 20% Polls", 
+  labs(title = "Trump Poll Approval for Top 20% Polls vs Bottom 20% Polls", 
        x = "Year", 
-       y = "Trump Vote Percentage") +
+       y = "Trump Poll Approval") +
   scale_fill_manual(values = c("Top 20%" = "skyblue", "Bottom 20%" = "lightcoral")) +  # Custom colors for top and bottom
   theme_minimal() +
   labs(fill="Poll Grade")
 ```
 
+Surprisingly, it turns out that the results from the bottom 20% polls coincide with the top 20% polls. We can clearly notice the variation across years but not across polls, yielding that perhaps there is no material difference in results on the type of polls used. Next, we will use aggregated state-level polls to predict the 2024 elections.
 
+## Predicting the 2024 election using polls
 
-```{r}
-sp <- read.csv("state_polls_1968-2024.csv")
+Here we again used a random forest to predict the vote share of Trump in 2024. We initialized with 500 trees and trained it to predict state-level popular vote based on the following features: year, state, poll approval at 7 weeks before the election, 10 weeks and 15 weeks.
+
+We chose 7 weeks because it is the most current data we have for now as of 23 September. 15 weeks was chosen because Biden droppped out 15 weeks before the election, and it would not be accurate to predict the vote share involving Harris using poll approvals more than 15 weeks ago when she wasn't running. Here are the results.
+
+```{r include=FALSE}
+library(tidyr)
+sp <- read.csv("state_polls_1968-2024.csv") |> filter(party=="REP") |>
+  group_by(year,state,weeks_left) |>
+  filter(days_left == max(days_left))
+sp_wide <- sp %>%
+  pivot_wider(names_from = weeks_left, values_from = poll_support, 
+              names_prefix = "poll_at_",
+              id_cols=c(year,state))
 ```
 
 
-```{r}
+
+
+```{r include=FALSE}
 # Load popular vote data. 
 d_popvote <- read.csv("popvote_1948-2020.csv")
 d_state <- read.csv("clean_wide_state_2pv_1948_2020.csv")
 d_state <- d_state |>
   right_join(d_popvote, by=c("year")) |>
-  left_join(sp, by=c("year", "state")) |>
-  filter(party.y=="REP") |>
-  filter(party.x=="republican")
+  left_join(sp_wide, by=c("year", "state"))
+
+d_state <- d_state |>
+  filter(party=="republican")
 
 d_state2 <- d_state |> 
-  select(c(year,state,R_pv2p,weeks_left,poll_support))
+  select(c(year,state,R_pv2p,poll_at_7,poll_at_10,poll_at_15)) |>
+  filter(state == "U.S." | state %in% swing_states)
 ```
 
+```{r include=FALSE}
+# Load required libraries
+library(randomForest)
+library(dplyr)
+
+# Step 1: Drop rows with NA values
+d_state2_clean <- na.omit(d_state2)
+
+
+# Step 2: Set up the Random Forest model
+# Define the formula to predict R_pv2p from the other variables
+# Since 'state' is a categorical variable, Random Forest will handle it automatically as a factor
+rf_formula <- R_pv2p ~ year + state + poll_at_7+poll_at_10+poll_at_15
+
+# Step 3: Train the Random Forest model
+set.seed(123)  # Set seed for reproducibility
+rf_model <- randomForest(rf_formula, data = d_state2_clean, importance = TRUE)
+
+# Step 4: Evaluate the model
+print(rf_model)  # Print model summary
+
+# Optional: View variable importance
+importance(rf_model)
+```
+
+```{r include=FALSE}
+
+data2024 <- sp_wide|>
+  filter(year==2024,state %in% swing_states) |>
+  select(poll_at_7,poll_at_10,poll_at_15)
+
+res <- predict(rf_model, data2024)
+
+# Create a data frame with the state names and output values
+swing_states_table <- data.frame(State = swing_states, Value = res)
+
+# Display the result
+swing_states_table
+```
+
+```{r echo=FALSE}
+# Sort the data frame by 'Value'
+swing_states_table <- swing_states_table[order(swing_states_table$Value, decreasing = TRUE), ]
+
+# Create the bar plot with values displayed and custom colors
+ggplot(swing_states_table, aes(x = reorder(State, Value), y = Value, fill = Value > 50)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = round(Value, 2)), vjust = 0.5, hjust = 1.2, color = "white", size = 3.5) +  # Adjust text position and size
+  scale_fill_manual(values = c("skyblue", "lightcoral")) +  # Custom color for the bars
+  coord_flip() +  # Flip coordinates for horizontal bars
+  labs(x = "State", y = "Predicted Republican vote share", title = "Predicting Republican vote share in swing states using polls") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  ylim(0,100) +
+  geom_hline(yintercept = 50, linetype = "dashed", color = "black", linewidth = 0.8)
+```
+
+Surprisingly, the random forest predicts that Democrats will win Georgia, Pennsylvania and Arizona, while Republicans will win Wisconsin, Michigan, North Carolina and Nevada. This is in contrast with betting markets, which forecasts the exact opposite except for Pennsylvania and Nevada.
+
+Let's take a closer look at the model through the RMSE of Leave-One-Out Cross-Validation.
+
+```{r echo=FALSE}
+# Initialize a vector to store predictions from the LOOCV
+loo_predictions <- rep(NA, nrow(d_state2_clean))
+
+# Loop through each observation for Leave-One-Out Cross-Validation
+for (i in 1:nrow(d_state2_clean)) {
+  # Create training and test sets
+  trainData <- d_state2_clean[-i, ]  # Use all data except the i-th observation for training
+  testData <- d_state2_clean[i, ]    # Use the i-th observation as the test case
+  
+  # Train the Random Forest model using only the specified predictors
+  rf_model <- randomForest(rf_formula, 
+                           data = trainData, ntree = 500)
+  
+  # Predict on the left-out observation
+  loo_predictions[i] <- predict(rf_model, testData)
+}
+
+# Calculate the actual error
+actual_labels <- d_state2_clean$R_pv2p
+loo_error_rate <- mean((loo_predictions - actual_labels)^2)  # Mean Squared Error (MSE)
+print(paste("LOO-CV Mean Squared Error: ", loo_error_rate))
+
+# Optionally, calculate the Root Mean Squared Error (RMSE)
+loo_rmse <- sqrt(loo_error_rate)
+print(paste("LOO-CV Root Mean Squared Error: ", loo_rmse))
+```
+
+The RMSE is 3.3. Using this margin of error, our forecasts on the state winers is not certain to hold true, since all our forecasts gave vote shares where the 50\% mark is within the margin of error. We simply do not have any certainty on the swing states right now.
