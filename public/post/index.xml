@@ -6,8 +6,22 @@
     <description>Recent content in Posts on Jay&#39;s 2024 Election Prediction</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Sep 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Sep 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:4321/usa-2024-election-prediction/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Week 3: Polls</title>
+      <link>http://localhost:4321/usa-2024-election-prediction/post/2024/09/23/week-3-polls/</link>
+      <pubDate>Mon, 23 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:4321/usa-2024-election-prediction/post/2024/09/23/week-3-polls/</guid>
+      <description>&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(dplyr)&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;pre&gt;&lt;code&gt;## &#xA;## Attaching package: &#39;dplyr&#39;&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;pre&gt;&lt;code&gt;## The following objects are masked from &#39;package:stats&#39;:&#xA;## &#xA;##     filter, lag&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;pre&gt;&lt;code&gt;## The following objects are masked from &#39;package:base&#39;:&#xA;## &#xA;##     intersect, setdiff, setequal, union&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;library(ggplot2)&#xA;&#xA;swing_states &amp;lt;- c(&amp;quot;Wisconsin&amp;quot;, &amp;quot;Michigan&amp;quot;, &amp;quot;Arizona&amp;quot;, &amp;quot;Nevada&amp;quot;, &amp;quot;North Carolina&amp;quot;, &amp;quot;Georgia&amp;quot;)&#xA;&#xA;pp16 &amp;lt;- read.csv(&amp;quot;president_polls_2016.csv&amp;quot;)&#xA;pp20 &amp;lt;- read.csv(&amp;quot;president_polls_2020.csv&amp;quot;)  |&amp;gt; mutate(state = ifelse(state==&#39;&#39;, &amp;quot;U.S.&amp;quot;, state))&#xA;pp24 &amp;lt;- read.csv(&amp;quot;president_polls_2024.csv&amp;quot;) |&amp;gt; &#xA;  mutate(state = ifelse(state==&#39;&#39;, &amp;quot;U.S.&amp;quot;, state))&#xA;&lt;/code&gt;&lt;/pr</description>
+    </item>
+    <item>
+      <title>How economy influences elections</title>
+      <link>http://localhost:4321/usa-2024-election-prediction/post/2024/09/11/week-2/</link>
+      <pubDate>Wed, 11 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:4321/usa-2024-election-prediction/post/2024/09/11/week-2/</guid>
+      <description>&lt;p&gt;The code for this page can be found &lt;a href=&#34;https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-11-week-2/index.Rmd&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth &lt;strong&gt;throughout&lt;/strong&gt; their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Past US Elections</title>
       <link>http://localhost:4321/usa-2024-election-prediction/post/2024/09/08/past-us-elections/</link>

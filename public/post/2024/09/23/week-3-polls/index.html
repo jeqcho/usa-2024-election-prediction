@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/usa-2024-election-prediction/livereload.js?mindelay=10&amp;v=2&amp;port=4321&amp;path=usa-2024-election-prediction/livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Week 3: Polls | Jay&#39;s 2024 Election Prediction</title>
+    <link rel="stylesheet" href="/usa-2024-election-prediction/css/style.css" />
+    <link rel="stylesheet" href="/usa-2024-election-prediction/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/usa-2024-election-prediction/">Main page</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Week 3: Polls</span></h1>
+<h2 class="author">Jay Chooi</h2>
+<h2 class="date">2024/09/23</h2>
+</div>
+
+<main>
+<pre><code class="language-r">library(dplyr)
+</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'
+</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+<pre><code class="language-r">library(ggplot2)
+
+swing_states &lt;- c(&quot;Wisconsin&quot;, &quot;Michigan&quot;, &quot;Arizona&quot;, &quot;Nevada&quot;, &quot;North Carolina&quot;, &quot;Georgia&quot;)
+
+pp16 &lt;- read.csv(&quot;president_polls_2016.csv&quot;)
+pp20 &lt;- read.csv(&quot;president_polls_2020.csv&quot;)  |&gt; mutate(state = ifelse(state=='', &quot;U.S.&quot;, state))
+pp24 &lt;- read.csv(&quot;president_polls_2024.csv&quot;) |&gt; 
+  mutate(state = ifelse(state=='', &quot;U.S.&quot;, state))
+</code></pre>
+<pre><code class="language-r"># Combine the dataframes into a list
+pp16$date &lt;- as.character(pp16$enddate)
+pp20$date &lt;- as.character(pp20$end_date)
+pp24$date &lt;- as.character(pp24$end_date)
+
+pp20$grade &lt;- pp20$fte_grade
+pp24$grade &lt;- pp24$numeric_grade
+
+pp16 &lt;- pp16 |&gt; filter(substr(date,1,2) == &quot;8/&quot;)
+pp20 &lt;- pp20 |&gt; filter(substr(date,1,2) == &quot;8/&quot;)
+pp24 &lt;- pp24 |&gt; filter(substr(date,1,2) == &quot;8/&quot;)
+
+
+polls &lt;- list(pp16, pp20, pp24)
+
+# Apply lapply to select only the 'cycle' and 'state' columns from each dataframe
+polls &lt;- lapply(polls, function(x) {
+  x |&gt; select(cycle, state, date)
+})
+
+# Use do.call with rbind to combine the list of dataframes into one dataframe
+cnt_polls &lt;- do.call(rbind, polls)
+
+cnt_polls &lt;- cnt_polls |&gt;
+  group_by(cycle,state) |&gt;
+  summarize(count=n())
+</code></pre>
+<pre><code>## `summarise()` has grouped output by 'cycle'. You can override using the
+## `.groups` argument.
+</code></pre>
+<pre><code class="language-r"># View the combined dataframe
+cnt_polls
+</code></pre>
+<pre><code>## # A tibble: 144 × 3
+## # Groups:   cycle [3]
+##    cycle state                count
+##    &lt;int&gt; &lt;chr&gt;                &lt;int&gt;
+##  1  2016 Alabama                 15
+##  2  2016 Alaska                  15
+##  3  2016 Arizona                 36
+##  4  2016 Arkansas                15
+##  5  2016 California              21
+##  6  2016 Colorado                24
+##  7  2016 Connecticut             15
+##  8  2016 Delaware                12
+##  9  2016 District of Columbia     9
+## 10  2016 Florida                 51
+## # ℹ 134 more rows
+</code></pre>
+<pre><code class="language-r">selected_cnt_polls &lt;- cnt_polls |&gt;
+  filter(state == &quot;U.S.&quot; | state %in% swing_states)
+
+ggplot(data = selected_cnt_polls, aes(x = cycle, y = count, fill = state)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +  # Use 'position = dodge' for side-by-side bars
+  scale_x_continuous(breaks = c(2016, 2020, 2024)) +  # Set the breaks for the x-axis
+  theme_minimal() + 
+  labs(title = &quot;Number of polls ending in October in the U.S. and swing states&quot;, x = &quot;Cycle&quot;, y = &quot;Count&quot;, fill = &quot;State&quot;)
+</code></pre>
+<img src="/usa-2024-election-prediction/post/2024/09/23/week-3-polls/index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<pre><code class="language-r"># install.packages(&quot;patchwork&quot;)
+library(patchwork)
+
+# Define the order of grades from worst to best for both datasets
+grade_levels &lt;- c(&quot;F&quot;, &quot;D&quot;, &quot;C-&quot;, &quot;C/D&quot;, &quot;C&quot;, &quot;C+&quot;, &quot;B/C&quot;, &quot;B-&quot;, &quot;B&quot;, &quot;B+&quot;, &quot;A/B&quot;, &quot;A-&quot;, &quot;A&quot;, &quot;A+&quot;)
+
+# Ensure 'pp16', 'pp20', and 'pp24' have grades ordered from worst to best
+pp16$grade &lt;- factor(pp16$grade, levels = grade_levels)
+pp20$grade &lt;- factor(pp20$grade, levels = grade_levels)
+
+# Plot for pp16
+plot_pp16 &lt;- ggplot(pp16 |&gt; filter(!is.na(grade)), aes(x = grade)) +
+  geom_bar(fill = &quot;skyblue&quot;) +
+  labs(title = &quot;Grade Distribution for 2016 Polls&quot;, x = &quot;Grade&quot;, y = &quot;Count&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+
+# Plot for pp20
+plot_pp20 &lt;- ggplot(pp20 |&gt; filter(!is.na(grade)), aes(x = grade)) +
+  geom_bar(fill = &quot;lightgreen&quot;) +
+  labs(title = &quot;Grade Distribution for 2020 Polls&quot;, x = &quot;Grade&quot;, y = &quot;Count&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+
+# Plot for pp24
+plot_pp24 &lt;- ggplot(pp24 |&gt; filter(!is.na(grade)), aes(x = grade)) +
+  geom_bar(fill = &quot;lightcoral&quot;) +
+  labs(title = &quot;Grade Distribution for 2024 Polls&quot;, x = &quot;Grade&quot;, y = &quot;Count&quot;) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+
+# Combine the plots using patchwork (you can adjust layout)
+combined_plot &lt;- (plot_pp16 | plot_pp20) / plot_pp24  # Side-by-side for pp16 and pp20, pp24 below
+
+# Display the combined plot
+combined_plot
+</code></pre>
+<img src="/usa-2024-election-prediction/post/2024/09/23/week-3-polls/index_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<pre><code class="language-r"># Function to get the top 20% of rows by grade
+get_top_20_percent &lt;- function(df) {
+  df |&gt; filter(state==&quot;U.S.&quot;) %&gt;%
+    arrange(desc(grade)) %&gt;%  # Arrange by grade in descending order
+    top_n(n = ceiling(0.2 * nrow(df)), wt = grade)  # Select top 20% rows
+}
+
+# Function to get the worst 20% of rows by grade
+get_bottom_20_percent &lt;- function(df) {
+  df  |&gt; filter(state==&quot;U.S.&quot;) %&gt;%
+    arrange(grade) %&gt;%  # Arrange by grade in descending order
+    top_n(n = ceiling(0.2 * nrow(df)), wt = grade)  # Select top 20% rows
+}
+
+
+# Apply the function to each dataset
+pp16_top20 &lt;- get_top_20_percent(pp16)
+pp20_top20 &lt;- get_top_20_percent(pp20)
+pp24_top20 &lt;- get_top_20_percent(pp24)
+
+# Apply the function to each dataset for bottom 20%
+pp16_bottom20 &lt;- get_bottom_20_percent(pp16)
+pp20_bottom20 &lt;- get_bottom_20_percent(pp20)
+pp24_bottom20 &lt;- get_bottom_20_percent(pp24)
+</code></pre>
+<pre><code class="language-r">pp16_top20_R_vote &lt;- mean(pp16_top20$adjpoll_trump)
+pp20_top20_R_vote &lt;- mean((pp20_top20|&gt;filter(candidate_name==&quot;Donald Trump&quot;))$pct, na.rm = TRUE)
+pp24_top20_R_vote &lt;- mean((pp24_top20|&gt;filter(candidate_name==&quot;Donald Trump&quot;))$pct, na.rm = TRUE)
+
+pp16_bottom20_R_vote &lt;- mean(pp16_bottom20$adjpoll_trump, na.rm = TRUE)
+pp20_bottom20_R_vote &lt;- mean((pp20_bottom20 |&gt; filter(candidate_name == &quot;Donald Trump&quot;))$pct, na.rm = TRUE)
+pp24_bottom20_R_vote &lt;- mean((pp24_bottom20 |&gt; filter(candidate_name == &quot;Donald Trump&quot;))$pct, na.rm = TRUE)
+</code></pre>
+<pre><code class="language-r"># Create a dataframe with the top and bottom 20% Trump vote for each year
+trump_vote_df &lt;- data.frame(
+  year = c(2016, 2020, 2024, 2016, 2020, 2024),
+  group = c(&quot;Top 20%&quot;, &quot;Top 20%&quot;, &quot;Top 20%&quot;, &quot;Bottom 20%&quot;, &quot;Bottom 20%&quot;, &quot;Bottom 20%&quot;),
+  vote = c(
+    pp16_top20_R_vote, pp20_top20_R_vote, pp24_top20_R_vote,  # Top 20% votes
+    pp16_bottom20_R_vote, pp20_bottom20_R_vote, pp24_bottom20_R_vote  # Bottom 20% votes
+  )
+)
+
+# Plot the bar chart
+ggplot(trump_vote_df, aes(x = factor(year), y = vote, fill = group)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +  # Dodge to place bars side by side
+  labs(title = &quot;Trump Vote Percentage for Top 20% Polls vs Bottom 20% Polls&quot;, 
+       x = &quot;Year&quot;, 
+       y = &quot;Trump Vote Percentage&quot;) +
+  scale_fill_manual(values = c(&quot;Top 20%&quot; = &quot;skyblue&quot;, &quot;Bottom 20%&quot; = &quot;lightcoral&quot;)) +  # Custom colors for top and bottom
+  theme_minimal() +
+  labs(fill=&quot;Poll Grade&quot;)
+</code></pre>
+<img src="/usa-2024-election-prediction/post/2024/09/23/week-3-polls/index_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<pre><code class="language-r">sp &lt;- read.csv(&quot;state_polls_1968-2024.csv&quot;)
+</code></pre>
+<pre><code class="language-r"># Load popular vote data. 
+d_popvote &lt;- read.csv(&quot;popvote_1948-2020.csv&quot;)
+d_state &lt;- read.csv(&quot;clean_wide_state_2pv_1948_2020.csv&quot;)
+d_state &lt;- d_state |&gt;
+  right_join(d_popvote, by=c(&quot;year&quot;)) |&gt;
+  left_join(sp, by=c(&quot;year&quot;, &quot;state&quot;)) |&gt;
+  filter(party.y==&quot;REP&quot;) |&gt;
+  filter(party.x==&quot;republican&quot;)
+</code></pre>
+<pre><code>## Warning in right_join(d_state, d_popvote, by = c(&quot;year&quot;)): Detected an unexpected many-to-many relationship between `x` and `y`.
+## ℹ Row 1 of `x` matches multiple rows in `y`.
+## ℹ Row 1 of `y` matches multiple rows in `x`.
+## ℹ If a many-to-many relationship is expected, set `relationship =
+##   &quot;many-to-many&quot;` to silence this warning.
+</code></pre>
+<pre><code>## Warning in left_join(right_join(d_state, d_popvote, by = c(&quot;year&quot;)), sp, : Detected an unexpected many-to-many relationship between `x` and `y`.
+## ℹ Row 601 of `x` matches multiple rows in `y`.
+## ℹ Row 177953 of `y` matches multiple rows in `x`.
+## ℹ If a many-to-many relationship is expected, set `relationship =
+##   &quot;many-to-many&quot;` to silence this warning.
+</code></pre>
+<pre><code class="language-r">d_state2 &lt;- d_state |&gt; 
+  select(c(year,state,R_pv2p,weeks_left,poll_support))
+</code></pre>
+
+</main>
+
+  <footer>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<script src="//cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+
+<script src="//cdn.jsdelivr.net/npm/@xiee/utils/js/center-img.min.js" defer></script>
+
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+  
+  <hr/>
+  © Jay Chooi 2024 &ndash; 2024 | <a href="https://github.com/jeqcho/usa-2024-election-prediction">Github</a>
+  
+  </footer>
+  </body>
+</html>
+
