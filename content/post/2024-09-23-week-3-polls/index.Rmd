@@ -65,7 +65,7 @@ ggplot(data = selected_cnt_polls, aes(x = cycle, y = count, fill = state)) +
   geom_bar(stat = "identity", position = "dodge") +  # Use 'position = dodge' for side-by-side bars
   scale_x_continuous(breaks = c(2016, 2020, 2024)) +  # Set the breaks for the x-axis
   theme_minimal() + 
-  labs(title = "Number of polls ending in October in the U.S. and swing states", x = "Cycle", y = "Count", fill = "State")
+  labs(title = "Number of polls ending in August in the U.S. and swing states", x = "Cycle", y = "Count", fill = "State")
 ``` 
 The number of nationwide polls increased 60\% from 525 in 2016 to 843 in 2024 (and take note that these are the ones ending in August). The same pattern of increase is also observed for each swing state. The question now is then how can we make use of this huge number of polls to predict the election? One way is to sort polls into different grades and use the polls that have higher grades in our predictive models.
 
