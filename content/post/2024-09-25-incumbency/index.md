@@ -14,7 +14,8 @@ Take a look at this plot with data from 1948 to 2020.
 
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
-The plot tells us that an incumbent president has an edge over their competitor. This effect is known as the incumbent advantage, and is well-studied in academia. (The incumbent advantage shows up everywhere around the world, curiously except in [South America](https://www.jstor.org/stable/26288984)).
+
+The plot tells us that an incumbent president has an edge over their competitor. This effect is known as the incumbent advantage, and is well-studied in academia. (The incumbent advantage shows up everywhere around the world, curiously except in [South America](https://www.jstor.org/stable/26288984) ).
 
 One might argue that there is no incumbent-candidate effect, but merely the incumbent-party effect. Let's test this theory by looking at the incumbent vs non-incumbent win rate by conditioning on being in a incumbent party
 
@@ -36,7 +37,7 @@ Let's figure out what's causing the incumbency advantage. One hypothesis is that
 
 
 <!-- html table generated in R 4.4.1 by xtable 1.8-4 package -->
-<!-- Mon Sep 30 17:38:19 2024 -->
+<!-- Mon Sep 30 17:47:03 2024 -->
 <table border=1>
 <tr> <th>  </th> <th> Estimate </th> <th> Std. Error </th> <th> t value </th> <th> Pr(&gt;|t|) </th>  </tr>
   <tr> <td align="right"> (Intercept) </td> <td align="right"> -3.0232 </td> <td align="right"> 0.0502 </td> <td align="right"> -60.25 </td> <td align="right"> 0.0000 </td> </tr>
@@ -57,7 +58,7 @@ summary(model)$adj.r.squared
 The low \(R^2\) of 0.002 shows that at best, federal spending only explains 0.2% of the vote share. But note the low p-value that is less than \(10^{-10}\), with an estimated effect of -0.007. This means that the model is confident that federal spending *decreases* vote share by 0.007% for every 1% increase in federal spending! This is the opposite of what we expected. Instead of what the *government* does (like federal spending), let's see how the *people* feel by fitting vote share change against county-level income change
 
 <!-- html table generated in R 4.4.1 by xtable 1.8-4 package -->
-<!-- Mon Sep 30 17:38:20 2024 -->
+<!-- Mon Sep 30 17:47:04 2024 -->
 <table border=1>
 <tr> <th>  </th> <th> Estimate </th> <th> Std. Error </th> <th> t value </th> <th> Pr(&gt;|t|) </th>  </tr>
   <tr> <td align="right"> (Intercept) </td> <td align="right"> -3.1473 </td> <td align="right"> 0.0522 </td> <td align="right"> -60.29 </td> <td align="right"> 0.0000 </td> </tr>
@@ -128,7 +129,7 @@ Incredibly, this one-variable linear model has a lower RMSE than our random fore
 
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-18-1.png" width="672" />
-Indeed, it appears that the simple model is closer to the truth than the complicated random forest model for most years. One might be tempted to ask the forecasters to pack their bags and crown the linear model with approval ratings as the best model, but let's take a closer look at the `\(R^2\)` for the whole dataset.
+Indeed, it appears that the simple model is closer to the truth than the complicated random forest model for most years. One might be tempted to ask the forecasters to pack their bags and crown the linear model with approval ratings as the best model, but let's take a closer look at the \(R^2\) for the whole dataset.
 
 
 ``` r

@@ -52,7 +52,8 @@ ggplot(win_percentage_data, aes(x = Group, y = WinPercentage, fill = Group)) +
   theme_minimal() +
   scale_y_continuous(limits = c(0, 100))
 ```
-The plot tells us that an incumbent president has an edge over their competitor. This effect is known as the incumbent advantage, and is well-studied in academia. (The incumbent advantage shows up everywhere around the world, curiously except in [South America](https://www.jstor.org/stable/26288984)).
+
+The plot tells us that an incumbent president has an edge over their competitor. This effect is known as the incumbent advantage, and is well-studied in academia. (The incumbent advantage shows up everywhere around the world, curiously except in [South America](https://www.jstor.org/stable/26288984) ).
 
 One might argue that there is no incumbent-candidate effect, but merely the incumbent-party effect. Let's test this theory by looking at the incumbent vs non-incumbent win rate by conditioning on being in a incumbent party
 
@@ -447,7 +448,7 @@ ggplot(plot_data, aes(x = factor(year), y = deviation, fill = model)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
 ```
-Indeed, it appears that the simple model is closer to the truth than the complicated random forest model for most years. One might be tempted to ask the forecasters to pack their bags and crown the linear model with approval ratings as the best model, but let's take a closer look at the $R^2$ for the whole dataset.
+Indeed, it appears that the simple model is closer to the truth than the complicated random forest model for most years. One might be tempted to ask the forecasters to pack their bags and crown the linear model with approval ratings as the best model, but let's take a closer look at the \(R^2\) for the whole dataset.
 
 ```{r}
 summary(lm(pv2p ~ juneapp, popvote_incumbent_party))$adj.r.squared
