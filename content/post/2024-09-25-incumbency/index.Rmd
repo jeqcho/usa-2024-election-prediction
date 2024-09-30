@@ -1,0 +1,470 @@
+---
+title: Incumbency
+author: Package Build
+date: '2024-09-25'
+slug: incumbency
+categories: []
+tags: []
+---
+
+# Incumbency
+
+```{r}
+popvote <- read.csv("popvote_1948-2020.csv")
+```
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+
+# Step 1: Separate incumbents and non-incumbents
+incumbent_data <- subset(popvote, !is.na(incumbent) &
+                           !is.na(winner) & incumbent == TRUE)
+non_incumbent_data <- subset(popvote, !is.na(incumbent) &
+                               !is.na(winner)  & incumbent == FALSE)
+
+# Step 2: Calculate win percentages for incumbents and non-incumbents
+incumbent_win_count <- sum(incumbent_data$winner == TRUE)
+incumbent_total <- nrow(incumbent_data)
+incumbent_win_percentage <- (incumbent_win_count / incumbent_total) * 100
+
+non_incumbent_win_count <- sum(non_incumbent_data$winner == TRUE)
+non_incumbent_total <- nrow(non_incumbent_data)
+non_incumbent_win_percentage <- (non_incumbent_win_count / non_incumbent_total) * 100
+
+# Step 3: Create a data frame for plotting
+win_percentage_data <- data.frame(
+  Group = c("Incumbent", "Non-Incumbent"),
+  WinPercentage = c(incumbent_win_percentage, non_incumbent_win_percentage)
+)
+
+# Step 4: Plot the win percentages
+ggplot(win_percentage_data, aes(x = Group, y = WinPercentage, fill = Group)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_text(aes(label = sprintf("%.1f%%", WinPercentage)), 
+            vjust = -0.5, size = 5) +  
+  scale_fill_manual(values = c("Incumbent" = "chartreuse3", "Non-Incumbent" = "orange")) + 
+  ggtitle("Win Percentage: Incumbents vs Non-Incumbents") +
+  ylab("Win Percentage (%)") +
+  xlab("Group") +
+  theme_minimal() +
+  scale_y_continuous(limits = c(0, 100))
+```
+
+One might argue that there is no incumbent-candidate effect, but merely the incumbent-party effect. Let's test this theory by looking at the incumbent vs non-incumbent win rate conditioning on being in a incumbent party
+
+```{r}
+# Step 1: Separate incumbents and non-incumbents
+incumbent_party_incumbent_data <- subset(incumbent_data, incumbent_party == TRUE)
+incumbent_party_non_incumbent_data <- subset(non_incumbent_data, incumbent_party == TRUE)
+
+# Step 2: Calculate win percentages for incumbents and non-incumbents
+incumbent_win_count <- sum(incumbent_party_incumbent_data$winner == TRUE)
+incumbent_total <- nrow(incumbent_party_incumbent_data)
+incumbent_win_percentage <- (incumbent_win_count / incumbent_total) * 100
+
+non_incumbent_win_count <- sum(incumbent_party_non_incumbent_data$winner == TRUE)
+non_incumbent_total <- nrow(incumbent_party_non_incumbent_data)
+non_incumbent_win_percentage <- (non_incumbent_win_count / non_incumbent_total) * 100
+
+# Step 3: Create a data frame for plotting
+win_percentage_data <- data.frame(
+  Group = c("Incumbent", "Non-Incumbent"),
+  WinPercentage = c(incumbent_win_percentage, non_incumbent_win_percentage)
+)
+
+# Step 4: Plot the win percentages
+ggplot(win_percentage_data, aes(x = Group, y = WinPercentage, fill = Group)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_text(aes(label = sprintf("%.1f%%", WinPercentage)), 
+            vjust = -0.5, size = 5) +  
+  scale_fill_manual(values = c("Incumbent" = "chartreuse3", "Non-Incumbent" = "orange")) + 
+  ggtitle("Win Percentage: Incumbents vs Non-incumbents of Incumbent Party") +
+  ylab("Win Percentage (%)") +
+  xlab("Group") +
+  theme_minimal() +
+  scale_y_continuous(limits = c(0, 100))
+```
+
+Ideally we would like to see compare incumbents vs non-incumbents when they are not from an incumbent party, but party hopping does not exist in the US.
+
+```{r}
+fed.grants.county <- read.csv("fedgrants_bycounty_1988-2008.csv")
+```
+
+
+```{r}
+# Step 1: Fit the linear model
+model <- lm(dvoteswing_inc ~ dpct_grants, data = fed.grants.county)
+
+# Step 2: Display a summary of the model to see the results
+summary(model)
+
+# Step 3: Create the scatterplot with regression line
+ggplot(fed.grants.county, aes(x = dpct_grants, y = dvoteswing_inc)) +
+  geom_point(color = "blue", size = 2) +   # Plot points with a specific color and size
+  geom_smooth(method = "lm", col = "red", se = TRUE) +  # Add a regression line with confidence interval
+  ggtitle("Scatterplot of Vote Swing for Incumbents vs Federal Aid Change") +
+  xlab("Percentage Change in Federal Aid (dpct_grants)") +
+  ylab("Percentage Change in Incumbent Vote Share (dvoteswing_inc)") +
+  theme_minimal()
+```
+
+
+```{r}
+# Step 1: Fit the linear model
+model <- lm(dvoteswing_inc ~ dpc_income, data = fed.grants.county)
+
+# Step 2: Display a summary of the model to see the results
+summary(model)
+
+# Step 3: Create the scatterplot with regression line
+ggplot(fed.grants.county, aes(x = dpc_income, y = dvoteswing_inc)) +
+  geom_point(color = "blue", size = 2) +   # Plot points with a specific color and size
+  geom_smooth(method = "lm", col = "red", se = TRUE) +  # Add a regression line with confidence interval
+  ggtitle("Scatterplot of Vote Swing for Incumbents vs Federal Aid Change") +
+  xlab("Percentage Change in Federal Aid (dpct_grants)") +
+  ylab("Percentage Change in Incumbent Vote Share (dvoteswing_inc)") +
+  theme_minimal()
+```
+
+```{r}
+# Step 1: Categorize dpc_income into bins
+fed.grants.county$dpc_income_bins <- cut(
+  fed.grants.county$dpc_income, 
+  breaks = c(-Inf, -5, 0, 5, Inf), 
+  labels = c("More than -5%", "-5% to 0%", "0% to 5%", "More than 5%"),
+  right = FALSE  # Include lower limit in the bin
+)
+
+# Step 2: Create a histogram of the binned dpc_income data
+ggplot(fed.grants.county, aes(x = dpc_income_bins)) +
+  geom_bar(fill = "skyblue", color = "black") +  # Bar plot since it's binned data
+  ggtitle("Histogram of Percentage Change in Per Capita Income") +
+  xlab("Percentage Change in Per Capita Income (dpc_income)") +
+  ylab("Frequency") +
+  theme_minimal()
+```
+
+
+# A simple model vs random forest
+
+Here we pit Abramowitz's Time for Change model against our model, using the same variables, but comparing the results of their linear regression against our random forest.
+
+```{r}
+library(dplyr)
+
+fred_econ <- read.csv("fred_econ.csv")
+fred_econ <- fred_econ |>
+  filter(quarter==2, !is.na(GDP_growth_quarterly)) |>
+  select(year, GDP_growth_quarterly) |>
+  rename(q2_gdp_growth = GDP_growth_quarterly)
+
+popvote <- popvote |>
+  left_join(fred_econ)
+```
+
+```{r}
+popvote_incumbent_party <- popvote |>
+  filter(incumbent_party == TRUE, !is.na(pv2p))
+```
+
+```{r}
+tfc <- lm(pv2p ~ juneapp + q2_gdp_growth + incumbent, data=popvote_incumbent_party)
+tfc
+```
+Interpret those numbers
+
+```{r}
+# Load necessary libraries
+library(randomForest)
+library(caret)  # For leave-one-out cross-validation
+
+# Random Forest model (set a seed for reproducibility)
+set.seed(123)
+rf_model <- randomForest(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = popvote_incumbent_party)
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(popvote_incumbent_party), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = popvote_incumbent_party[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = popvote_incumbent_party[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party$pv2p[i] - prediction)^2
+})
+
+# Step 2: Perform Leave-One-Out Cross-Validation for the random forest model
+rf_loo_errors <- sapply(1:nrow(popvote_incumbent_party), function(i) {
+  # Fit the model excluding observation i
+  rf_loo <- randomForest(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = popvote_incumbent_party[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(rf_loo, newdata = popvote_incumbent_party[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party$pv2p[i] - prediction)^2
+})
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors))  # Take the square root of the mean of the squared errors
+rf_rmse <- sqrt(mean(rf_loo_errors))  # Same for random forest
+
+# Step 4: Print the results
+cat("Linear Model LOO-CV RMSE:", lm_rmse, "\n")
+cat("Random Forest LOO-CV RMSE:", rf_rmse, "\n")
+```
+
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(randomForest)
+library(tidyr)  # Load the tidyr package for pivot_longer
+
+# Initialize vectors to store LOO predictions
+lm_loo_predictions <- numeric(nrow(popvote_incumbent_party))
+rf_loo_predictions <- numeric(nrow(popvote_incumbent_party))
+
+# Step 1: Perform Leave-One-Out Cross-Validation (LOO-CV) for both models
+for (i in 1:nrow(popvote_incumbent_party)) {
+  
+  # Leave out the ith observation for LOO-CV
+  train_data <- popvote_incumbent_party[-i, ]
+  test_data <- popvote_incumbent_party[i, , drop = FALSE]
+  
+  # Fit linear model on the training data
+  lm_loo_model <- lm(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = train_data)
+  
+  # Predict on the left-out observation
+  lm_loo_predictions[i] <- predict(lm_loo_model, newdata = test_data)
+  
+  # Fit random forest model on the training data
+  rf_loo_model <- randomForest(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = train_data)
+  
+  # Predict on the left-out observation
+  rf_loo_predictions[i] <- predict(rf_loo_model, newdata = test_data)
+}
+
+# Step 2: Calculate the deviations (lm and rf predictions from the truth)
+prediction_data <- popvote_incumbent_party %>%
+  mutate(lm_loo_predictions = lm_loo_predictions,
+         rf_loo_predictions = rf_loo_predictions) %>%
+  select(year, pv2p, lm_loo_predictions, rf_loo_predictions) %>%
+  rename(truth = pv2p) %>%
+  mutate(lm_deviation = lm_loo_predictions - truth,  # Deviation of lm predictions from truth
+         rf_deviation = rf_loo_predictions - truth)  # Deviation of rf predictions from truth
+
+# Step 3: Reshape the data for plotting (convert to long format)
+plot_data <- prediction_data %>%
+  select(year, lm_deviation, rf_deviation) %>%
+  pivot_longer(cols = c(lm_deviation, rf_deviation), 
+               names_to = "model", 
+               values_to = "deviation")
+
+# Step 4: Plot the bar chart showing deviations from truth
+ggplot(plot_data, aes(x = factor(year), y = deviation, fill = model)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Bar chart with dodged bars
+  ggtitle("Deviation of LM and RF Predictions from Truth by Year") +
+  xlab("Year") +
+  ylab("Deviation from Truth (pv2p)") +
+  scale_fill_manual(values = c("lm_deviation" = "green", "rf_deviation" = "orange")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+
+
+```{r}
+# Load necessary libraries
+library(randomForest)
+library(caret)  # For leave-one-out cross-validation
+
+# Random Forest model (set a seed for reproducibility)
+set.seed(123)
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(popvote_incumbent_party), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ juneapp , data = popvote_incumbent_party[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = popvote_incumbent_party[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party$pv2p[i] - prediction)^2
+})
+
+# Step 2: Perform Leave-One-Out Cross-Validation for the random forest model
+rf_loo_errors <- sapply(1:nrow(popvote_incumbent_party), function(i) {
+  # Fit the model excluding observation i
+  rf_loo <- randomForest(pv2p ~ juneapp , data = popvote_incumbent_party[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(rf_loo, newdata = popvote_incumbent_party[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party$pv2p[i] - prediction)^2
+})
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors))  # Take the square root of the mean of the squared errors
+rf_rmse <- sqrt(mean(rf_loo_errors))  # Same for random forest
+
+# Step 4: Print the results
+cat("Linear Model LOO-CV RMSE:", lm_rmse, "\n")
+cat("Random Forest LOO-CV RMSE:", rf_rmse, "\n")
+```
+
+
+```{r}
+
+# Initialize vectors to store LOO predictions
+lm_loo_predictions <- numeric(nrow(popvote_incumbent_party))
+rf_loo_predictions <- numeric(nrow(popvote_incumbent_party))
+
+# Step 1: Perform Leave-One-Out Cross-Validation (LOO-CV) for both models
+for (i in 1:nrow(popvote_incumbent_party)) {
+  
+  # Leave out the ith observation for LOO-CV
+  train_data <- popvote_incumbent_party[-i, ]
+  test_data <- popvote_incumbent_party[i, , drop = FALSE]
+  
+  # Fit linear model on the training data
+  lm_loo_model <- lm(pv2p ~ juneapp, data = train_data)
+  
+  # Predict on the left-out observation
+  lm_loo_predictions[i] <- predict(lm_loo_model, newdata = test_data)
+  
+  # Fit random forest model on the training data
+  rf_loo_model <- randomForest(pv2p ~ juneapp, data = train_data)
+  
+  # Predict on the left-out observation
+  rf_loo_predictions[i] <- predict(rf_loo_model, newdata = test_data)
+}
+
+# Step 2: Calculate the deviations (lm and rf predictions from the truth)
+prediction_data <- popvote_incumbent_party %>%
+  mutate(lm_loo_predictions = lm_loo_predictions,
+         rf_loo_predictions = rf_loo_predictions) %>%
+  select(year, pv2p, lm_loo_predictions, rf_loo_predictions) %>%
+  rename(truth = pv2p) %>%
+  mutate(lm_deviation = lm_loo_predictions - truth,  # Deviation of lm predictions from truth
+         rf_deviation = rf_loo_predictions - truth)  # Deviation of rf predictions from truth
+
+# Step 3: Reshape the data for plotting (convert to long format)
+plot_data <- prediction_data %>%
+  select(year, lm_deviation, rf_deviation) %>%
+  pivot_longer(cols = c(lm_deviation, rf_deviation), 
+               names_to = "model", 
+               values_to = "deviation")
+
+# Step 4: Plot the bar chart showing deviations from truth
+ggplot(plot_data, aes(x = factor(year), y = deviation, fill = model)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Bar chart with dodged bars
+  ggtitle("Deviation of LM and RF Predictions from Truth by Year") +
+  xlab("Year") +
+  ylab("Deviation from Truth (pv2p)") +
+  scale_fill_manual(values = c("lm_deviation" = "green", "rf_deviation" = "orange")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+Intrepret these numbers and compare with above. LOL lm using approval wins
+
+# Other Expert Predictions
+
+```{r}
+sabato <- read.csv("sabato_crystal_ball_ratings.csv") |>
+  rename(abbr=state)
+cook <- read.csv("CPR_EC_Ratings.csv") |>
+  rename(abbr=Abbreviation, year=Cycle, rating=Rating)
+```
+
+```{r}
+# Perform an inner join
+experts <- sabato %>%
+  inner_join(cook, by = c("year","abbr")) |>
+  rename(sabato_rating=rating.x, cook_rating=rating.y)
+
+# Create a mapping for cook_rating
+cook_rating_mapping <- c(
+  "Solid D"  = 1,  # Solid Democrat
+  "Likely D" = 2,  # Likely Democrat
+  "Lean D"   = 3,  # Lean Democrat
+  "Toss Up"  = 4,  # Toss Up
+  "Lean R"   = 5,  # Lean Republican
+  "Likely R" = 6,  # Likely Republican
+  "Solid R"  = 7   # Solid Republican
+)
+
+# Apply the mapping to experts$cook_rating
+experts$cook_rating <- cook_rating_mapping[experts$cook_rating]
+```
+
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+
+# Step 1: Check if the prediction was correct based on PluralityParty (winning party)
+experts <- experts %>%
+  mutate(
+    sabato_correct = (sabato_rating <= 3 & PluralityParty == "D") |  # D leaning and D won
+                     (sabato_rating >= 5 & PluralityParty == "R"),   # R leaning and R won
+    cook_correct = (cook_rating <= 3 & PluralityParty == "D") |      # D leaning and D won
+                   (cook_rating >= 5 & PluralityParty == "R")        # R leaning and R won
+  )
+
+# Step 2: Calculate the total number of predictions within each group for Sabato and Cook ratings
+total_predictions_sabato <- experts %>%
+  group_by(sabato_rating) %>%
+  summarise(total = n())
+
+total_predictions_cook <- experts %>%
+  group_by(cook_rating) %>%
+  summarise(total = n())
+
+# Step 3: Calculate the correct predictions and percentages within each rating group
+
+# For Sabato ratings
+correct_predictions_sabato <- experts %>%
+  filter(sabato_correct == TRUE) %>%
+  group_by(sabato_rating) %>%
+  summarise(correct_count = n()) %>%
+  left_join(total_predictions_sabato, by = "sabato_rating") %>%
+  mutate(
+    percentage = (correct_count / total) * 100,  # Calculate percentage within group
+    rating_system = "Sabato"  # Add a column for rating system
+  )
+
+# For Cook ratings
+correct_predictions_cook <- experts %>%
+  filter(cook_correct == TRUE) %>%
+  group_by(cook_rating) %>%
+  summarise(correct_count = n()) %>%
+  left_join(total_predictions_cook, by = "cook_rating") %>%
+  mutate(
+    percentage = (correct_count / total) * 100,  # Calculate percentage within group
+    rating_system = "Cook"  # Add a column for rating system
+  )
+
+# Step 4: Combine the data for both Sabato and Cook ratings
+combined_data <- bind_rows(
+  correct_predictions_sabato %>% rename(score = sabato_rating),
+  correct_predictions_cook %>% rename(score = cook_rating)
+)
+
+# Step 5: Convert the score column to a factor with levels from 1 to 7 to ensure all ratings are shown
+combined_data <- combined_data %>%
+  mutate(score = factor(score, levels = 1:7))  # Explicitly set levels 1 to 7
+
+# Step 6: Create the grouped bar chart with percentages and labels on the bars
+ggplot(combined_data, aes(x = score, y = percentage, fill = rating_system)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = sprintf("%.1f", percentage)), 
+            position = position_dodge(width = 0.9), vjust = -0.5, size = 2) +  # Add percentage labels
+  ggtitle("Correctness Within Each Group for Sabato and Cook Ratings") +
+  xlab("Rating (1 = Solid D, 7 = Solid R)") +
+  ylab("Percentage of Correct Predictions (%)") +
+  scale_fill_manual(values = c("Sabato" = "lightblue", "Cook" = "lightgreen")) +
+  scale_x_discrete(drop = FALSE) +  # Ensure all levels (1 to 7) are shown
+  theme_minimal()
+```
+
+
+
