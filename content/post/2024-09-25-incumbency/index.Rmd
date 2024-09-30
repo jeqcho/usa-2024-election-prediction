@@ -170,7 +170,8 @@ ggplot(fed.grants.county, aes(x = dpct_grants, y = dvoteswing_inc)) +
   ylab("Percentage Change in Incumbent Vote Share") +
   theme_minimal()
 ```
-The low \(R^2\) of 0.002 shows that at best, federal spending only explains 0.2% of the vote share. But note the low p-value that is less than \(10^{-10}\), with an estimated effect of -0.007. This means that the model is confident that federal spending *decreases* vote share by 0.007% for every 1% increase in federal spending! This is the opposite of what we expected. Instead of what the *government* does (like federal spending), let's see how the *people* feel by fitting vote share change against county-level income change
+
+The low \(R^2\) of 0.002 shows that at best, federal spending only explains 0.2% of the vote share. But note the low p-value that is less than \(10^{-10}\), with an estimated effect of -0.007. This means that the model is confident that federal spending **decreases** vote share by 0.007% for every 1% increase in federal spending! This is the opposite of what we expected. Instead of what the *government* does (like federal spending), let's see how the *people* feel by fitting vote share change against county-level income change
 
 ```{r echo=FALSE, results="asis"}
 # Step 1: Fit the linear model
@@ -197,6 +198,7 @@ ggplot(fed.grants.county, aes(x = dpc_income, y = dvoteswing_inc)) +
   ylab("Percentage Change in Incumbent Vote Share") +
   theme_minimal()
 ```
+
 The \(R^2\) is lower, explaining away 0.02% of the variance, but the p-value is at 0.04 with an estimate of 0.06. This means that a 1% increase in income is associated with a 0.06% increase in vote share for the incumbent party. That means that if many counties face an increase in income over the term, the incumbent president will be favored. And indeed this is the case:
 
 ```{r echo=FALSE}
@@ -216,9 +218,10 @@ ggplot(fed.grants.county|>filter(!is.na(dpc_income_bins)), aes(x = dpc_income_bi
   ylab("Frequency") +
   theme_minimal()
 ```
+
 The plot above shows that thanks to the current trend of the modern economy, most counties face an increase in income. It can then be theorized that the incumbency advantage is explained by the momentum of the modern economy making the constituents to reward the incumbent president, whoever they are.
 
-This might be disappointing to some readers, as they would want presidents who *tried harder* by allocating more federal spending on key states to be favored, but in reality the mechanism of democracy will ensure that those favored are presidents who made the situation on the ground *actually better* regardless of their federal spending. And because of the modern economy momentum, this is anyone who manages to get into the Oval Office.
+This might be disappointing to some readers, as they would want presidents who **tried harder** by allocating more federal spending on key states to be favored, but in reality the mechanism of democracy will ensure that those favored are presidents who made the situation on the ground **actually better** regardless of their federal spending. And because of the modern economy momentum, this is anyone who manages to get into the Oval Office.
 
 # Simple models can be powerful
 
