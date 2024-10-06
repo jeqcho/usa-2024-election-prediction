@@ -1,0 +1,78 @@
+---
+title: How economy influences elections
+author: Jay Chooi
+date: '2024-09-11'
+slug: week-2
+categories: []
+tags: []
+---
+
+
+
+<p>The code for this page can be found <a href="https://github.com/jeqcho/usa-2024-election-prediction/blob/main/content/post/2024-09-11-week-2/index.Rmd">here</a>.</p>
+<p>One measure of the economy is the GDP growth. But do voters care more about the short-term GDP growth in the months leading up to the election, or do they judge the candidate based on the GDP growth <strong>throughout</strong> their term? We first investigate the Q2 GDP growth, which is by how much did the GDP grow in the second quarter (April, May, June) in the year of the election.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>In our best-fit lines above, we have removed 2020 as an outlier. The plot shows that there is a strong positive correlation between second quarter GDP growth and the incumbent’s party vote share, particularly so when the candidate is also incumbent! This is fair, since the voters might not judge a new non-incumbent candidate with the current economy. Another interesting feature is that the best-fit line almost cross the center of 50% vote share for 0% growth. This suggests that the voters only reward the incumbent with more votes if the economy grows, and punishes when not, with no established baseline that the president is expected to perform. Let’s look at the <span class="math inline">\(R^2\)</span> to get an idea of how powerful is the prediction. Here’s the <span class="math inline">\(R^2\)</span> for non-incumbent candidates.</p>
+<pre class="r"><code>summary(lm(pv2p~GDP_growth_quarterly,
+           data=(d_inc_econ|&gt;filter(incumbent==FALSE))
+           ))$r.squared</code></pre>
+<pre><code>## [1] 0.1142466</code></pre>
+<p>Here’s the <span class="math inline">\(R^2\)</span> for incumbent candidates.</p>
+<pre class="r"><code>summary(lm(pv2p~GDP_growth_quarterly,
+           data=(d_inc_econ|&gt;filter(incumbent==TRUE, year!=2020))
+           ))$r.squared</code></pre>
+<pre><code>## [1] 0.4373633</code></pre>
+<p>It turns out that second quarter GDP growth can explain up to 44% of the change in vote shares across time! Now, how about long term GDP growth? Instead of looking at the GDP growth during the election year, let’s compare the GDP growth from the start of their term to the end of the term.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Here’s the <span class="math inline">\(R^2\)</span> for non-incumbents.</p>
+<pre class="r"><code>summary(lm(pv2p~GDP_growth_termly,
+           data=(d_inc_econ|&gt;filter(incumbent==FALSE))
+           ))$r.squared</code></pre>
+<pre><code>## [1] 0.01141712</code></pre>
+<p>Here’s the <span class="math inline">\(R^2\)</span> for incumbents.</p>
+<pre class="r"><code>summary(lm(pv2p~GDP_growth_termly,
+           data=(d_inc_econ|&gt;filter(incumbent==TRUE, year!=2020))
+           ))$r.squared</code></pre>
+<pre><code>## [1] 0.2929693</code></pre>
+<p>Interestingly, the effect on non-incumbent candidates essentially flattens out. Voters do not judge new candidates based on how well the economy performed over the years. For incumbent candidates, we still see a strong positive correlation, but the explanatory power decreases from 44 to 29. This suggests that the short-term national economy has more influence on elections that the long-term trajectory. Another interesting feature is that the best-fit line crosses the 50% mark when the GDP growth is 29.6%. This means that in contrast to the second-quarter GDP growth, the voters impose a baseline performance for the president to sustain the growth of the economy.</p>
+<p>How about other measures of the economy like unemployment rate? Here we took seasonally-adjusted unemployment rate for each state and see if the vote share of the incumbet party in each state changes in response to the unemployment rate.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Here’s the <span class="math inline">\(R^2\)</span> for non-incumbents.</p>
+<pre class="r"><code>summary(lm(pv2p~q2_unrate_growth,
+           data=(d_unrate_enc|&gt;filter(incumbent==FALSE))
+           ))$r.squared</code></pre>
+<pre><code>## [1] 0.003274093</code></pre>
+<p>Here’s the <span class="math inline">\(R^2\)</span> for incumbents.</p>
+<pre class="r"><code>summary(lm(pv2p~q2_unrate_growth,
+           data=(d_unrate_enc|&gt;filter(incumbent==TRUE, year!=2020))
+           ))$r.squared</code></pre>
+<pre><code>## [1] 0.0005243959</code></pre>
+<p>The flat line and low <span class="math inline">\(R^2\)</span> in both cases suggest that unemployment rate does not have a huge say on who becomes president. This suggest that voters do not associate employment with the president, since they might see more as a personal matter.</p>
+<p>Let’s put all the economic indicators we have into a machine learning model and see which indicators are most effective in predicting the national vote share. We build a random forest model with 100 trees and look at the importance plot which shows how good each indicator is in predicting vote share.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>The random forest confirms our hypothesis and crowns the second quarter GDP growth as the strongest economic predictor of the election, followed by the S&amp;P 500 open and the incumbency effect. Let’s use these three predictors to predict the next election and check the leave-one-out cross-validation (LOO-CV) error.</p>
+<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  26.8868307053893&quot;</code></pre>
+<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  5.18525126733404&quot;</code></pre>
+<p>The RMS is 5.05 which can be interpreted as saying that the prediction is usually within 5% of the truth. Let’s use this model to predict the current election.</p>
+<pre class="r"><code>set.seed(1347)
+
+data2024 &lt;- d_fred|&gt;filter(year==2024,quarter==2)
+data2024$incumbent &lt;- FALSE
+
+rf_model &lt;- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent, 
+                           data = d_inc_econ, ntree = 100)
+
+predict(rf_model, data2024)</code></pre>
+<pre><code>##        1 
+## 49.83405</code></pre>
+<p>The model suggests a vote share of 49.8% for Kamala Harris using GDP growth rate, S&amp;P 500 and the fact of non-incumbency. It can be interesting to note that the economic indicators itself are on the fence in this election and not particularly strong. Even if an incumbent runs, the vote share is 50.7%.</p>
+<pre class="r"><code>data2024 &lt;- d_fred|&gt;filter(year==2024,quarter==2)
+data2024$incumbent &lt;- TRUE
+
+rf_model &lt;- randomForest(pv2p ~ GDP_growth_quarterly + sp500_open + incumbent, 
+                           data = d_inc_econ, ntree = 100,)
+
+predict(rf_model, data2024)</code></pre>
+<pre><code>##        1 
+## 50.71584</code></pre>
+<p>Since the economic indicators are not vocal, both Harris and Trump have no edge in terms of the economy.</p>

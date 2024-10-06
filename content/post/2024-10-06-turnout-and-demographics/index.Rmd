@@ -1,0 +1,10 @@
+---
+title: Turnout and demographics
+author: Jay Chooi
+date: '2024-10-06'
+slug: turnout-and-demographics
+categories: []
+tags: []
+---
+
+One sticking point of using state-level economic indicators to predict votes is for example, voters in Arizona who works at Utah, and benefited from the economic conditions of Utah, then do they vote favorably for the incumbents, although the economic conditions of Arizona is bad? How much vote share do these people make up in Arizona?
