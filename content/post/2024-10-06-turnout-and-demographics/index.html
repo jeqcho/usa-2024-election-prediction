@@ -1,0 +1,101 @@
+---
+title: Turnout and demographics
+author: Jay Chooi
+date: '2024-10-06'
+slug: turnout-and-demographics
+categories: []
+tags: []
+---
+
+
+
+<p>This week, I am interested in predicting the voting preference of each demographic group. But votes are confidential, so we don’t have actual voting data of each demographic group. However, note that each county has a different demographic composition, and we <em>do</em> have the voting preference of each county. We can use this demographic variation across counties to extract the voting preference of each demographic group through a statistical technique called <strong>ecological inference</strong>. Gary King, a Government professor at Harvard, wrote extensively on <a href="https://gking.harvard.edu/category/research-interests/methods/ecological-inference">the technique</a>.</p>
+<p>To show how this technique works, I will extract out voter turnout by racial group by looking at the demographic and voting preference variation across states. We can then compare our results with the estimates from the <a href="https://www.census.gov/topics/public-sector/voting.html">Census Bureau</a>. Here’s what the Census Bureau tells us.</p>
+<p><img src="census_turnout.png" alt="Turnout by race according to Census Bureau" />
+It seems like recent years we are seeing an upward trend of civic engagement! Another interesting feature in the plot above is that non-hispanic blacks had higher turnout rates than non-hispanic whites in 2008 and 2012, which is when Obama was running for elections. However, here is a quote from the <a href="https://www.electproject.org/election-data/voter-turnout-demographics">US Elections Project</a>.</p>
+<blockquote>
+<p>Surveys have error: both as a consequence from random sampling and from other issues, such as who responds to a survey and the truthfulness of their responses. Pollsters have long noted that poll respondents overstate their voting participation. A primary reason – although not the only one – is that people like to think of themselves in a favorable light within social norms, in this case presenting themselves as voters even if they did not vote.</p>
+</blockquote>
+<p>In other words, we expect this surveyed turnout to be higher than the actual turnout. Another ground truth is the voter file, which is maintained by the states and records whether a voter has voted in any given previous elections. The voter file I have access to only have the voting record for the 2020 presidential election.</p>
+<div class="float">
+<img src="voterfile_turnout.png" alt="Turnout from Voter File" />
+<div class="figcaption">Turnout from Voter File</div>
+</div>
+<p>Seems like the voter file is not telling us much with its incomplete records. Also take note that some voters who voted in 2020 might have been removed from the current voter file if they are deceased.</p>
+<p>Now let’s try out ecological inference. First, we have the demographic variation across states.</p>
+<p><img src="state_demographics.png" alt="Demographics across States" />
+Second, we have the turnout variation across states.</p>
+<p><img src="state_turnout.png" alt="Turnout Rates across States" />
+Using these two datasets, along with the total number of voters in each state, we can estimate the turnout for each racial group, by state, using ecological inference. Here are our results.</p>
+<p><img src="turnout_estimates.png" alt="Turnout estimates by race and state" />
+We can then compare our estimates for the turnout by racial group to other sources of turnout.</p>
+<p><img src="ecological_turnout.png" alt="Turnout estimates against other sources" />
+It turns out that the estimated turnout (71%) for whites are spot on, with a tight 95% credible interval hugging the surveyed turnout (73%). For blacks, the surveyed turnout (66\5) is on the upper bound of the estimated turnout (59%). For hispanics, the estimated turnout is 67%, more than 52% from the survey. The estimate for other vote share is spot on about 60% surveyed vs 57% estimated.</p>
+<p>Here is a table concluding our findings.</p>
+<table>
+<colgroup>
+<col width="6%" />
+<col width="11%" />
+<col width="9%" />
+<col width="11%" />
+<col width="14%" />
+<col width="17%" />
+<col width="15%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Racial Group</th>
+<th align="left">Turnout Rate (Voter File)</th>
+<th align="left">NA Rate (Voter File)</th>
+<th align="left">Absent Rate (Voter File)</th>
+<th align="left">Surveyed Turnout (Census Bureau)</th>
+<th align="left">Estimated Turnout (Ecological Inference)</th>
+<th align="left">Lower Bound (Ecological Inference)</th>
+<th align="left">Upper Bound (Ecological Inference)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">White</td>
+<td align="left">49%</td>
+<td align="left">38%</td>
+<td align="left">13%</td>
+<td align="left">73%</td>
+<td align="left">71%</td>
+<td align="left">69%</td>
+<td align="left">73%</td>
+</tr>
+<tr class="even">
+<td align="left">Black</td>
+<td align="left">36%</td>
+<td align="left">49%</td>
+<td align="left">15%</td>
+<td align="left">66%</td>
+<td align="left">59%</td>
+<td align="left">54%</td>
+<td align="left">66%</td>
+</tr>
+<tr class="odd">
+<td align="left">Hispanic</td>
+<td align="left">39%</td>
+<td align="left">56%</td>
+<td align="left">5%</td>
+<td align="left">52%</td>
+<td align="left">67%</td>
+<td align="left">62%</td>
+<td align="left">73%</td>
+</tr>
+<tr class="even">
+<td align="left">Other</td>
+<td align="left">33%</td>
+<td align="left">56%</td>
+<td align="left">11%</td>
+<td align="left">60%</td>
+<td align="left">57%</td>
+<td align="left">50%</td>
+<td align="left">65%</td>
+</tr>
+</tbody>
+</table>
+<p>Moving forward, it will be interesting to analyze the 2024 election to get the vote preference of each racial group. In the meantime, for forecasting, we can use a forecast of turnout for each racial group to get a more accurate estimate for the battleground states.</p>
