@@ -25,15 +25,19 @@ Seems like the voter file is not telling us much with its incomplete records. Al
 Now let's try out ecological inference. First, we have the demographic variation across states.
 
 ![Demographics across States](state_demographics.png)
+
 Second, we have the turnout variation across states.
 
 ![Turnout Rates across States](state_turnout.png)
+
 Using these two datasets, along with the total number of voters in each state, we can estimate the turnout for each racial group, by state, using ecological inference. Here are our results.
 
 ![Turnout estimates by race and state](turnout_estimates.png)
+
 We can then compare our estimates for the turnout by racial group to other sources of turnout.
 
 ![Turnout estimates against other sources](ecological_turnout.png)
+
 It turns out that the estimated turnout (71\%) for whites are spot on, with a tight 95\% credible interval hugging the surveyed turnout (73\%). For blacks, the surveyed turnout (66\5) is on the upper bound of the estimated turnout (59\%). For hispanics, the estimated turnout is 67\%, more than 52\% from the survey. The estimate for other vote share is spot on about 60\% surveyed vs 57\% estimated.
 
 Here is a table concluding our findings.
