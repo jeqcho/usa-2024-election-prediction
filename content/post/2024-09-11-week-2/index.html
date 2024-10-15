@@ -51,8 +51,8 @@ tags: []
 <p>Let’s put all the economic indicators we have into a machine learning model and see which indicators are most effective in predicting the national vote share. We build a random forest model with 100 trees and look at the importance plot which shows how good each indicator is in predicting vote share.</p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>The random forest confirms our hypothesis and crowns the second quarter GDP growth as the strongest economic predictor of the election, followed by the S&amp;P 500 open and the incumbency effect. Let’s use these three predictors to predict the next election and check the leave-one-out cross-validation (LOO-CV) error.</p>
-<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  26.8868307053893&quot;</code></pre>
-<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  5.18525126733404&quot;</code></pre>
+<pre><code>## [1] &quot;LOO-CV Mean Squared Error:  25.5103785768594&quot;</code></pre>
+<pre><code>## [1] &quot;LOO-CV Root Mean Squared Error:  5.05077999687765&quot;</code></pre>
 <p>The RMS is 5.05 which can be interpreted as saying that the prediction is usually within 5% of the truth. Let’s use this model to predict the current election.</p>
 <pre class="r"><code>set.seed(1347)
 

@@ -24,7 +24,7 @@ It turns out that non-incumbents in a incumbent party fared worse than the overa
 <p>Trump is a non-incumbent from a non-incumbent party, while Harris is a non-incumbent from an incumbent-party (hence the color coding above), which means that the effect is acting against Harris.</p>
 <p>Let’s figure out what’s causing the incumbency advantage. One hypothesis is that incumbents will award more federal spending grants to key states which will sway votes to their side (academics call this pork-barrel spending). Here we test that effect by plotting the change in vote share vs change in federal spending for counties from 1996 to 2008.</p>
 <!-- html table generated in R 4.4.1 by xtable 1.8-4 package -->
-<!-- Mon Sep 30 18:03:52 2024 -->
+<!-- Mon Oct 14 14:32:37 2024 -->
 <table border="1">
 <tr>
 <th>
@@ -82,7 +82,7 @@ dpct_grants
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>The low <span class="math inline">\(R^2\)</span> of 0.002 shows that at best, federal spending only explains 0.2% of the vote share. But note the low p-value that is less than <span class="math inline">\(10^{-10}\)</span>, with an estimated effect of -0.007. This means that the model is confident that federal spending <strong>decreases</strong> vote share by 0.007% for every 1% increase in federal spending! This is the opposite of what we expected. Instead of what the <em>government</em> does (like federal spending), let’s see how the <em>people</em> feel by fitting vote share change against county-level income change</p>
 <!-- html table generated in R 4.4.1 by xtable 1.8-4 package -->
-<!-- Mon Sep 30 18:03:52 2024 -->
+<!-- Mon Oct 14 14:32:37 2024 -->
 <table border="1">
 <tr>
 <th>

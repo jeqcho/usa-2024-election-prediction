@@ -1,0 +1,961 @@
+---
+title: A Working Model; Campaign Contributions
+author: Jay Chooi
+date: '2024-10-14'
+slug: campaign-ad-spending
+categories: []
+tags: []
+---
+
+In this week, we will finalize a model and test whether adding campaign ad spending will improve the model. Recall Abramowitz's model from the [incumbency](/usa-2024-election-prediction/post/2024/09/25/incumbency/) blog post.
+
+\[
+\underbrace{\text{pv2p}}_{\text{incumbent party}} = \beta_0 + \beta_1 \cdot \underbrace{\text{G2GDP}}_{\text{Q2 GDP growth}} + \beta_2 \cdot \underbrace{\text{NETAPP}}_{\text{June Gallup job approval}} + \beta_3 \cdot \underbrace{\text{TERM1INC}}_{\text{sitting pres}}
+\]
+
+This model achieved a leave-one-out RMSE (LOO-RMSE) of 4.183061 (the lower the better). With Harris and Trump running the race, let's look at the LOO-RMSE for elections where non-incumbents faced each other.
+
+```{r echo=FALSE,message=FALSE}
+set.seed(1347)
+library(dplyr)
+
+popvote <- read.csv("data/popvote_1948-2020.csv")
+
+fred_econ <- read.csv("data/fred_econ.csv")
+
+fred_econ_q2 <- fred_econ |>
+  filter(quarter==2, !is.na(GDP_growth_quarterly)) |>
+  select(year, GDP_growth_quarterly) |>
+  rename(q2_gdp_growth = GDP_growth_quarterly)
+
+fred_econ_q3 <- fred_econ |>
+  filter(quarter==3, !is.na(GDP_growth_quarterly)) |>
+  select(year, GDP_growth_quarterly) |>
+  rename(q3_gdp_growth = GDP_growth_quarterly)
+
+popvote <- popvote |>
+  left_join(fred_econ_q2) |>
+  left_join(fred_econ_q3)
+```
+
+```{r echo=FALSE,message=FALSE}
+popvote_incumbent_party <- popvote |>
+  filter(incumbent_party == TRUE, !is.na(pv2p))
+```
+
+
+```{r echo=FALSE, message=FALSE}
+# Load necessary libraries
+library(caret)  # For leave-one-out cross-validation
+
+# Random Forest model (set a seed for reproducibility)
+set.seed(123)
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(popvote_incumbent_party), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = popvote_incumbent_party[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = popvote_incumbent_party[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party$pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!popvote_incumbent_party$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("Number of non-incumbents elections in database:", length(non_incumbents), "\n")
+cat("LOO-RMSE (non-incumbents):", lm_rmse, "\n")
+```
+
+The LOO-RMSE is lower at 2.7, which is reassuring.
+
+
+Since Biden dropped out on July 21 and Harris won the nomination on August 5, it might be more accurate for this election to use Q3 GDP growth instead of Q2. Let's see whether using this metric changes the model's historical performance by much.
+
+```{r echo=FALSE,message=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(popvote_incumbent_party), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ juneapp + q3_gdp_growth + incumbent, data = popvote_incumbent_party[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = popvote_incumbent_party[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party$pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!popvote_incumbent_party$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (total):", lm_rmse, "\n")
+cat("LOO-RMSE (non-incumbents):", lm_rmse_inc, "\n")
+```
+
+Interestingly, using Q3 data, which is closer to the election date, has a higher RMSE than using Q2 data. However, for most elections, the candidates are known during Q2. Harris was finalized as the candidate during Q3, so for this election, we will proceed with Q3 data, noting but accepting the higher RMSE.
+
+Similarly, let's use the September Gallup job approval instead of June. Note that this approval rating is still for Biden. I have scrapped the data off [this website](https://www.presidency.ucsb.edu/statistics/data/presidential-job-approval-all-data), with 11 elections from 1980 having consistent September polls. Here are the model's performance for those 11 elections
+
+```{r echo=FALSE, message=FALSE}
+sepapp <- read.csv("data/latest_september_data.csv") |> filter(year>=1980)
+
+popvote_incumbent_party_sep <- popvote_incumbent_party |>
+  right_join(sepapp)
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(popvote_incumbent_party_sep), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = popvote_incumbent_party_sep[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = popvote_incumbent_party_sep[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party_sep$pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!popvote_incumbent_party_sep$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (June, total):", lm_rmse, "\n")
+cat("LOO-RMSE (June, non-incumbents):", lm_rmse_inc, "\n")
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(popvote_incumbent_party_sep), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ sepapp + q2_gdp_growth + incumbent, data = popvote_incumbent_party_sep[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = popvote_incumbent_party_sep[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party_sep$pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!popvote_incumbent_party_sep$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (September, total):", lm_rmse, "\n")
+cat("LOO-RMSE (September, non-incumbents):", lm_rmse_inc, "\n")
+```
+The same pattern from using Q3 GDP growth occurred, where the RMSE for all elections increased (here from 4.33 to 4.52), while the RMSE for the non-incumbent elections decreased (here from 5.64 to 4.08).
+
+
+Let's combine both modifications of using Q3 GDP growth and September Gallup approval ratings, and using the smaller subset of the 11 elections since 1980 where we have September Gallup data.
+
+```{r echo=FALSE, message=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(popvote_incumbent_party_sep), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ sepapp + q3_gdp_growth + incumbent, data = popvote_incumbent_party_sep[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = popvote_incumbent_party_sep[i, ])
+  # Calculate the squared error for the excluded observation
+  (popvote_incumbent_party_sep$pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!popvote_incumbent_party_sep$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (Q3, September, total):", lm_rmse, "\n")
+cat("LOO-RMSE (Q3, September, non-incumbents):", lm_rmse_inc, "\n")
+```
+
+We achieved a LOO-RMSE of 6.27 generally and 4.47 for non-incumbent elections.
+
+Note that we have been predicting the national two-party vote share. Currently, this national popular vote share doesn't have much weight since the electoral collage determines who wins. Let's get more granular and apply this model at the state-level then. We are only interested in recent competitive states. Let's take a look at the past 3 elections.
+
+```{r echo=FALSE,message=FALSE}
+d_pvstate_wide <- read.csv("data/clean_wide_state_2pv_1948_2020.csv")
+d_pvstate_wide$abs_margin_pv2p <- abs(d_pvstate_wide$D_pv2p - d_pvstate_wide$R_pv2p)
+```
+
+```{r echo=FALSE,message=FALSE}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Calculate the margin if not already done
+d_pvstate_wide$margin_pv2p <- d_pvstate_wide$D_pv2p - d_pvstate_wide$R_pv2p
+d_pvstate_wide$abs_margin_pv2p <- abs(d_pvstate_wide$margin_pv2p)
+
+# Create a new column for the winning party
+d_pvstate_wide$winner <- ifelse(d_pvstate_wide$margin_pv2p > 0, "Democrat", "Republican")
+
+# Function to filter closest states for a given year
+get_closest_states <- function(d1, yr, n=10) {
+  d1 %>%
+    filter(year == yr) %>%
+    arrange(abs_margin_pv2p) %>%
+    head(n)
+}
+
+# Get closest states for 2012, 2016, and 2020
+closest_2012 <- get_closest_states(d_pvstate_wide, 2012)
+closest_2016 <- get_closest_states(d_pvstate_wide, 2016)
+closest_2020 <- get_closest_states(d_pvstate_wide, 2020)
+
+# Plotting function with color coding by winner and x-axis limit from 0 to 7
+plot_closest_states <- function(data, year) {
+  ggplot(data, aes(x = reorder(state, abs_margin_pv2p), y = abs_margin_pv2p, fill = winner)) +
+    geom_bar(stat = "identity") +
+    coord_flip() +
+    scale_fill_manual(values = c("Democrat" = "blue", "Republican" = "red")) +
+    labs(title = paste("Top 10 Closest States by Margin in", year), 
+         x = "State", 
+         y = "Absolute Margin (%)",
+         fill = "Winning Party") +
+    ylim(0, 8) +  # Set x-axis limit to 0-7%
+    geom_hline(yintercept = 5, linetype = "dashed", color = "black") +  # Add vertical line at 5%
+    theme_minimal()
+}
+
+# Plot for 2012
+plot_2012 <- plot_closest_states(closest_2012, 2012)
+
+# Plot for 2016
+plot_2016 <- plot_closest_states(closest_2016, 2016)
+
+# Plot for 2020
+plot_2020 <- plot_closest_states(closest_2020, 2020)
+
+# Display the plots
+print(plot_2012)
+print(plot_2016)
+print(plot_2020)
+```
+
+We drew a line at 5\%. Here are the states where the margin is at most 5\% in any of the past three elections.
+
+```{r echo=FALSE,message=FALSE}
+# Filter states where the absolute margin is less than 5%
+close_margin_states <- d_pvstate_wide %>%
+  filter(abs_margin_pv2p < 5) %>%
+  filter(year>=2012)%>%
+  distinct(state)
+
+# Display the filtered states
+print(close_margin_states)
+```
+
+Another way of measuring competitiveness is whether a state does not have the same winning party in the past three elections. This can be different from above if for example the entire state swung by more than 5\% in each election.
+
+```{r echo=FALSE,message=FALSE}
+library(dplyr)
+
+# Assuming the 'winner' column already exists and indicates the winning party
+# Filter data for the last three elections (2012, 2016, 2020)
+last_three_elections <- d_pvstate_wide %>%
+  filter(year %in% c(2012, 2016, 2020)) %>%
+  select(state, year, winner)
+
+# Group by state and summarize if the winning party is not the same in all three elections
+states_with_different_winners <- last_three_elections %>%
+  group_by(state) %>%
+  summarize(same_winner = n_distinct(winner) == 1) %>%
+  filter(same_winner == FALSE)
+
+# Display the states where the winning party changed across elections
+print(states_with_different_winners$state)
+```
+
+Iowa is one such state that swung very hard. I will add it to the list of competitive states.
+
+```{r echo=FALSE}
+close_margin_states <- rbind(close_margin_states, data.frame(state = "Iowa"))
+```
+
+
+Now we can run our model for each of the 14 states by introducing factors for each state. This will give us one model but in effect as if we had 13 models, one for each state.
+
+```{r echo=FALSE, message=FALSE}
+selected_states <- d_pvstate_wide |>
+  filter(state %in% close_margin_states$state)
+
+demo_inc_year <- popvote |>
+  filter(party == "democrat") |>
+  mutate(democrat_inc = incumbent_party) |>
+  select(year,democrat_inc)
+
+selected_states <- selected_states |>
+  left_join(demo_inc_year) |>
+  mutate(inc_pv2p = ifelse(democrat_inc, D_pv2p, R_pv2p)) |>
+  select(year, state, inc_pv2p)
+
+selected_states <- selected_states |>
+  left_join(popvote_incumbent_party_sep) |>
+  filter(year >= 1980)
+```
+
+```{r echo=FALSE, message=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(selected_states), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- selected_states[i, ]$year
+  lm_loo <- lm(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent, data = subset(selected_states, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = selected_states[i, ])
+  # Calculate the squared error for the excluded observation
+  (selected_states$inc_pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!selected_states$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, total):", lm_rmse, "\n")
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, non-incumbents):", lm_rmse_inc, "\n")
+```
+
+Putting in state indicators to predict state-level popular vote share increased LOO-RMSE from 6.27 to 10.7, and for non-incumbents from 4.5 to 7.0.
+
+For an illustrative example, let's look at how well the model predicts the popular vote share for Pennsylvania (leaving that year's data out)
+
+```{r echo=FALSE,message=FALSE}
+library(tidyr)
+
+penn <- selected_states |>
+  filter(state == "Pennsylvania")
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+predictions <- sapply(1:nrow(selected_states), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- selected_states[i, ]$year
+  lm_loo <- lm(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent, data = subset(selected_states, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = selected_states[i, ])
+  # Calculate the squared error for the excluded observation
+  prediction
+})
+
+penn_predictions <- predictions[selected_states$state == "Pennsylvania"]
+
+penn_results <- cbind(penn, penn_predictions)
+
+# Step 3: Reshape the data for plotting (convert to long format)
+plot_data <- penn_results %>%
+  select(year, inc_pv2p, penn_predictions) %>%
+  pivot_longer(cols = c(inc_pv2p, penn_predictions), 
+               names_to = "model", 
+               values_to = "value")
+
+plot_data$value <- plot_data$value - 50
+
+plot_data$model <- ifelse(plot_data$model=="inc_pv2p","Truth", "Prediction")
+
+# Step 4: Plot the bar chart showing deviations from truth
+ggplot(plot_data, aes(x = factor(year), y = value, fill = model)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Bar chart with dodged bars
+  ggtitle("Pennsylvania incumbent popular vote share deviation from 50%") +
+  xlab("Year") +
+  ylab("Deviation from 50%") +
+  scale_fill_manual(values = c("Truth" = "chartreuse3", "Prediction" = "orange")) +
+  theme_minimal() +
+  ylim(-15,30)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+Again, there is the 2020 COVID outlier. Let's remove it and see how our model performs.
+
+
+```{r echo=FALSE, message=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+dat <- subset(selected_states, year != 2020)
+  
+lm_loo_errors <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- lm(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  (dat$inc_pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!dat$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, no 2020, total):", lm_rmse, "\n")
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, no 2020, non-incumbents):", lm_rmse_inc, "\n")
+```
+The LOO-RMSE for all elections decreased from 10.7 to 7.5, while for non-incumbents it increased from 7.0 to 7.4. Here's the plot for Pennsylvania again.
+
+```{r echo=FALSE,message=FALSE}
+penn <- dat |>
+  filter(state == "Pennsylvania")
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+predictions <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- lm(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  prediction
+})
+
+penn_predictions <- predictions[dat$state == "Pennsylvania"]
+
+penn_results <- cbind(penn, penn_predictions)
+
+# Step 3: Reshape the data for plotting (convert to long format)
+plot_data <- penn_results %>%
+  select(year, inc_pv2p, penn_predictions) %>%
+  pivot_longer(cols = c(inc_pv2p, penn_predictions), 
+               names_to = "model", 
+               values_to = "value")
+
+plot_data$value <- plot_data$value - 50
+
+plot_data$model <- ifelse(plot_data$model=="inc_pv2p","Truth", "Prediction")
+
+# Step 4: Plot the bar chart showing deviations from truth
+ggplot(plot_data, aes(x = factor(year), y = value, fill = model)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Bar chart with dodged bars
+  ggtitle("Pennsylvania incumbent popular vote share deviation from 50%") +
+  xlab("Year") +
+  ylab("Deviation from 50%") +
+  scale_fill_manual(values = c("Truth" = "chartreuse3", "Prediction" = "orange")) +
+  theme_minimal() +
+  ylim(-15,30)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+It might be possible that the linear model is not powerful enough under our setup to express partisanship in states. Let's use the more powerful random forest.
+
+```{r echo=FALSE, message=FALSE}
+library(randomForest)
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+dat <- subset(selected_states, year != 2020)
+  
+lm_loo_errors <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  (dat$inc_pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!dat$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, no 2020, total):", lm_rmse, "\n")
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, no 2020, non-incumbents):", lm_rmse_inc, "\n")
+```
+
+```{r echo=FALSE,message=FALSE}
+penn <- dat |>
+  filter(state == "Pennsylvania")
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+predictions <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  prediction
+})
+
+penn_predictions <- predictions[dat$state == "Pennsylvania"]
+
+penn_results <- cbind(penn, penn_predictions)
+
+# Step 3: Reshape the data for plotting (convert to long format)
+plot_data <- penn_results %>%
+  select(year, inc_pv2p, penn_predictions) %>%
+  pivot_longer(cols = c(inc_pv2p, penn_predictions), 
+               names_to = "model", 
+               values_to = "value")
+
+plot_data$value <- plot_data$value - 50
+
+plot_data$model <- ifelse(plot_data$model=="inc_pv2p","Truth", "Prediction")
+
+# Step 4: Plot the bar chart showing deviations from truth
+ggplot(plot_data, aes(x = factor(year), y = value, fill = model)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Bar chart with dodged bars
+  ggtitle("Pennsylvania incumbent popular vote share deviation from 50%") +
+  xlab("Year") +
+  ylab("Deviation from 50%") +
+  scale_fill_manual(values = c("Truth" = "chartreuse3", "Prediction" = "orange")) +
+  theme_minimal() +
+  ylim(-15,30)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+The LOO-RMSE for all elections decreased from 7.5 to 6.9, while for non-incumbents it decreased from 7.4 to 6.5.
+
+Let's try to include partisanship into the data, by including whether the incumbent party is Democrat or Republican.
+
+```{r echo=FALSE, message=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+dat <- subset(selected_states, year != 2020)
+  
+lm_loo_errors <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  (dat$inc_pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!dat$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, no 2020, total):", lm_rmse, "\n")
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, no 2020, non-incumbents):", lm_rmse_inc, "\n")
+```
+
+The LOO-RMSE for all elections decreased from 6.9 to 6.7, while for non-incumbents it decreased from 6.5 to 5.2.
+
+```{r echo=FALSE,message=FALSE}
+penn <- dat |>
+  filter(state == "Pennsylvania")
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+predictions <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent +deminc, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  prediction
+})
+
+penn_predictions <- predictions[dat$state == "Pennsylvania"]
+
+penn_results <- cbind(penn, penn_predictions)
+
+# Step 3: Reshape the data for plotting (convert to long format)
+plot_data <- penn_results %>%
+  select(year, inc_pv2p, penn_predictions) %>%
+  pivot_longer(cols = c(inc_pv2p, penn_predictions), 
+               names_to = "model", 
+               values_to = "value")
+
+plot_data$value <- plot_data$value - 50
+
+plot_data$model <- ifelse(plot_data$model=="inc_pv2p","Truth", "Prediction")
+
+# Step 4: Plot the bar chart showing deviations from truth
+ggplot(plot_data, aes(x = factor(year), y = value, fill = model)) +
+  geom_bar(stat = "identity", position = "dodge") +  # Bar chart with dodged bars
+  ggtitle("Pennsylvania incumbent popular vote share deviation from 50%") +
+  xlab("Year") +
+  ylab("Deviation from 50%") +
+  scale_fill_manual(values = c("Truth" = "chartreuse3", "Prediction" = "orange")) +
+  theme_minimal() +
+  ylim(-15,30)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for readability
+```
+
+## Campaign Contributions
+
+Here are some data on the geographic source of campaign income of both parties for the past three elections.
+
+```{r echo=FALSE,message=FALSE}
+fec <- read.csv("data/FEC_contributions_by_state_2008_2024.csv")
+```
+
+```{r echo=FALSE,message=FALSE}
+# Function to convert state name to abbreviation
+# US state abbreviations and names
+state_abb = c('AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 
+             'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 
+             'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY')
+state_name = c('Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+              'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland',
+              'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 
+              'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 
+              'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
+              'West Virginia', 'Wisconsin', 'Wyoming')
+
+state_to_abbr <- function(state_names) {
+  # Create a named vector where state.name is the name and state.abb is the value
+  name_to_abbr <- setNames(state.abb, state.name)
+  
+  # Handle cases where state name is not in the list
+  state_abbr <- name_to_abbr[state_names]
+  
+  # If a state name is not found, return "Unknown"
+  state_abbr[is.na(state_abbr)] <- "Unknown"
+  
+  return(state_abbr)
+}
+
+close_margin_states_abbr <- state_to_abbr(close_margin_states$state)
+
+# Filter the data for Democratic party and years 2020 and 2024
+filtered_data <- subset(fec, party == "Democrat" & election_year %in% c(2016, 2020, 2024) & contribution_state %in% close_margin_states_abbr)
+
+# Aggregate the data by state and election year, summing the contribution amounts
+aggregated_data <- aggregate(contribution_receipt_amount ~ contribution_state + election_year, data = filtered_data, sum)
+
+# Plot the data using ggplot2
+ggplot(aggregated_data, aes(x = contribution_state, y = contribution_receipt_amount/1e6, fill = as.factor(election_year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Democratic Contributions by State for 2016, 2020, 2024",
+       x = "State",
+       y = "Total Contribution Amount (USD millions)",
+       fill = "Election Year") +
+  theme_minimal() +
+  ylim(0,60)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  # Rotate x-axis labels for better readability
+```
+
+
+```{r echo=FALSE,message=FALSE}
+
+# Filter the data for Democratic party and years 2020 and 2024
+filtered_data <- subset(fec, party == "Republican" & election_year %in% c(2016, 2020, 2024) & contribution_state %in% close_margin_states_abbr)
+
+# Aggregate the data by state and election year, summing the contribution amounts
+aggregated_data <- aggregate(contribution_receipt_amount ~ contribution_state + election_year, data = filtered_data, sum)
+
+# Plot the data using ggplot2
+ggplot(aggregated_data, aes(x = contribution_state, y = contribution_receipt_amount/1e6, fill = as.factor(election_year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Republican Contributions by State for 2016, 2020, 2024",
+       x = "State",
+       y = "Total Contribution Amount (USD millions)",
+       fill = "Election Year") +
+  theme_minimal() +
+  ylim(0,60)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  # Rotate x-axis labels for better readability
+```
+We can see that in these competitive states, campaign contributions are similar.
+
+```{r echo=FALSE,warning=FALSE}
+# Filter the data for Pennsylvania (PA) and for both Republicans and Democrats
+filtered_data <- subset(fec, contribution_state == "PA" & party %in% c("Democrat", "Republican"))
+
+# Aggregate the data by election year, party, and sum the contribution amounts
+aggregated_data <- aggregate(contribution_receipt_amount ~ election_year + party, data = filtered_data, sum)
+
+# Plot the data using ggplot2
+ggplot(aggregated_data, aes(x = election_year, y = contribution_receipt_amount/1e6, fill = party)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Campaign Contributions in Pennsylvania (PA) Over the Years",
+       x = "Election Year",
+       y = "Total Contribution Amount (USD millions)",
+       color = "Party") +
+  ylim(0,max(filtered_data$contribution_receipt_amount/1e6))+
+  theme_minimal()+
+  scale_x_discrete(drop = FALSE, limits=filtered_data$election_year)   # Ensure all x-axis labels are displayed
+```
+
+Let's investigate if we can use campaign contributions to help forecast the vote share of the state. Here we only have data from the 2008, 2012, 2016 and 2020.
+
+```{r echo=FALSE,message=FALSE}
+# for each state, calculate the z-score for each contribution (aggregating year and party)
+
+# Function to calculate z-scores for contributions by state
+fec_with_z_scores <- fec %>%
+  group_by(contribution_state) %>%
+  mutate(
+    mean_contribution = mean(contribution_receipt_amount, na.rm = TRUE),  # Mean by state
+    sd_contribution = sd(contribution_receipt_amount, na.rm = TRUE),      # Standard deviation by state
+    z_score = (contribution_receipt_amount - mean_contribution) / sd_contribution  # Z-score calculation
+  ) %>%
+  ungroup()  # Remove grouping after calculation
+
+fec_with_z_scores <- fec_with_z_scores |>
+  rename(state = contribution_state, year=election_year) |>
+  pivot_wider(
+    names_from = party,
+    values_from = z_score
+  ) |>
+  group_by(state, year) |>
+  summarize(
+    z_score_democrat = mean(Democrat, na.rm = TRUE),  # Combine any duplicates by averaging (or summing, depending on needs)
+    z_score_republican = mean(Republican, na.rm = TRUE)
+  ) |>
+  ungroup()  # Ungroup to get back to normal data frame
+  # select(state, year, z_score)
+
+abbr_to_state <- function(abbreviations) {
+  # Create a named vector where state.abb is the name and state.name is the value
+  abbr_to_name <- setNames(state.name, state.abb)
+  
+  # Look up the state name for each abbreviation
+  state_names <- abbr_to_name[abbreviations]
+  
+  # If an abbreviation is not found, return NA
+  state_names[is.na(state_names)] <- "Unknown"
+  
+  return(state_names)
+}
+
+fec_with_z_scores$state <- sapply(fec_with_z_scores$state, abbr_to_state)
+```
+
+```{r echo=FALSE, message=FALSE}
+selected_states_z <- selected_states |>
+  right_join(fec_with_z_scores) |>
+  filter(state %in% close_margin_states$state)
+```
+
+
+```{r echo=FALSE,message=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+dat <- subset(selected_states_z, year <= 2020)
+  
+lm_loo_errors <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc + z_score_democrat + z_score_republican, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  (dat$inc_pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!dat$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, 2008-2020, campaign contributions, total):", lm_rmse, "\n")
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, 2008-2020, campaign contributions, non-incumbents):", lm_rmse_inc, "\n")
+```
+Let's compare it to our previous model if we only evaluate on 2008 to 2020.
+
+```{r echo=FALSE,message=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+dat <- subset(selected_states, year <= 2020 & year >= 2008)
+  
+lm_loo_errors <- sapply(1:nrow(dat), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- dat[i, ]$year
+  lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc, data = subset(dat, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = dat[i, ])
+  # Calculate the squared error for the excluded observation
+  (dat$inc_pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!dat$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, 2008-2020, total):", lm_rmse, "\n")
+cat("LOO-RMSE (Q3 GDP, September approval, competitive states, 2008-2020, non-incumbents):", lm_rmse_inc, "\n")
+```
+It seems like introducing campaign contributions doesn't help with predictions, so we will discard campaign contributions going forward. One thing we could look into, is campaign spending on each state. We would like to do investigate that if we have the data.
+
+One last step before we finalize a working model: limit the scope of our training data. The rationale is that data from older elections might not be useful in forecasting future elections. Here we calculate the LOO-RMSE if we train the model with data starting from that date
+
+```{r echo=FALSE,message=FALSE}
+YEARS <- unique(selected_states$year)
+YEARS <- YEARS[1:(length(YEARS)-1)]
+
+# Define a function to perform LOO cross-validation and compute RMSE for a given year
+compute_rmse_for_year <- function(YEAR, selected_states) {
+  # Subset data to include only years after the specified YEAR
+  dat <- subset(selected_states, year >= YEAR)
+  
+  # Perform Leave-One-Out Cross-Validation (LOO)
+  lm_loo_errors <- sapply(1:nrow(dat), function(i) {
+    # Get the year of the i-th observation
+    yr <- dat[i, ]$year
+    
+    # Fit the model excluding observations with the same year
+    lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc,
+                           data = subset(dat, year != yr))
+    
+    # Predict the value for the excluded observation
+    prediction <- predict(lm_loo, newdata = dat[i, ])
+    
+    # Calculate the squared error for the excluded observation
+    (dat$inc_pv2p[i] - prediction)^2
+  })
+  
+  # Extract errors for non-incumbents
+  non_incumbents <- lm_loo_errors[!dat$incumbent]
+
+  # Calculate RMSE for all observations
+  lm_rmse <- sqrt(mean(lm_loo_errors))
+  
+  # Calculate RMSE for non-incumbents
+  lm_rmse_inc <- sqrt(mean(non_incumbents))
+  
+  # Return the RMSE values for the current year
+  return(list(total_rmse = lm_rmse, non_incumbent_rmse = lm_rmse_inc))
+}
+
+# Initialize empty lists to store RMSE results for each year
+rmse_results <- list()
+
+# Loop over the YEARS array and calculate RMSE for each year
+for (YEAR in YEARS) {
+  # Compute RMSE for the current YEAR
+  rmse_results[[as.character(YEAR)]] <- compute_rmse_for_year(YEAR, selected_states)
+  
+}
+```
+
+```{r include=FALSE}
+# Print out RMSE results for each year
+for (YEAR in YEARS) {
+  cat("Year:", YEAR, "\n")
+  cat("  LOO-RMSE (total):", rmse_results[[as.character(YEAR)]]$total_rmse, "\n")
+  cat("  LOO-RMSE (non-incumbents):", rmse_results[[as.character(YEAR)]]$non_incumbent_rmse, "\n")
+}
+```
+
+```{r echo=FALSE,message=FALSE}
+# Initialize an empty data frame to store RMSE results for each year
+rmse_df <- data.frame(
+  year = numeric(),
+  total_rmse = numeric(),
+  non_incumbent_rmse = numeric(),
+  stringsAsFactors = FALSE
+)
+
+# Loop over the YEARS array and calculate RMSE for each year
+for (YEAR in YEARS) {
+  # Compute RMSE for the current YEAR
+  rmse_result <- compute_rmse_for_year(YEAR, selected_states)
+  
+  # Store the result in the data frame
+  rmse_df <- rbind(rmse_df, data.frame(
+    year = YEAR,
+    total_rmse = rmse_result$total_rmse,
+    non_incumbent_rmse = rmse_result$non_incumbent_rmse
+  ))
+}
+
+# Reshape the data frame for plotting
+rmse_df_long <- reshape2::melt(rmse_df, id.vars = "year", 
+                               variable.name = "type", value.name = "rmse")
+
+# Plot the bar chart using ggplot2 with better colors
+ggplot(rmse_df_long, aes(x = factor(year), y = rmse, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "RMSE Across Years (Total and Non-Incumbents)",
+       x = "Year",
+       y = "RMSE",
+       fill="Error group") +
+  theme_minimal() +
+  scale_fill_manual(values = c("total_rmse" = "#66c2a5",  # Soft green
+                               "non_incumbent_rmse" = "#fc8d62"),  # Soft orange
+                    labels = c("Total RMSE", "Non-Incumbent RMSE")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+The plot above motivates using 1992 onwards.
+
+
+
+## Final working model
+
+We predict the incumbent party two-party vote share of a state using random forest model given the following data
+
+- Q3 GDP growth
+- Gallup September presidential job approval rating
+- whether the incumbent party candidate is themselves an incumbent
+- State
+- whether the incumbent party is the Democrat Party
+
+We train it on data from 1992 to 2020. This model achieves a LOO-RMSE of
+
+```{r echo=FALSE}
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+train_data <- subset(selected_states, year >= 1992)
+  
+lm_loo_errors <- sapply(1:nrow(train_data), function(i) {
+  # Fit the model excluding observations with the same yaer
+  yr <- train_data[i, ]$year
+  lm_loo <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc, data = subset(train_data, year != yr) )
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = train_data[i, ])
+  # Calculate the squared error for the excluded observation
+  (train_data$inc_pv2p[i] - prediction)^2
+})
+
+non_incumbents <- lm_loo_errors[!train_data$incumbent]
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- sqrt(mean(lm_loo_errors)) 
+lm_rmse_inc <- sqrt(mean(non_incumbents))  # Take the square root of the mean of the squared errors
+cat("LOO-RMSE (total):", lm_rmse, "\n")
+cat("LOO-RMSE (non-incumbents):", lm_rmse_inc, "\n")
+```
+
+The model predicts the following for 2024.
+
+```{r echo=FALSE,message=FALSE}
+num_selective_states <- length(unique(selected_states$state))
+
+selected_states_2024 <- data.frame(
+  sepapp = rep(50, num_selective_states),
+  q3_gdp_growth = rep(3.2, num_selective_states), # https://www.atlantafed.org/cqer/research/gdpnow
+  state = unique(selected_states$state),
+  incumbent = rep(FALSE, num_selective_states),
+  deminc = rep(TRUE, num_selective_states),
+  year = rep(2024, num_selective_states),
+  inc_pv2p = rep(NA, num_selective_states)
+)
+```
+
+```{r echo=FALSE}
+rf <- randomForest(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc, data = train_data)
+predictions <- predict(rf, newdata = selected_states_2024)
+
+combined_df <- data.frame(
+    predictions = predictions,                    # The predictions vector
+    state = unique(selected_states$state)         # Unique states from selected_states
+  )
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+swing_states <- c("Arizona", "Georgia", "Michigan", "Nevada", "North Carolina", "Pennsylvania", "Wisconsin")
+
+# Create a new column for difference from 50
+combined_df$diff_from_50 <- combined_df$predictions - 50
+
+# Create the bar chart
+ggplot(combined_df, aes(x = state, y = diff_from_50, fill = predictions < 50)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(round(predictions, 1), "%")), 
+            vjust = ifelse(combined_df$diff_from_50 >= 0, -0.5, 1.5), size = 2) +  # Add rounded prediction numbers
+  scale_fill_manual(values = c("TRUE" = "firebrick1", "FALSE" = "dodgerblue4"),
+                    labels = c("TRUE" = "Republican", "FALSE" = "Democrat")) +  # Color red if predictions < 50, else blue
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +  # Add a horizontal line at 0 (which represents 50 in original scale)
+  labs(title = "2024 Presidential Election Forecast for Competitive States", x = "State", y = "Democrat two-party vote share from 50%", fill="Winner") +
+  theme_minimal() +
+  coord_cartesian(ylim = c(-1.1, 1.1)) +  # Adjust y-axis limits if needed for better visibility
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, 
+                                   color = ifelse(combined_df$state %in% swing_states, "darkgreen", "black")))
+```
+
+Toss-up states are labelled in green (see our [blog](/usa-2024-election-prediction/post/2024/09/25/incumbency/) on expert predictions for identifying toss-ups).
+
+
+
+I would like to point out that the model predicts a close race for the non-swing states New Hampshire and Ohio, but the model agrees on the winner with expert predictions on these non-swing states. Be careful that the model has a LOO-RMSE of 3.68 for the 2024 situation, while all the states forecasted here are within 1\% from 50\%. The model predicts a Harris win with 276 vs 262.
+
+<a href="https://www.270towin.com/maps/wjRxz"><img src="https://www.270towin.com/map-images/wjRxz.png" width="800"></a>
+
+The next step will be to quantify uncertainty and answer this question: if we run a simulation with our model 1000 times, how often will Harris win?
