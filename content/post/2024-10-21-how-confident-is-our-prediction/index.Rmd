@@ -343,7 +343,7 @@ grid.arrange(grobs = plots, ncol = 2)
 
 Harris wins with more than 50% occurence in Virginia, Maine, Michigan, Minnesota, Nevada, New Hampshire and Wisconsin.
 
-How about the electoral collage?
+How about the electoral college?
 ```{r echo=FALSE}
 ec <- read.csv("../data/corrected_ec_1948_2024.csv")
 ec <- subset(ec, year==2024 & state%in% swing_states)
@@ -399,7 +399,7 @@ p <- ggplot(data.frame(harris), aes(x = harris, fill = harris > 269)) +
     labels = c("TRUE" = "Democratic Win", "FALSE" = "Republican Win")
   ) +
   labs(
-    x = "Democratic Two-party Share",
+    x = "Democratic Electoral College Vote Count",
     y = "Count",
     fill = "Outcome",
     title = paste(
