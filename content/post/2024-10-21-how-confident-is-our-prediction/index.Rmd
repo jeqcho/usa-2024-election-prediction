@@ -152,7 +152,7 @@ ggplot(rmse_df_long, aes(x = factor(year), y = rmse, fill = type)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "RMSE with across different start years",
        x = "Start year of training data",
-       y = "LOO-RMSE of Swing States",
+       y = "LOO-RMSE of Competitive States",
        fill = "Error group") +
   theme_minimal() +
   scale_fill_manual(
@@ -163,7 +163,7 @@ ggplot(rmse_df_long, aes(x = factor(year), y = rmse, fill = type)) +
     # Soft pink for non-incumbent swing RMSE
     labels = c(
       "Swing state RMSE\n(trained on all states)",
-      "Swing state RMSE\n(trained on swing states only)"
+      "Swing state RMSE\n(trained on competitive states only)"
     )
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -221,7 +221,7 @@ all_interval_df$pred <- output_train_all$testPred
 ```{r echo=FALSE}
 state_names <- swing_states
 # Add state names to each dataframe
-swing_interval_df <- swing_interval_df %>% mutate(State = state_names, Source = "Swing States")
+swing_interval_df <- swing_interval_df %>% mutate(State = state_names, Source = "Competitive States")
 all_interval_df <- all_interval_df %>% mutate(State = state_names, Source = "All States")
 
 # Combine the two dataframes
@@ -232,7 +232,7 @@ ggplot(combined_df, aes(x = State, y = pred, color = Source)) +
   geom_point(position = position_dodge(width = 0.5), size = 3) +   # Plot predicted values
   geom_errorbar(aes(ymin = lower, ymax = upper), 
                 position = position_dodge(width = 0.5), width = 0.2) +  # Plot error bars
-  labs(title = "Prediction Intervals for Swing States",
+  labs(title = "Prediction Intervals for Competitive States",
        x = "State", 
        y = "Prediction with Interval",
        color = "Training data") +
