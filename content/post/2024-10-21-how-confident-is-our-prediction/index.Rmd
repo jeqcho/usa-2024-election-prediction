@@ -1,0 +1,425 @@
+---
+title: How confident is our prediction?
+author: Jay Chooi
+date: '2024-10-21'
+slug: how-confident-is-our-prediction
+categories: []
+tags: []
+---
+
+# Borrowing power from other states
+Our [previous working model](/usa-2024-election-prediction/content/post/2024-10-14-campaign-ad-spending) only used data from competitive states. Here we will proceed with the 7 swing states. Can we improve our prediction accuracy by combining data from non-swing states?
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+
+```{r echo=FALSE}
+library(dplyr)
+library(randomForest)
+library(ggplot2)
+library(ranger)
+```
+
+
+```{r echo=FALSE}
+# initialize datasets
+real_swing_states <- c(
+  "Arizona",
+  "Nevada",
+  "Georgia",
+  "North Carolina",
+  "Pennsylvania",
+  "Michigan",
+  "Wisconsin"
+)
+
+competitive_states <- c("Florida", "North Carolina", "Ohio", "Virginia",
+                  "Arizona", "Maine", "Michigan", "Minnesota",
+                  "Nevada", "New Hampshire", "Pennsylvania",
+                  "Wisconsin", "Georgia", "Iowa")
+
+swing_states <- competitive_states
+
+d_pvstate_wide <- read.csv("../data/clean_wide_state_2pv_1948_2020.csv")
+popvote <- read.csv("../data/popvote_1948-2020.csv")
+fred_econ <- read.csv("../data/fred_econ.csv")
+sepapp <- read.csv("../data/latest_september_data.csv") |> filter(year>=1980)
+
+fred_econ_q3 <- fred_econ |>
+  filter(quarter==3, !is.na(GDP_growth_quarterly)) |>
+  select(year, GDP_growth_quarterly) |>
+  rename(q3_gdp_growth = GDP_growth_quarterly)
+
+popvote <- popvote |>
+  left_join(fred_econ_q3)
+
+popvote_incumbent_party <- popvote |>
+  filter(incumbent_party == TRUE, !is.na(pv2p))
+popvote_incumbent_party_sep <- popvote_incumbent_party |>
+  right_join(sepapp)
+
+d_pvstate_wide$abs_margin_pv2p <- abs(d_pvstate_wide$D_pv2p - d_pvstate_wide$R_pv2p)
+d_pvstate_wide$margin_pv2p <- d_pvstate_wide$D_pv2p - d_pvstate_wide$R_pv2p
+d_pvstate_wide$abs_margin_pv2p <- abs(d_pvstate_wide$margin_pv2p)
+d_pvstate_wide$winner <- ifelse(d_pvstate_wide$margin_pv2p > 0, "Democrat", "Republican")
+
+demo_inc_year <- popvote |>
+  filter(party == "democrat") |>
+  mutate(democrat_inc = incumbent_party) |>
+  select(year,democrat_inc)
+
+d_pvstate_wide <- d_pvstate_wide |>
+  left_join(demo_inc_year) |>
+  mutate(inc_pv2p = ifelse(democrat_inc, D_pv2p, R_pv2p)) |>
+  select(year, state, inc_pv2p)
+
+d_pvstate_wide <- d_pvstate_wide |>
+  left_join(popvote_incumbent_party_sep) |>
+  filter(year >= 1980)
+
+swing_states_df <- d_pvstate_wide |>
+  filter(state %in% swing_states)
+```
+
+```{r echo=FALSE}
+YEARS <- unique(d_pvstate_wide$year)
+YEARS <- YEARS[1:(length(YEARS) - 1)]
+
+# Define a function to perform LOO cross-validation and compute RMSE for a given year
+compute_rmse_for_year <- function(YEAR, dataset) {
+  # Subset data to include only years after the specified YEAR
+  dat <- subset(dataset, year >= YEAR)
+  
+  # Fit the model excluding observations with the same year
+  all_errors <- c()
+  for (pred_yr in YEARS[YEARS >= YEAR])
+  {
+    train_data = subset(dat, year != pred_yr)
+    rf <- ranger(
+      formula = inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc,
+      data = train_data
+      
+    )
+    test_data = subset(dat, year == pred_yr &
+                         state %in% swing_states)
+    
+    cur_error <- (test_data$inc_pv2p - predict(rf, test_data)$predictions) ^
+      2
+    all_errors <- c(all_errors, cur_error)
+  }
+  
+  sqrt(mean(all_errors))
+}
+```
+
+```{r echo=FALSE}
+# Initialize an empty data frame to store RMSE results for each year
+rmse_df <- data.frame(
+  year = numeric(),
+  total_rmse = numeric(),
+  total_rmse_swing = numeric()
+)
+
+# Loop over the YEARS array and calculate RMSE for each year
+for (YEAR in YEARS) {
+  # Compute RMSE for the current YEAR
+  rmse_result <- compute_rmse_for_year(YEAR, d_pvstate_wide)
+  rmse_result_swing <- compute_rmse_for_year(YEAR, swing_states_df)
+  
+  # Store the result in the data frame
+  rmse_df <- rbind(rmse_df, data.frame(
+    year = YEAR,
+    total_rmse = rmse_result,
+    total_rmse_swing = rmse_result_swing
+  ))
+}
+```
+
+```{r echo=FALSE}
+# Reshape the data frame for plotting
+rmse_df_long <- reshape2::melt(
+  rmse_df,
+  id.vars = "year",
+  variable.name = "type",
+  value.name = "rmse"
+)
+
+
+# Plot the bar chart using ggplot2 with better colors
+ggplot(rmse_df_long, aes(x = factor(year), y = rmse, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "RMSE with across different start years",
+       x = "Start year of training data",
+       y = "LOO-RMSE of Swing States",
+       fill = "Error group") +
+  theme_minimal() +
+  scale_fill_manual(
+    values = c(
+      "total_rmse" = "#66c2a5",
+      "total_rmse_swing" = "#8da0cb"
+    ),
+    # Soft pink for non-incumbent swing RMSE
+    labels = c(
+      "Swing state RMSE\n(trained on all states)",
+      "Swing state RMSE\n(trained on swing states only)"
+    )
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+There are no significant differences in RMSE whether we include non-swing states. Let's see whether it impacts the prediction interval of 2024. We choose the model with the start year of the training data as 1992.
+
+```{r echo=FALSE}
+# setup for 2024
+num_selective_states <- length(swing_states)
+
+swing_states_2024_df <- data.frame(
+  sepapp = rep(50, num_selective_states),
+  q3_gdp_growth = rep(3.2, num_selective_states),
+  state = unique(swing_states),
+  incumbent = rep(FALSE, num_selective_states),
+  deminc = rep(TRUE, num_selective_states),
+  year = rep(2024, num_selective_states),
+  inc_pv2p = rep(NA, num_selective_states)
+)
+```
+
+
+```{r echo=FALSE}
+library(rfinterval)
+
+chosen_year <- 1992
+pred_int <- c()
+train_data <- subset(d_pvstate_wide, year >= chosen_year)
+
+output_train_all <- rfinterval(
+  inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc,
+  train_data = train_data,
+  test_data = swing_states_2024_df,
+  method = c("oob", "split-conformal", "quantreg"),
+  alpha = 0.1
+)
+
+output_train_swing <- rfinterval(
+  inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc,
+  train_data = subset(train_data, state %in% swing_states),
+  test_data = swing_states_2024_df,
+  method = c("oob", "split-conformal", "quantreg"),
+  alpha = 0.1
+)
+
+
+swing_interval_df <- output_train_swing$sc_interval
+swing_interval_df$pred <- output_train_swing$testPred
+
+all_interval_df <- output_train_all$sc_interval
+all_interval_df$pred <- output_train_all$testPred
+```
+
+```{r echo=FALSE}
+state_names <- swing_states
+# Add state names to each dataframe
+swing_interval_df <- swing_interval_df %>% mutate(State = state_names, Source = "Swing States")
+all_interval_df <- all_interval_df %>% mutate(State = state_names, Source = "All States")
+
+# Combine the two dataframes
+combined_df <- bind_rows(swing_interval_df, all_interval_df)
+
+# Plotting the prediction intervals with ggplot2
+ggplot(combined_df, aes(x = State, y = pred, color = Source)) +
+  geom_point(position = position_dodge(width = 0.5), size = 3) +   # Plot predicted values
+  geom_errorbar(aes(ymin = lower, ymax = upper), 
+                position = position_dodge(width = 0.5), width = 0.2) +  # Plot error bars
+  labs(title = "Prediction Intervals for Swing States",
+       x = "State", 
+       y = "Prediction with Interval",
+       color = "Training data") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate state names for readability
+```
+
+This tells us that we should stick with training on swing states if we want to predict the swing states!
+
+# Quantifying uncertainty
+
+Here we collected quantiles from the random forest and ran a Monte Carlo simulation on 1000 draws to show jointly how often do each party win in each state.
+
+```{r echo=FALSE}
+set.seed(123)  # For reproducibility
+
+rf_model_qrf <- ranger(inc_pv2p ~ sepapp + q3_gdp_growth + state + incumbent + deminc,
+                       data = subset(train_data, state %in% swing_states),,  # Training data
+                       quantreg = TRUE,    # Enable quantile regression
+                       num.trees = 500)    # Number of trees
+
+n_simulations <- 1000  # Number of Monte Carlo simulations
+n_wins <- 0  # Counter for how many times Candidate A wins
+
+n_states <- nrow(swing_states_2024_df)
+# Initialize an empty data frame to store sampled vote shares for each state and each simulation
+sampled_vote_shares_df <- data.frame(matrix(ncol = n_states, nrow = n_simulations))
+# Set the row names of the data frame to the swing state names
+colnames(sampled_vote_shares_df) <- swing_states
+
+# Train the Quantile Regression Forest model (assumed to be done)
+# rf_model_qrf <- ranger(y ~ ., data = train_data, quantreg = TRUE, num.trees = 500)
+
+# Predict finer quantiles (e.g., 1st to 99th percentiles) for each state
+quantiles_to_predict <- seq(0.01, 0.99, by = 0.01)  # 1% quantiles from 1st to 99th
+
+quantile_predictions <- predict(rf_model_qrf, 
+                                data = swing_states_2024_df, 
+                                type = "quantiles", 
+                                quantiles = quantiles_to_predict)
+
+# Run Monte Carlo simulations
+results <- 
+for (i in 1:n_simulations) {
+  
+  # For each state, randomly sample a quantile for each state
+  sampled_quantiles <- apply(quantile_predictions$predictions, 1, function(quantile_row) {
+    # Randomly select one quantile (prediction) from the available fine quantiles
+    sample(quantile_row, size = 1)
+  })
+  
+  # Store the sampled vote shares for this simulation in the corresponding column of the data frame
+  sampled_vote_shares_df[i, ] <- sampled_quantiles
+  
+}
+```
+
+```{r echo=FALSE, fig.width=8, fig.height=20}
+library(gridExtra)
+
+plots <- list()  # Create a list to store the plots
+
+for (state in swing_states) {
+  # Get the vote share for the current state
+  state_vote <- sampled_vote_shares_df[[state]]
+  
+  # Calculate the percentage of simulations where Democrats win (>= 50%)
+  dem_win_pct <- mean(state_vote >= 50) * 100
+  
+  # Create the plot
+  p <- ggplot(data.frame(state_vote),
+              aes(x = state_vote, fill = state_vote < 50)) +
+    geom_histogram(binwidth = 0.2) +  # Adjust binwidth if necessary
+    scale_fill_manual(
+      values = c(
+        "TRUE" = "firebrick1",
+        "FALSE" = "dodgerblue4"
+      ),
+      labels = c("TRUE" = "Republican Win", "FALSE" = "Democratic Win")
+    ) +
+    labs(
+      x = "Democratic Two-party Share",
+      y = "Count",
+      fill = "Outcome",
+      title = paste(
+        "Simulated Outcomes for",
+        state,
+        "\n(Democrats win",
+        round(dem_win_pct, 1),
+        "% of the time)"
+      )
+    ) +
+    geom_vline(
+      xintercept = 50,
+      color = "black",
+      linetype = "dashed",
+      size = 1
+    ) +  # Vertical line at 50
+    theme_minimal()
+  # Add the plot to the list
+  plots[[state]] <- p
+}
+
+# Arrange and display all the plots in a grid, for example a 2x2 grid
+grid.arrange(grobs = plots, ncol = 2)
+```
+
+Harris wins with more than 50% occurence in Maine, Michigan, Minnesota, Nevada, and New Hampshire.
+
+How about the electoral collage?
+```{r echo=FALSE}
+ec <- read.csv("../data/corrected_ec_1948_2024.csv")
+ec <- subset(ec, year==2024 & state%in% swing_states)
+ec <- select(ec, c(state,electors))
+```
+
+```{r echo=FALSE}
+# Ensure the row names (years) are part of the dataframe
+sampled_vote_shares_df <- sampled_vote_shares_df %>%
+  mutate(year = rownames(sampled_vote_shares_df))
+
+# Reshape sampled_vote_shares_df into long format to facilitate joining
+long_vote_shares <- sampled_vote_shares_df %>%
+  tidyr::gather(key = "state", value = "vote_share", -year)
+
+# Convert vote_share to numeric (just in case it was converted to a factor or character)
+long_vote_shares <- long_vote_shares %>%
+  mutate(vote_share = as.numeric(vote_share))
+
+long_vote_shares <- subset(long_vote_shares, state%in% real_swing_states)
+
+# Join the vote share data with the electoral college data by state name
+joined_data <- long_vote_shares %>%
+  left_join(ec, by = c("state" = "state"))
+
+# Ensure electors are numeric as well
+joined_data <- joined_data %>%
+  mutate(electors = as.numeric(electors))
+
+# Calculate the electoral votes won by multiplying vote shares with electors
+joined_data <- joined_data %>%
+  mutate(electoral_votes_won = ifelse(vote_share>50, electors,0))
+
+# Sum the total electoral votes for each year
+total_electoral_votes_df <- joined_data %>%
+  group_by(year) %>%
+  summarise(total_electoral_votes = sum(electoral_votes_won, na.rm = TRUE))
+
+harris <- 226 + total_electoral_votes_df$total_electoral_votes
+```
+
+```{r echo=FALSE}
+dem_win_pct <- sum(harris>269)/length(harris)*100
+
+# Create the plot
+p <- ggplot(data.frame(harris), aes(x = harris, fill = harris > 269)) +
+  geom_histogram(binwidth = 0.2) +  # Adjust binwidth if necessary
+  scale_fill_manual(
+    values = c(
+      "TRUE" = "dodgerblue4",
+      "FALSE" = "firebrick1"
+    ),
+    labels = c("TRUE" = "Democratic Win", "FALSE" = "Republican Win")
+  ) +
+  labs(
+    x = "Democratic Two-party Share",
+    y = "Count",
+    fill = "Outcome",
+    title = paste(
+      "Simulated Outcomes for Harris\n(Democrats win",
+      round(dem_win_pct, 1),
+      "% of the time)"
+    )
+  ) +
+  geom_vline(
+    xintercept = 270,
+    color = "black",
+    linetype = "dashed",
+    size = 1
+  ) +  # Vertical line at 50
+  theme_minimal()
+
+# Display the plot
+print(p)
+```
+
+Harris will win 40% of the time. The reader might be curious how this can be different from a predicted Harris win last time. This relates to how the mean and the median are different objects. The previous presentation relies more on the mean, and this presentation relies more on the median.
+
+I also want to note that this model predicts that Harris has a 1/3 chance of winning Iowa, and the probability of the other non-swing states being won is not close to 90%. This is different from prevailing judgement and the betting market, so we might have to tweak the model further to include state-level approval for Harris.
+

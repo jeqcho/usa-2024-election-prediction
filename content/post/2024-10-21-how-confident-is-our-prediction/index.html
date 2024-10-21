@@ -1,0 +1,29 @@
+---
+title: How confident is our prediction?
+author: Jay Chooi
+date: '2024-10-21'
+slug: how-confident-is-our-prediction
+categories: []
+tags: []
+---
+
+
+
+<div id="borrowing-power-from-other-states" class="section level1">
+<h1>Borrowing power from other states</h1>
+<p>Our <a href="/usa-2024-election-prediction/content/post/2024-10-14-campaign-ad-spending">previous working model</a> only used data from competitive states. Here we will proceed with the 7 swing states. Can we improve our prediction accuracy by combining data from non-swing states?</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>There are no significant differences in RMSE whether we include non-swing states. Let’s see whether it impacts the prediction interval of 2024. We choose the model with the start year of the training data as 1992.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>This tells us that we should stick with training on swing states if we want to predict the swing states!</p>
+</div>
+<div id="quantifying-uncertainty" class="section level1">
+<h1>Quantifying uncertainty</h1>
+<p>Here we collected quantiles from the random forest and ran a Monte Carlo simulation on 1000 draws to show jointly how often do each party win in each state.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<p>Harris wins with more than 50% occurence in Maine, Michigan, Minnesota, Nevada, and New Hampshire.</p>
+<p>How about the electoral collage?</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Harris will win 40% of the time. The reader might be curious how this can be different from a predicted Harris win last time. This relates to how the mean and the median are different objects. The previous presentation relies more on the mean, and this presentation relies more on the median.</p>
+<p>I also want to note that this model predicts that Harris has a 1/3 chance of winning Iowa, and the probability of the other non-swing states being won is not close to 90%. This is different from prevailing judgement and the betting market, so we might have to tweak the model further to include state-level approval for Harris.</p>
+</div>
