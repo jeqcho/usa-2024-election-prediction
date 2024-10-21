@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 
 ```{r echo=FALSE}
+set.seed(1347)
 library(dplyr)
 library(randomForest)
 library(ggplot2)
@@ -340,7 +341,7 @@ for (state in swing_states) {
 grid.arrange(grobs = plots, ncol = 2)
 ```
 
-Harris wins with more than 50% occurence in Maine, Michigan, Minnesota, Nevada, and New Hampshire.
+Harris wins with more than 50% occurence in Virginia, Maine, Michigan, Minnesota, Nevada, New Hampshire and Wisconsin.
 
 How about the electoral collage?
 ```{r echo=FALSE}
@@ -419,7 +420,7 @@ p <- ggplot(data.frame(harris), aes(x = harris, fill = harris > 269)) +
 print(p)
 ```
 
-Harris will win 40% of the time. The reader might be curious how this can be different from a predicted Harris win last time. This relates to how the mean and the median are different objects. The previous presentation relies more on the mean, and this presentation relies more on the median.
+Harris will win 45% of the time. The reader might be curious how this can be different from a predicted Harris win last time. This relates to how the mean and the median are different objects. The previous presentation relies more on the mean, and this presentation relies more on the median.
 
-I also want to note that this model predicts that Harris has a 1/3 chance of winning Iowa, and the probability of the other non-swing states being won is not close to 90%. This is different from prevailing judgement and the betting market, so we might have to tweak the model further to include state-level approval for Harris.
+I also want to note that this model predicts that Harris has a more than 40% chance of winning Iowa, and the probability of the other non-swing states being won is not close to 90%. This is different from prevailing judgement and the betting market, so we might have to tweak the model further to include state-level approval for Harris.
 
