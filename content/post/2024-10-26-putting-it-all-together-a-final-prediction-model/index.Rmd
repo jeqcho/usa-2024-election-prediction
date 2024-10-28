@@ -569,7 +569,8 @@ data2024 <- data2024 |>
 data2024
 ```
 
-
+![Final prediction](./final-preds.png)
+Trump wins with 272 against Harris' 266.
 
 
 # Uncertainty
