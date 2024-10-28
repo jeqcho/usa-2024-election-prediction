@@ -504,6 +504,8 @@ cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
 
 # Prediction
 
+We predict the Democratic two-party vote share for states that we have accurate data. This includes all toss up and likely states.
+
 ```{r}
 states <- unique(state_popvote_gdp_polls$state)
 # get relevant states
@@ -562,6 +564,8 @@ data2024 <- data.frame(
 model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing, data =  state_popvote_gdp_polls)
 
 data2024$preds <- predict(model, data2024)$predictions
+data2024 <- data2024 |>
+  arrange(preds)
 data2024
 ```
 
@@ -806,8 +810,6 @@ p <- ggplot(data.frame(harris), aes(x = harris, fill = harris > 269)) +
 # Display the plot
 print(p)
 ```
-
-Our final prediction gives a 32.6% chance of a Harris win.
 
 # Appendix
 
