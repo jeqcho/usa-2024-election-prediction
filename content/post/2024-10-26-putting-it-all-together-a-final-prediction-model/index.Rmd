@@ -569,6 +569,9 @@ data2024 <- data2024 |>
 data2024
 ```
 
+
+For the rest of the states, which are solid or likely states according to Cook's Political Report, we will assign it assuming that the expert predictions are correct.
+
 ![Final prediction](./final-preds.png)
 Trump wins with 272 against Harris' 266.
 
