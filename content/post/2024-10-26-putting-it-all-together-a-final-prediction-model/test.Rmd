@@ -1,0 +1,34 @@
+---
+title: "Test out 538 poll dataset"
+output: html_document
+date: "2024-10-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+fav <- read.csv("../data/favorability_polls.csv")
+fav_past <- read.csv("../data/favorability_averages.csv")
+```
+
+```{r}
+ballots <- read.csv("../data/generic_ballot_polls.csv")
+ballots_past <- read.csv("../data/generic_ballot_polls_historical.csv")
+```
+
+```{r}
+app <- read.csv("../data/president_approval_polls.csv")
+app_past <- read.csv("../data/president_approval_polls_historical.csv")
+```
+
+```{r}
+ge <- read.csv("../data/president_polls.csv")
+ge_past <- read.csv("../data/president_polls_historical.csv")
+```
+
+```{r}
+state_polls <- read.csv("../data/state_polls_1968-2024.csv")
+```
+

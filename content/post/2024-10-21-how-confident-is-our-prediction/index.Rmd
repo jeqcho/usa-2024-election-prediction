@@ -8,7 +8,7 @@ tags: []
 ---
 
 # Borrowing power from other states
-Our [previous working model](/usa-2024-election-prediction/content/post/2024-10-14-campaign-ad-spending) only used data from competitive states. Can we improve our prediction accuracy by combining data from non-swing states?
+Our [previous working model](/usa-2024-election-prediction/post/2024/10/14/campaign-ad-spending/) only used data from competitive states. Can we improve our prediction accuracy by combining data from non-swing states?
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)

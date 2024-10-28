@@ -1,0 +1,17 @@
+---
+title: "Test out 538 poll dataset"
+output: html_document
+date: "2024-10-26"
+---
+
+
+
+<pre class="r"><code>fav &lt;- read.csv(&quot;../data/favorability_polls.csv&quot;)
+fav_past &lt;- read.csv(&quot;../data/favorability_averages.csv&quot;)</code></pre>
+<pre class="r"><code>ballots &lt;- read.csv(&quot;../data/generic_ballot_polls.csv&quot;)
+ballots_past &lt;- read.csv(&quot;../data/generic_ballot_polls_historical.csv&quot;)</code></pre>
+<pre class="r"><code>app &lt;- read.csv(&quot;../data/president_approval_polls.csv&quot;)
+app_past &lt;- read.csv(&quot;../data/president_approval_polls_historical.csv&quot;)</code></pre>
+<pre class="r"><code>ge &lt;- read.csv(&quot;../data/president_polls.csv&quot;)
+ge_past &lt;- read.csv(&quot;../data/president_polls_historical.csv&quot;)</code></pre>
+<pre class="r"><code>state_polls &lt;- read.csv(&quot;../data/state_polls_1968-2024.csv&quot;)</code></pre>
