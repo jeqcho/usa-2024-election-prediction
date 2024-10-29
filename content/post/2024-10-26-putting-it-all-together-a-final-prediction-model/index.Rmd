@@ -1039,3 +1039,28 @@ model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_l
 
 plot(model)
 ```
+
+```{r}
+# Load the required library
+library(ggplot2)
+
+# Assuming your model is called `model` and training data is called `train_data`
+# Calculate predicted values from the model
+train_data <- state_popvote_gdp_polls
+predicted_values <- predict(model, newdata = train_data)
+
+# Calculate residuals (difference between actual values and predicted values)
+residuals <- residuals(model)
+
+# Assuming 'year' column is present in your 'train_data' but not used in the model
+train_data$predicted <- predicted_values
+train_data$residuals <- residuals
+
+# Plot residuals vs predicted values and color-code by 'year'
+ggplot(train_data, aes(x = predicted, y = residuals, color = factor(year))) +
+  geom_point() +                          # Points for residuals vs predicted
+  labs(x = "Predicted Values", y = "Residuals", title = "Residuals vs Predicted Values by Year") +
+  theme_minimal() +                       # Use a minimal theme
+  scale_color_discrete(name = "Year")     # Make sure the legend uses 'Year'
+```
+
