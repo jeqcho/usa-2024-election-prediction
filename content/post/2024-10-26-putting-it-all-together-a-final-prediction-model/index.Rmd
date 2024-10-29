@@ -91,39 +91,6 @@ We will use this metric to evaluate our model: leave-one-out root mean square er
 
 # Modifications
 
-## Sophisticated Models
-
-In preparation for state-level data and indicators that might not be linear, let's replace the linear model with a random forest model and see if the out-of-sample performance improves.
-
-```{r}
-# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
-lm_loo_errors <- sapply(1:nrow(selected), function(i) {
-  # Fit the model excluding observation i
-  lm_loo <- ranger(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = selected[-i, ])
-  # Predict the excluded observation
-  prediction <- predict(lm_loo, data = selected[i, ])$predictions
-  # Calculate the squared error for the excluded observation
-  (selected$pv2p[i] - prediction)^2
-})
-
-pred_errors <- sapply(1:nrow(selected), function(i) {
-  # Fit the model excluding observation i
-  lm_loo <- ranger(pv2p ~ juneapp + q2_gdp_growth + incumbent, data = selected[-i, ])
-  # Predict the excluded observation
-  prediction <- predict(lm_loo, data = selected[i, ])$predictions
-  # Calculate the squared error for the excluded observation
-  abs(selected$pv2p[i] - prediction)
-})
-
-# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
-lm_rmse <- round(sqrt(mean(lm_loo_errors)),2)
-lm_mean_error <- round(mean(pred_errors),2)
-# Step 4: Print the results
-cat("Abramowitz LOO-CV RMSE:", lm_rmse, "\n")
-cat("Abramowitz LOO-CV prediction error:", lm_mean_error, "%\n")
-```
-
-
 ## Moving from national to state-level
 
 To predict the winner of the electoral college we need to predict the two-party vote share of each state. We will replace the Q2 GDP growth variable from national to state-level, and the June Gallup job approval to state-level presidential polls 20 weeks before the election.
@@ -295,7 +262,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -303,7 +270,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -321,7 +288,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -329,7 +296,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr & state%in% swing_states)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -341,7 +308,6 @@ cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
 ```
 
 It seems like the LOO-CV for non-swing states is dragging up the error. Let's try to reduce it by incorporating by sets swing states and non-swing states apart: political calcification.
-
 
 ## Political calcification
 
@@ -367,7 +333,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -375,7 +341,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -393,7 +359,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -401,7 +367,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr & state%in% swing_states)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -413,11 +379,10 @@ cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
 ```
 
 
-## Swing state behavior
-
-Swing states might have inherently different dynamics than other states. For example, they are the battleground states where campaign spending are being focused on. Let's add a flag on whether a state is consider a swing state in that election.
 
 ```{r}
+# swing flag
+
 cpr <- read.csv("../data/CPR_EC_Ratings.csv")
 
 colnames(cpr) <- tolower(colnames(cpr))
@@ -446,65 +411,10 @@ state_popvote_gdp_polls <- state_popvote_gdp_polls |>
   mutate(comp = ifelse(state %in% competitive_states,1,0))
 ```
 
-```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
-```
-
 
 # Prediction
 
-We predict the Democratic two-party vote share for states that we have accurate data. This includes all toss up and likely states.
+We predict the Democratic two-party vote share for states that we have accurate data. This includes all toss up and lean states.
 
 ```{r}
 states <- unique(state_popvote_gdp_polls$state)
@@ -561,9 +471,9 @@ data2024 <- data.frame(
 
 
 ```{r}
-model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing, data =  state_popvote_gdp_polls)
+model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag, data =  state_popvote_gdp_polls)
 
-data2024$preds <- predict(model, data2024)$predictions
+data2024$preds <- predict(model, data2024)
 data2024 <- data2024 |>
   arrange(preds)
 data2024
@@ -574,6 +484,8 @@ For the rest of the states, which are solid or likely states according to Cook's
 
 ![Final prediction](./final-preds.png)
 Trump wins with 272 against Harris' 266.
+
+
 
 
 # Uncertainty
@@ -833,7 +745,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q3_gdp_growth + incumbent  + inc_lag + swing,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q3_gdp_growth + incumbent  + inc_lag,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -841,7 +753,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -859,7 +771,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q3_gdp_growth + incumbent  + inc_lag + swing,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q3_gdp_growth + incumbent  + inc_lag,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -867,7 +779,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr & state%in% swing_states)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -893,7 +805,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing+ deminc,
+  model <- lm(formula = inc_pv2p ~inc_poll2p + q2_gdp_growth + incumbent  + inc_lag+ deminc,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -901,7 +813,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -919,7 +831,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing + deminc,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + deminc,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -927,7 +839,7 @@ for (pred_yr in YEARS) {
                       year == pred_yr & state%in% swing_states)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -952,7 +864,66 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag ,
+              data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls,
+                      year == pred_yr)
+  
+  # Compute squared errors for the test data
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
+  
+  # Collect all errors
+  all_errors <- c(all_errors, cur_error)
+}
+
+# Compute and return RMSE
+err <- round(sqrt(mean(all_errors)),2)
+cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
+
+all_errors <- c()
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = inc_pv2p ~inc_poll2p + q2_gdp_growth_4y + incumbent  + inc_lag ,
+              data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls,
+                      year == pred_yr & state%in% swing_states)
+  
+  # Compute squared errors for the test data
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
+  
+  # Collect all errors
+  all_errors <- c(all_errors, cur_error)
+}
+
+# Compute and return RMSE
+err <- round(sqrt(mean(all_errors)),2)
+cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
+```
+
+## More sophisticated models
+
+Let's see if using a random forest helps.
+
+```{r}
+# Fit the model excluding observations with the same year
+all_errors <- c()
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -978,7 +949,7 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~inc_poll2p + q2_gdp_growth_4y + incumbent  + inc_lag + swing,
+  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag ,
               data = train_data)
   
   # Subset test data for the prediction year and swing states
@@ -997,9 +968,9 @@ err <- round(sqrt(mean(all_errors)),2)
 cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
 ```
 
-Let's see if this effect hold with 2020 removed.
+## Swing state behavior
 
-Here is using Q2 YOY GDP growth with 2020 removed.
+Swing states might have inherently different dynamics than other states. For example, they are the battleground states where campaign spending are being focused on. Let's add a flag on whether a state is consider a swing state in that election.
 
 ```{r}
 # Fit the model excluding observations with the same year
@@ -1011,15 +982,15 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
-              data = filter(train_data, year!=2020) )
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
+              data = train_data)
   
   # Subset test data for the prediction year and swing states
   test_data <- subset(state_popvote_gdp_polls,
                       year == pred_yr)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -1037,15 +1008,15 @@ for (pred_yr in YEARS) {
   train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
   
   # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
-              data = filter(train_data, year!=2020) )
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
+              data = train_data)
   
   # Subset test data for the prediction year and swing states
   test_data <- subset(state_popvote_gdp_polls,
                       year == pred_yr & state%in% swing_states)
   
   # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
   
   # Collect all errors
   all_errors <- c(all_errors, cur_error)
@@ -1056,61 +1027,15 @@ err <- round(sqrt(mean(all_errors)),2)
 cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
 ```
 
-Here is using Q2 3-year GDP growth with 2020 removed.
+
+
+## Diagnostics
+
+The diagnostics plots below show that the OLS assumptions hold pretty well (ELIH assumptions). The Q-Q plot in particular looks spectacular.
 
 ```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
+model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
+              data = state_popvote_gdp_polls)
 
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth_4y + incumbent  + inc_lag + swing,
-              data = filter(train_data, year!=2020) )
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- ranger(formula =inc_pv2p ~ inc_poll2p + q2_gdp_growth_4y + incumbent  + inc_lag + swing,
-              data =  filter(train_data, year!=2020) )
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
+plot(model)
 ```
-
-It turns out that this modification simply teases out the 2020 effect, so we will not use this modification.
