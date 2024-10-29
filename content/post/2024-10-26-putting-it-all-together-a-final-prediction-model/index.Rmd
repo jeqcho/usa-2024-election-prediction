@@ -483,20 +483,16 @@ data2024
 For the rest of the states, which are solid or likely states according to Cook's Political Report, we will assign it assuming that the expert predictions are correct.
 
 ![Final prediction](./final-preds.png)
-Trump wins with 272 against Harris' 266.
-
+Trump wins with 312 against Harris' 226
 
 
 
 # Uncertainty
 
+Here we simulate 10,000 possible cases. Here we plotted the uncertainty for the states assuming that the errors are independent. Regardless of whether the errors are correlated across states, marginally the plots will look the same.
 
 ```{r}
-rf_model_qrf <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing, data =  state_popvote_gdp_polls,
-                 quantreg = TRUE)
-
-
-n_simulations <- 1000  # Number of Monte Carlo simulations
+n_simulations <- 10000  # Number of Monte Carlo simulations
 n_wins <- 0  # Counter for how many times Candidate A wins
 
 n_states <- nrow(data2024)
@@ -505,29 +501,12 @@ sampled_vote_shares_df <- data.frame(matrix(ncol = n_states, nrow = n_simulation
 # Set the row names of the data frame to the swing state names
 colnames(sampled_vote_shares_df) <- data2024$state
 
-# Train the Quantile Regression Forest model (assumed to be done)
-# rf_model_qrf <- ranger(y ~ ., data = train_data, quantreg = TRUE, num.trees = 500)
-
-# Predict finer quantiles (e.g., 1st to 99th percentiles) for each state
-quantiles_to_predict <- seq(0.01, 0.99, by = 0.01)  # 1% quantiles from 1st to 99th
-
-quantile_predictions <- predict(rf_model_qrf, 
-                                data = data2024, 
-                                type = "quantiles", 
-                                quantiles = quantiles_to_predict)
-
+sdmodel <- sd(residuals(model))
 # Run Monte Carlo simulations
 results <- 
 for (i in 1:n_simulations) {
-  
-  # For each state, randomly sample a quantile for each state
-  sampled_quantiles <- apply(quantile_predictions$predictions, 1, function(quantile_row) {
-    # Randomly select one quantile (prediction) from the available fine quantiles
-    sample(quantile_row, size = 1)
-  })
-  
   # Store the sampled vote shares for this simulation in the corresponding column of the data frame
-  sampled_vote_shares_df[i, ] <- sampled_quantiles
+  sampled_vote_shares_df[i, ] <- data2024$preds + rnorm(n_states, mean = 0, sd = sdmodel)
   
 }
 ```
@@ -537,12 +516,20 @@ library(gridExtra)
 
 plots <- list()  # Create a list to store the plots
 
+state_odds <- data.frame(
+  state = character(),   # Empty column for state (character type)
+  odds = numeric()       # Empty column for odds (numeric type)
+)
+
+
 for (state in data2024$state) {
   # Get the vote share for the current state
   state_vote <- sampled_vote_shares_df[[state]]
   
   # Calculate the percentage of simulations where Democrats win (>= 50%)
   dem_win_pct <- mean(state_vote >= 50) * 100
+  
+  state_odds <- rbind(state_odds, data.frame(state = state, odds = dem_win_pct))
   
   # Create the plot
   p <- ggplot(data.frame(state_vote),
@@ -654,7 +641,34 @@ pred_votes <- sum(ec$electors)
 ```
 
 
+Here for each simulation we assume that the states share the same error.
 
+```{r}
+n_simulations <- 10000  # Number of Monte Carlo simulations
+n_wins <- 0  # Counter for how many times Candidate A wins
+
+n_states <- nrow(data2024)
+# Initialize an empty data frame to store sampled vote shares for each state and each simulation
+sampled_vote_shares_df <- data.frame(matrix(ncol = n_states, nrow = n_simulations))
+# Set the row names of the data frame to the swing state names
+colnames(sampled_vote_shares_df) <- data2024$state
+
+# independent
+sdmodel <- sd(residuals(model))
+
+err <- rnorm(n_simulations, mean=0, sd=sdmodel)
+# Run Monte Carlo simulations
+results <- 
+for (i in 1:n_simulations) {
+  # Store the sampled vote shares for this simulation in the corresponding column of the data frame
+  # indep
+  # sampled_vote_shares_df[i, ] <- data2024$preds + rnorm(n_states, mean = 0, sd = sdmodel)
+  
+  # together
+  sampled_vote_shares_df[i, ] <- data2024$preds + err[i]
+  
+}
+```
 
 
 ```{r echo=FALSE}
@@ -697,7 +711,7 @@ dem_win_pct <- sum(harris>269)/length(harris)*100
 
 # Create the plot
 p <- ggplot(data.frame(harris), aes(x = harris, fill = harris > 269)) +
-  geom_histogram(binwidth = 0.2) +  # Adjust binwidth if necessary
+  geom_histogram(binwidth = 1) +  # Adjust binwidth if necessary
   scale_fill_manual(
     values = c(
       "TRUE" = "dodgerblue4",
@@ -726,6 +740,92 @@ p <- ggplot(data.frame(harris), aes(x = harris, fill = harris > 269)) +
 # Display the plot
 print(p)
 ```
+
+If we instead assume that states have independent error (which I think is less reasonable than all states sharing the same error), we will have a <2% chance of a Democrat win.
+
+## Betting odds
+
+```{r}
+bet <- read.csv("../data/betting_odds.csv") |>
+  select(c("harris_odds","state"))
+
+bet$state <- abbr_to_full(bet$state)
+
+bet$harris_odds <- as.numeric(sub("%", "", bet$harris_odds)) / 100
+
+state_odds <- state_odds |>
+  left_join(bet, by="state")
+```
+
+```{r}
+state_odds <- state_odds |>
+  rename(market_odds = "harris_odds", model_odds = "odds")
+```
+
+```{r}
+state_odds$market_odds <- state_odds$market_odds * 100
+```
+
+
+```{r}
+# Load necessary packages
+library(ggplot2)
+library(ggrepel)  # For better label placement
+
+ggplot(state_odds, aes(x = model_odds, y = market_odds)) +
+  geom_point(aes(color = model_odds < 50), size = 1) +  # Conditionally color points
+  scale_color_manual(
+    values = c("TRUE" = "red", "FALSE" = "blue"),        # Red if < 50, blue otherwise
+    name = "Model Odds",                                 # Title for the legend
+    labels = c("Harris >= 50%", "Harris < 50%")                          # Custom labels for the legend
+  ) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +  # Identity line
+  geom_vline(xintercept = 50, linetype = "dotted") +  # Vertical line at 50 (not 0.5)
+  geom_hline(yintercept = 50, linetype = "dotted") +  # Horizontal line at 50 (not 0.5)
+  geom_text_repel(aes(label = state), size = 3) +  # Adding state labels with repelling
+  labs(
+    title = "Market Odds vs Model Odds for Harris",
+    x = "Model Odds",
+    y = "Market Odds"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+state_pv2p_pred <- data2024 |>
+  select(c("state","preds"))
+
+state_odds <- state_odds |>
+  left_join(state_pv2p_pred)
+```
+```{r}
+ggplot(state_odds, aes(x = preds, y = market_odds)) +
+  geom_point(aes(color = model_odds < 50), size = 1) +  # Conditionally color points
+  scale_color_manual(
+    values = c("TRUE" = "red", "FALSE" = "blue"),        # Red if < 50, blue otherwise
+    name = "Model Odds",                                 # Title for the legend
+    labels = c("Harris >= 50%", "Harris < 50%")                          # Custom labels for the legend
+  ) +
+  geom_vline(xintercept = 50, linetype = "dotted") + # Vertical line at 0.5 (example)
+  geom_hline(yintercept = 50, linetype = "dotted") + # Horizontal line at 0.5 (example)
+  geom_text_repel(aes(label = state), size = 3) +  # Adding state labels with repelling
+  labs(
+    title = "Market Odds vs Predicted Two-Party Vote Share for Harris",
+    x = "Predicted Two-Party Vote Share",
+    y = "Market Odds"
+  ) +
+  theme_minimal()
+```
+```{r}
+state_odds$preds_logit <- log(state_odds$preds/100/(1-state_odds$preds/100))
+
+state_odds$market_odds_logit <- log(state_odds$market_odds/100/(1-state_odds$market_odds/100))
+```
+
+
+
+
+
 
 # Appendix
 
