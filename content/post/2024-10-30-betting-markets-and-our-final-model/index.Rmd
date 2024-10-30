@@ -21,10 +21,55 @@ library(ranger)
 ## Betting odds
 
 ```{r}
+real_swing_states <- c(
+  "Arizona",
+  "Nevada",
+  "Georgia",
+  "North Carolina",
+  "Pennsylvania",
+  "Michigan",
+  "Wisconsin"
+)
+
+competitive_states <- c("Florida", "North Carolina", "Ohio", "Virginia",
+                  "Arizona", "Maine", "Michigan", "Minnesota",
+                  "Nevada", "New Hampshire", "Pennsylvania",
+                  "Wisconsin", "Georgia", "Iowa")
+
+swing_states <- real_swing_states
+```
+
+
+```{r}
+# Function to map state abbreviations to full names
+abbr_to_full <- function(state_abbr) {
+  # Create a named vector where the names are abbreviations and the values are full names
+  state_map <- c(
+    "AL" = "Alabama", "AK" = "Alaska", "AZ" = "Arizona", "AR" = "Arkansas", "CA" = "California",
+    "CO" = "Colorado", "CT" = "Connecticut", "DE" = "Delaware", "FL" = "Florida", "GA" = "Georgia",
+    "HI" = "Hawaii", "ID" = "Idaho", "IL" = "Illinois", "IN" = "Indiana", "IA" = "Iowa",
+    "KS" = "Kansas", "KY" = "Kentucky", "LA" = "Louisiana", "ME" = "Maine", "MD" = "Maryland",
+    "MA" = "Massachusetts", "MI" = "Michigan", "MN" = "Minnesota", "MS" = "Mississippi", "MO" = "Missouri",
+    "MT" = "Montana", "NE" = "Nebraska", "NV" = "Nevada", "NH" = "New Hampshire", "NJ" = "New Jersey",
+    "NM" = "New Mexico", "NY" = "New York", "NC" = "North Carolina", "ND" = "North Dakota", "OH" = "Ohio",
+    "OK" = "Oklahoma", "OR" = "Oregon", "PA" = "Pennsylvania", "RI" = "Rhode Island", "SC" = "South Carolina",
+    "SD" = "South Dakota", "TN" = "Tennessee", "TX" = "Texas", "UT" = "Utah", "VT" = "Vermont",
+    "VA" = "Virginia", "WA" = "Washington", "WV" = "West Virginia", "WI" = "Wisconsin", "WY" = "Wyoming", "DC" = "District Of Columbia"
+  )
+  
+  # Map the state abbreviations to their full names
+  return(state_map[state_abbr])
+}
+```
+
+
+```{r}
 bet <- read.csv("../data/betting_odds.csv") |>
   select(c("harris_odds","state"))
 
 state_odds <- read.csv("../data/state_odds.csv")
+data2024 <- read.csv("../data/data2024.csv")
+state_popvote_gdp_polls <- read.csv("../data/state_popvote_gdp_polls.csv")
 
 bet$state <- abbr_to_full(bet$state)
 

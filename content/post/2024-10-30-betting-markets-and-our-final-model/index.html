@@ -9,3 +9,57 @@ tags: []
 
 
 
+<p>Note: this is for the November 4 submission. See <a href="/post/2024/10/26/putting-it-all-together-a-final-prediction-model/">here</a> for the 28 Oct submission.</p>
+<div id="betting-odds" class="section level2">
+<h2>Betting odds</h2>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="appendix" class="section level1">
+<h1>Appendix</h1>
+<p>Here are other ideas that didn’t improve the model.</p>
+<div id="a-later-economy" class="section level2">
+<h2>A later economy</h2>
+<p>Instead of Q2 GDP growth, Q3 GDP growth comparison is closer to the election.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.28</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.69</code></pre>
+</div>
+<div id="partisanship" class="section level2">
+<h2>Partisanship</h2>
+<p>Voters might vote along partisan lines. Let’s incorporate the party where the incumbent candidate is from.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.13</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.59</code></pre>
+</div>
+<div id="a-longer-horizon-for-the-economy" class="section level2">
+<h2>A longer horizon for the economy</h2>
+<p>How about using a GDP growth compared to 3 years ago?</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.18</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.64</code></pre>
+</div>
+<div id="more-sophisticated-models" class="section level2">
+<h2>More sophisticated models</h2>
+<p>Let’s see if using a random forest helps.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 3.04</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 2.74</code></pre>
+</div>
+<div id="swing-state-behavior" class="section level2">
+<h2>Swing state behavior</h2>
+<p>Swing states might have inherently different dynamics than other states. For example, they are the battleground states where campaign spending are being focused on. Let’s add a flag on whether a state is consider a swing state in that election.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.19</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.53</code></pre>
+</div>
+<div id="national-gdp" class="section level2">
+<h2>National GDP</h2>
+<p>Some literature suggests that using national-level GDP is more accurate than using state-level GDP.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 12.61</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 12.36</code></pre>
+</div>
+<div id="diagnostics" class="section level2">
+<h2>Diagnostics</h2>
+<p>The diagnostics plots below show that the OLS assumptions hold pretty well (ELIH assumptions). The Q-Q plot in particular looks spectacular.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-16-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-16-2.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-16-3.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-16-4.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+</div>
