@@ -8,7 +8,7 @@ tags: []
 ---
 
 
-Note: this is for the November 4 submission. See [here](/post/2024/10/26/putting-it-all-together-a-final-prediction-model/) for the 28 Oct submission.
+Note: this is for the November 4 submission. See [here](/usa-2024-election-prediction/post/2024/10/30/betting-markets-and-our-final-model/) for the 28 Oct submission.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
@@ -17,6 +17,10 @@ set.seed(123)
 library(dplyr)
 library(ranger)
 ```
+
+# The Final Model
+
+work in progress...
 
 ## Betting odds
 

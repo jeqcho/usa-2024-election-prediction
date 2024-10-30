@@ -425,10 +425,19 @@ state_popvote_gdp_polls <- state_popvote_gdp_polls |>
 ```
 
 This gives our final model
-
 \[
-\underbrace{\text{pv2p}}_{\text{State-level incumbent party pv2p}} = \beta_0 + \beta_1 \cdot \underbrace{\text{G2GDP}}_{\text{State-level Q2 GDP growth}} + \beta_2 \cdot \underbrace{\text{NETAPP}}_{\text{State-level two-candidate poll}} + \beta_3 \cdot \underbrace{\text{TERM1INC}}_{\text{sitting president?}} + \beta_4 \cdot \underbrace{\text{LAG}}_{\text{State-level previous election pv2p}}
+\text{pv2p} = \beta_0 + \beta_1 \cdot \text{G2GDP} + \beta_2 \cdot \text{NETAPP} + \beta_3 \cdot \text{TERM1INC} + \beta_4 \cdot \text{LAG}
 \]
+
+Where:
+
+| Variable        | Explanation                               |
+|-----------------|-------------------------------------------|
+| \(\text{pv2p}\)     | State-level incumbent party pv2p        |
+| \(\text{G2GDP}\)    | State-level Q2 GDP growth               |
+| \(\text{NETAPP}\)   | State-level two-candidate poll          |
+| \(\text{TERM1INC}\) | Sitting president?                      |
+| \(\text{LAG}\)      | State-level previous election pv2p      |
 
 # Prediction
 

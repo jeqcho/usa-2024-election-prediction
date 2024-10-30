@@ -36,10 +36,41 @@ tags: []
 <p>Let’s incorporate past voting records into the prediction.</p>
 <pre><code>## State-level Abramowitz LOO-CV RMSE: 2.18</code></pre>
 <pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.55</code></pre>
-<p>This gives our final model</p>
-<p><span class="math display">\[
-\underbrace{\text{pv2p}}_{\text{State-level incumbent party pv2p}} = \beta_0 + \beta_1 \cdot \underbrace{\text{G2GDP}}_{\text{State-level Q2 GDP growth}} + \beta_2 \cdot \underbrace{\text{NETAPP}}_{\text{State-level two-candidate poll}} + \beta_3 \cdot \underbrace{\text{TERM1INC}}_{\text{sitting president?}} + \beta_4 \cdot \underbrace{\text{LAG}}_{\text{State-level previous election pv2p}}
+<p>This gives our final model
+<span class="math display">\[
+\text{pv2p} = \beta_0 + \beta_1 \cdot \text{G2GDP} + \beta_2 \cdot \text{NETAPP} + \beta_3 \cdot \text{TERM1INC} + \beta_4 \cdot \text{LAG}
 \]</span></p>
+<p>Where:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\text{pv2p}\)</span></td>
+<td>State-level incumbent party pv2p</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\text{G2GDP}\)</span></td>
+<td>State-level Q2 GDP growth</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\text{NETAPP}\)</span></td>
+<td>State-level two-candidate poll</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\text{TERM1INC}\)</span></td>
+<td>Sitting president?</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\text{LAG}\)</span></td>
+<td>State-level previous election pv2p</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="prediction" class="section level1">
