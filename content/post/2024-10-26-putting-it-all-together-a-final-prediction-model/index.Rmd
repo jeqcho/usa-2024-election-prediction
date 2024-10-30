@@ -225,6 +225,18 @@ state_popvote_gdp_polls <- state_popvote_gdp_polls |>
   mutate(inc_pv2p = ifelse(deminc, D_pv2p, R_pv2p))
 ```
 
+```{r}
+fred_econ <- fred_econ |>
+  rename(national_q2_gdp_growth = q2_gdp_growth)
+```
+
+
+```{r}
+state_popvote_gdp_polls <- state_popvote_gdp_polls |>
+  left_join(fred_econ, by="year")
+```
+
+
 
 ```{r}
 real_swing_states <- c(
@@ -349,6 +361,7 @@ for (pred_yr in YEARS) {
 
 # Compute and return RMSE
 err <- round(sqrt(mean(all_errors)),2)
+allrmse <- err
 cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
 
 all_errors <- c()
@@ -411,6 +424,11 @@ state_popvote_gdp_polls <- state_popvote_gdp_polls |>
   mutate(comp = ifelse(state %in% competitive_states,1,0))
 ```
 
+This gives our final model
+
+\[
+\underbrace{\text{pv2p}}_{\text{State-level incumbent party pv2p}} = \beta_0 + \beta_1 \cdot \underbrace{\text{G2GDP}}_{\text{State-level Q2 GDP growth}} + \beta_2 \cdot \underbrace{\text{NETAPP}}_{\text{State-level two-candidate poll}} + \beta_3 \cdot \underbrace{\text{TERM1INC}}_{\text{sitting president?}} + \beta_4 \cdot \underbrace{\text{LAG}}_{\text{State-level previous election pv2p}}
+\]
 
 # Prediction
 
@@ -477,6 +495,26 @@ data2024$preds <- predict(model, data2024)
 data2024 <- data2024 |>
   arrange(preds)
 data2024
+```
+
+```{r}
+plotdata2024 <- data2024
+plotdata2024$state <- factor(plotdata2024$state, levels = plotdata2024$state)
+
+# Create the dot-and-whisker plot with fixed error width
+ggplot(plotdata2024, aes(x = state, y = preds)) +
+  geom_point(aes(color = preds < 50), size = 1)  +  # Dots representing the predicted vote share
+  geom_errorbar(aes(ymin = preds - allrmse, ymax = preds +allrmse), width = 0.2) +  # Fixed error bars (0.2)
+  scale_color_manual(values = c("TRUE" = "firebrick1", "FALSE" = "dodgerblue4"), 
+                     name = "Winner", 
+                     labels = c("Harris", "Trump")) +  # Custom colors and legend
+  labs(
+    title = "Predicted Democratic Two-Party Vote Share by State",
+    x = "State",
+    y = "Predicted Vote Share",
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))  # Rotate state labels for readability
 ```
 
 
@@ -798,6 +836,7 @@ state_pv2p_pred <- data2024 |>
 state_odds <- state_odds |>
   left_join(state_pv2p_pred)
 ```
+
 ```{r}
 ggplot(state_odds, aes(x = preds, y = market_odds)) +
   geom_point(aes(color = model_odds < 50), size = 1) +  # Conditionally color points
@@ -816,6 +855,7 @@ ggplot(state_odds, aes(x = preds, y = market_odds)) +
   ) +
   theme_minimal()
 ```
+
 ```{r}
 state_odds$preds_logit <- log(state_odds$preds/100/(1-state_odds$preds/100))
 
@@ -1127,6 +1167,66 @@ err <- round(sqrt(mean(all_errors)),2)
 cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
 ```
 
+## National GDP
+
+Some literature suggests that using national-level GDP is more accurate than using state-level GDP.
+
+
+```{r}
+# Fit the model excluding observations with the same year
+all_errors <- c()
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + national_q2_gdp_growth + incumbent  + inc_lag,
+              data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls,
+                      year == pred_yr)
+  
+  # Compute squared errors for the test data
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
+  
+  # Collect all errors
+  all_errors <- c(all_errors, cur_error)
+}
+
+# Compute and return RMSE
+err <- round(sqrt(mean(all_errors)),2)
+allrmse <- err
+cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
+
+all_errors <- c()
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + national_q2_gdp_growth + incumbent  + inc_lag,
+              data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls,
+                      year == pred_yr & state%in% swing_states)
+  
+  # Compute squared errors for the test data
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
+  
+  # Collect all errors
+  all_errors <- c(all_errors, cur_error)
+}
+
+# Compute and return RMSE
+err <- round(sqrt(mean(all_errors)),2)
+cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
+```
 
 
 ## Diagnostics
@@ -1163,4 +1263,113 @@ ggplot(train_data, aes(x = predicted, y = residuals, color = factor(year))) +
   theme_minimal() +                       # Use a minimal theme
   scale_color_discrete(name = "Year")     # Make sure the legend uses 'Year'
 ```
+
+```{r}
+model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
+              data = state_popvote_gdp_polls)
+
+# Calculate predicted values from the model
+train_data <- state_popvote_gdp_polls  # Replace with your actual data
+
+# Add predicted values to the original data
+train_data$predicted <- predicted_values
+
+all_preds <- data.frame(
+  year=numeric(0),
+  state=character(0),
+  preds=numeric(0),
+  inc_pv2p=numeric(0)
+)
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
+              data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls,
+                      year == pred_yr)
+  
+  # Compute squared errors for the test data
+  test_data$preds <- predict(model, test_data)
+  
+  result <- test_data |>
+    select(c("year","state","preds","inc_pv2p"))
+  
+  # Collect all errors
+  all_preds <- rbind(all_preds, result)
+}
+
+# Plot Fitted (Actual) vs Predicted
+ggplot(all_preds, aes(x = inc_pv2p, y = preds)) +
+  geom_point(aes(color = (inc_pv2p > 50) != (preds > 50)), size = 2) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
+  labs(
+    title = "Fitted vs LOO Predicted Incumbent Two-Party Popular Vote (2008-2020)",
+    x = "Actual Incumbent Two-Party Vote Share",
+    y = "LOO Predicted Incumbent Two-Party Vote Share"
+  ) +
+  scale_color_manual(
+    values = c("TRUE" = "red", "FALSE" = "darkgreen"),
+    labels = c("Correct Prediction", "Incorrect Prediction"),
+    name = "Prediction Accuracy"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Subset data for critical predictions
+crit_preds <- subset(all_preds, preds > 45 & preds < 55)
+
+# Create a Prediction Accuracy variable
+crit_preds$PredictionAccuracy <- ifelse(
+  (crit_preds$inc_pv2p > 50) == (crit_preds$preds > 50),
+  "Correct Prediction",
+  "Incorrect Prediction"
+)
+
+# Plot
+ggplot(crit_preds, aes(x = inc_pv2p, y = preds)) +
+  # Highlight quadrants
+  geom_rect(aes(xmin = 45, xmax = 50, ymin = 50, ymax = 55),
+            fill = "lightpink", alpha = 0.3, inherit.aes = FALSE) +
+  geom_rect(aes(xmin = 50, xmax = 55, ymin = 45, ymax = 50),
+            fill = "lightblue", alpha = 0.3, inherit.aes = FALSE) +
+  # Points colored by Prediction Accuracy
+  geom_point(aes(color = PredictionAccuracy), size = 2) +
+  # Diagonal reference line
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
+  # Labels
+  labs(
+    title = "Zoomed plot for predictions between 45% and 55% (2008-2020)",
+    x = "Actual Incumbent Two-Party Vote Share",
+    y = "LOO Predicted Incumbent Two-Party Vote Share"
+  ) +
+  # Custom color scale
+  scale_color_manual(
+    values = c("Correct Prediction" = "darkgreen", "Incorrect Prediction" = "red"),
+    name = "Prediction Accuracy"
+  ) +
+  # Add quadrant labels
+  annotate("text", x = 47.5, y = 54, label = "Actual Loss,\nPredicted Win", 
+           color = "black", size = 3, hjust = 0.5) +
+  annotate("text", x = 52.5, y = 46, label = "Actual Win,\nPredicted Loss", 
+           color = "black", size = 3, hjust = 0.5) +
+  # Add labels only for incorrect predictions
+  geom_text_repel(
+    data = subset(crit_preds, PredictionAccuracy == "Incorrect Prediction"),
+    aes(label = paste(state, year)),
+    size = 3
+  ) +
+  # Set plot limits and theme
+  xlim(45, 55) +
+  ylim(45, 55) +
+  theme_minimal()
+```
+
+
 

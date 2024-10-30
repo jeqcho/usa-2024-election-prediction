@@ -36,6 +36,10 @@ tags: []
 <p>Let’s incorporate past voting records into the prediction.</p>
 <pre><code>## State-level Abramowitz LOO-CV RMSE: 2.18</code></pre>
 <pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.55</code></pre>
+<p>This gives our final model</p>
+<p><span class="math display">\[
+\underbrace{\text{pv2p}}_{\text{State-level incumbent party pv2p}} = \beta_0 + \beta_1 \cdot \underbrace{\text{G2GDP}}_{\text{State-level Q2 GDP growth}} + \beta_2 \cdot \underbrace{\text{NETAPP}}_{\text{State-level two-candidate poll}} + \beta_3 \cdot \underbrace{\text{TERM1INC}}_{\text{sitting president?}} + \beta_4 \cdot \underbrace{\text{LAG}}_{\text{State-level previous election pv2p}}
+\]</span></p>
 </div>
 </div>
 <div id="prediction" class="section level1">
@@ -64,6 +68,7 @@ tags: []
 ## 20   62.62017           2.8     FALSE 64.90891     0     California 62.55537
 ## 21   64.59140           1.9     FALSE 67.11555     0  Massachusetts 64.89125
 ## 22   65.07442           2.3     FALSE 67.02905     0       Maryland 65.20225</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 <p>For the rest of the states, which are solid or likely states according to Cook’s Political Report, we will assign it assuming that the expert predictions are correct.</p>
 <p><img src="final-preds.png" alt="Final prediction" />
 Trump wins with 312 against Harris’ 226</p>
@@ -71,15 +76,15 @@ Trump wins with 312 against Harris’ 226</p>
 <div id="uncertainty" class="section level1">
 <h1>Uncertainty</h1>
 <p>Here we simulate 10,000 possible cases. Here we plotted the uncertainty for the states assuming that the errors are independent. Regardless of whether the errors are correlated across states, marginally the plots will look the same.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-32-1.png" width="768" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-35-1.png" width="768" /></p>
 <p>How about the electoral college?</p>
 <p>Here for each simulation we assume that the states share the same error.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 <p>If we instead assume that states have independent error (which I think is less reasonable than all states sharing the same error), we will have a &lt;2% chance of a Democrat win.</p>
 <div id="betting-odds" class="section level2">
 <h2>Betting odds</h2>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
 </div>
 </div>
 <div id="appendix" class="section level1">
@@ -115,10 +120,18 @@ Trump wins with 312 against Harris’ 226</p>
 <pre><code>## State-level Abramowitz LOO-CV RMSE: 2.19</code></pre>
 <pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.53</code></pre>
 </div>
+<div id="national-gdp" class="section level2">
+<h2>National GDP</h2>
+<p>Some literature suggests that using national-level GDP is more accurate than using state-level GDP.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 12.61</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 12.36</code></pre>
+</div>
 <div id="diagnostics" class="section level2">
 <h2>Diagnostics</h2>
 <p>The diagnostics plots below show that the OLS assumptions hold pretty well (ELIH assumptions). The Q-Q plot in particular looks spectacular.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-53-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-53-2.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-53-3.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-53-4.png" width="672" /></p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-57-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-57-2.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-57-3.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-57-4.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-60-1.png" width="672" /></p>
 </div>
 </div>
