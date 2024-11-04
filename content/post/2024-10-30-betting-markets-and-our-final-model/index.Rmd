@@ -1,14 +1,12 @@
 ---
-title: Betting markets and our final model
+title: Final Forecast of the 2024 US President
 author: Jay Chooi
 date: '2024-10-30'
-slug: betting-markets-and-our-final-model
+slug: final-forecast-of-the-2024-us-president
 categories: []
 tags: []
 ---
 
-
-Note: this is for the November 4 submission. See [here](/usa-2024-election-prediction/post/2024/10/30/betting-markets-and-our-final-model/) for the 28 Oct submission.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
@@ -16,13 +14,93 @@ set.seed(123)
 
 library(dplyr)
 library(ranger)
+library(ggplot2)
+library(ggrepel)
+library(tidyverse)
 ```
 
-# The Final Model
+# Model prediction
+The model predicts a Trump win with 312 against 226, sweeping all seven swing states. See below for vote share by state.
 
-work in progress...
+![Final prediction map](./final-preds.png)
 
-## Betting odds
+# Model description
+
+Our final model predicts the electoral college winner by running a simple linear regression to predict the popular vote winner in each state.
+
+\[
+\text{pv2p} = \beta_0 + \beta_1 \cdot \text{Q2GDP} + \beta_2 \cdot \text{POLL} + \beta_3 \cdot \text{SIT} + \beta_4 \cdot \text{LAG}
+\]
+
+Where:
+
+| Variable        | Explanation                               |
+|-----------------|-------------------------------------------|
+| \(\text{pv2p}\)     | State-level incumbent party pv2p        |
+| \(\text{Q2GDP}\)    | State-level Q2 GDP growth               |
+| \(\text{POLL}\)   | State-level two-candidate poll          |
+| \(\text{SIT}\) | Sitting president?                      |
+| \(\text{LAG}\)      | State-level previous election pv2p      |
+
+Restricted by data availability, our training data includes 196 state-level election results from 2008, 2012, 2016, and 2020.
+
+# Model Justification
+
+The regression is an ordinary least-squares (OLS). The model has its origins in [Abramowitz's Time for Change model](https://centerforpolitics.org/crystalball/time-for-change-model-predicts-close-election-with-slight-edge-for-kamala-harris/). Each variable provides perpendicular information on factors driving the popular vote. The GDP informs the economic fundamentals. The poll reflects current voter sentiment. The sitting president flag encodes the incumbency effect. The previous election results provides information on political calcification of each state.
+
+# Model coefficients
+
+```{r}
+state_odds <- read.csv("../data/state_odds.csv")
+data2024 <- read.csv("../data/data2024.csv")
+state_popvote_gdp_polls <- read.csv("../data/state_popvote_gdp_polls.csv")
+
+# Renaming columns based on the provided mapping
+# Selectively rename columns
+state_popvote_gdp_polls <- state_popvote_gdp_polls %>%
+  rename(
+    pv2p = inc_pv2p,
+    Q2GDP = q2_gdp_growth,
+    POLL = inc_poll2p,
+    SIT = incumbent,
+    LAG = inc_lag
+  )
+
+data2024 <- data2024 %>%
+  rename(
+    Q2GDP = q2_gdp_growth,
+    POLL = inc_poll2p,
+    SIT = incumbent,
+    LAG = inc_lag
+  )
+
+model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = state_popvote_gdp_polls)
+
+summary(model)
+```
+# Model intrepretation
+
+**GDP**: an estimate of -0.10465 suggest that a 1% higher Q2 GDP growth rate is associated with -0.1% change in vote share.
+
+**Polls**: an estimate of 0.78661 suggest that a 1% increase in polls is associated with a +0.8% change in vote share.
+
+**Incumbency**: an estimate of 2.26164 suggest that an incumbent president gets a +2.3% increase in vote share.
+
+**Previous election**: an estimate of 0.31320 suggest that every 1% of the vote share from the previous election translates to +0.3% to the current election.
+
+# Model validation
+
+We also verified the OLS assumptions. See appendix below for details
+
+Our in-sample root mean-squared error (RMSE) is given below.
+
+```{r}
+res <- residuals(model)
+err <- round(sqrt(mean(res^2)),2)
+cat("In-sample RMSE:", err, "\n")
+```
+
+Our leave-one-out (LOO) RMSE is given below.
 
 ```{r}
 real_swing_states <- c(
@@ -43,6 +121,420 @@ competitive_states <- c("Florida", "North Carolina", "Ohio", "Virginia",
 swing_states <- real_swing_states
 ```
 
+
+```{r}
+all_errors <- c()
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls, year == pred_yr)
+  
+  # Compute squared errors for the test data
+  cur_error <- (test_data$pv2p - predict(model, test_data)) ^ 2
+  
+  # Collect all errors
+  all_errors <- c(all_errors, cur_error)
+}
+
+# Compute and return RMSE
+err <- round(sqrt(mean(all_errors)), 2)
+cat("LOO RMSE:", err, "\n")
+
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls, year == pred_yr & state %in% swing_states)
+  
+  # Compute squared errors for the test data
+  cur_error <- (test_data$pv2p - predict(model, test_data)) ^ 2
+  
+  # Collect all errors
+  all_errors <- c(all_errors, cur_error)
+}
+
+# Compute and return RMSE
+err <- round(sqrt(mean(all_errors)), 2)
+cat("LOO RMSE (swing states):", err, "\n")
+```
+
+Here we present a plot showing the LOO performance of the model.
+
+```{r}
+model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = state_popvote_gdp_polls)
+
+# Calculate predicted values from the model
+train_data <- state_popvote_gdp_polls  # Replace with your actual data
+
+# Add predicted values to the original data
+predicted_values <- predict(model, newdata = train_data)
+train_data$predicted <- predicted_values
+
+all_preds <- data.frame(
+  year=numeric(0),
+  state=character(0),
+  preds=numeric(0),
+  pv2p=numeric(0)
+)
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls,
+                      year == pred_yr)
+  
+  # Compute squared errors for the test data
+  test_data$preds <- predict(model, test_data)
+  
+  result <- test_data |>
+    select(c("year","state","preds","pv2p"))
+  
+  # Collect all errors
+  all_preds <- rbind(all_preds, result)
+}
+
+# Plot Fitted (Actual) vs Predicted
+ggplot(all_preds, aes(x = pv2p, y = preds)) +
+  geom_point(aes(color = (pv2p > 50) != (preds > 50)), size = 1) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
+  labs(
+    title = "LOO Predicted Incumbent Two-Party Popular Vote vs Actual (2008-2020)",
+    x = "Actual Incumbent Two-Party Vote Share",
+    y = "LOO Predicted Incumbent Two-Party Vote Share"
+  ) +
+  scale_color_manual(
+    values = c("TRUE" = "red", "FALSE" = "darkgreen"),
+    labels = c("Correct Prediction", "Incorrect Prediction"),
+    name = "Prediction Accuracy"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Subset data for critical predictions
+crit_preds <- subset(all_preds, preds > 45 & preds < 55)
+
+# Create a Prediction Accuracy variable
+crit_preds$PredictionAccuracy <- ifelse(
+  (crit_preds$pv2p > 50) == (crit_preds$preds > 50),
+  "Correct Prediction",
+  "Incorrect Prediction"
+)
+
+# Plot
+ggplot(crit_preds, aes(x = pv2p, y = preds)) +
+  # Highlight quadrants
+  geom_rect(aes(xmin = 45, xmax = 50, ymin = 50, ymax = 55),
+            fill = "khaki", alpha = 0.3, inherit.aes = FALSE) +
+  geom_rect(aes(xmin = 50, xmax = 55, ymin = 45, ymax = 50),
+            fill = "moccasin", alpha = 0.3, inherit.aes = FALSE) +
+  # Points colored by Prediction Accuracy
+  geom_point(aes(color = PredictionAccuracy), size = 2) +
+  # Diagonal reference line
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
+  # Labels
+  labs(
+    title = "Zoomed in plot for close elections (2008-2020)",
+    x = "Actual Incumbent Two-Party Vote Share",
+    y = "LOO Predicted Incumbent Two-Party Vote Share"
+  ) +
+  # Custom color scale
+  scale_color_manual(
+    values = c("Correct Prediction" = "darkgreen", "Incorrect Prediction" = "red"),
+    name = "Prediction Accuracy"
+  ) +
+  # Add quadrant labels
+  annotate("text", x = 47.5, y = 54, label = "Predicted Win\nActual Loss", 
+           color = "black", size = 3, hjust = 0.5) +
+  annotate("text", x = 52.5, y = 46, label = "Predicted Loss\nActual Win", 
+           color = "black", size = 3, hjust = 0.5) +
+  # Add labels only for incorrect predictions
+  geom_text_repel(
+    data = subset(crit_preds, PredictionAccuracy == "Incorrect Prediction"),
+    aes(label = paste(state, year)),
+    size = 3
+  ) +
+  # Set plot limits and theme
+  xlim(45, 55) +
+  ylim(45, 55) +
+  theme_minimal()
+```
+
+# Detailed Model Prediction and Model Uncertainty
+
+Here are the predictors for 2024 and the corresponding incumbent vote share prediction. Swing states are marked. We also include the 95% prediction interval. Numbers are rounded to 2 decimal points for display.
+
+```{r}
+model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = state_popvote_gdp_polls)
+
+preds <- predict(model, data2024,interval = "prediction", level = 0.95)
+data2024$preds <- preds[,1]
+data2024$lower <- preds[,2]
+data2024$upper <- preds[,3]
+
+data2024 <- data2024 |>
+  arrange(preds)
+data2024$X <- NULL
+data2024 |>
+  mutate(POLL=round(POLL,2))|>
+  mutate(LAG=round(LAG,2))|>
+  mutate(preds=round(preds,2))|>
+  mutate(lower=round(lower,2))|>
+  mutate(upper=round(upper,2))
+```
+```{r}
+
+```
+
+
+Swing states below are marked in purple. The error bar corresponds to the 95% prediction interval.
+
+```{r}
+plotdata2024 <- data2024
+plotdata2024$state <- factor(plotdata2024$state, levels = plotdata2024$state)
+
+
+# Create the dot-and-whisker plot with fixed error width
+ggplot(plotdata2024, aes(x = state, y = preds)) +
+  geom_point(aes(color = preds < 50), size = 1)  +  # Dots representing the predicted vote share
+  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2) +  # Fixed error bars (0.2)
+  scale_color_manual(
+    values = c(
+      "TRUE" = "firebrick1",
+      "FALSE" = "dodgerblue4"
+    ),
+    name = "Winner",
+    labels = c("Harris", "Trump")
+  ) +  # Custom colors and legend
+  labs(title = "Predicted Democratic Two-Party Vote Share by State", x = "State", y = "Predicted Vote Share", ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(
+    angle = 90,
+    hjust = 1,
+    color = ifelse(
+      levels(plotdata2024$state) %in% swing_states,
+      "purple3",
+      "black"
+    )
+  ))
+```
+
+OLS also allows us to fit a distribution on the vote share of the states. This allows us to find the probability of a Harris win as shown below.
+
+```{r}
+deg_free <- nrow(state_popvote_gdp_polls) - length(coef(model))
+scale_factor <- (preds[,3]- preds[,1])/qt(0.975, deg_free)
+
+probability <- pt((50-preds[,1])/ scale_factor, deg_free, lower.tail = TRUE)
+data2024$pharriswin <- 1-probability
+data2024$ptrumpwin <- probability
+```
+
+```{r}
+# Prepare data and reorder based on pharriswin
+plotdata <- data2024 |>
+  select(state, pharriswin, ptrumpwin) |>
+  mutate(state = reorder(state, pharriswin))  # Reorder state based on pharriswin
+
+# Melt the data to create a long format suitable for stacked bar plots
+plotdata_long <- plotdata |>
+  pivot_longer(cols = c(pharriswin, ptrumpwin), names_to = "candidate", values_to = "probability")
+
+# Define colors: blue for Harris (pharriswin) and red for Trump (ptrumpwin)
+plot_colors <- c("pharriswin" = "dodgerblue4", "ptrumpwin" = "firebrick1")
+
+# Create the horizontal bar plot
+ggplot(plotdata_long, aes(x = probability, y = state, fill = candidate)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = plot_colors, labels = c("Harris", "Trump")) +
+  labs(
+    title = "Predicted Winning Probability by State",
+    x = "Probability",
+    y = "State"
+  ) +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        axis.text.y = element_text(
+      color = ifelse(levels(plotdata$state) %in% swing_states, "purple3", "black")  # Color labels if in swing_states
+    ))
+```
+
+We can then sample from this distribution to get a distribution on the electoral college.
+
+```{r echo=FALSE}
+ec_all <- read.csv("../data/corrected_ec_1948_2024.csv") |> filter(year==2024)
+ec <- subset(ec_all, year==2024 & state%in% data2024$state)
+ec <- select(ec, c(state,electors))
+```
+
+```{r}
+states_no_pred <- setdiff(ec_all$state, data2024$state)
+expert_ratings <- read.csv("../data/sabato_crystal_ball_ratings.csv") |>
+  filter(year==2024)
+```
+
+```{r}
+# Function to map state abbreviations to full names
+abbr_to_full <- function(state_abbr) {
+  # Create a named vector where the names are abbreviations and the values are full names
+  state_map <- c(
+    "AL" = "Alabama", "AK" = "Alaska", "AZ" = "Arizona", "AR" = "Arkansas", "CA" = "California",
+    "CO" = "Colorado", "CT" = "Connecticut", "DE" = "Delaware", "FL" = "Florida", "GA" = "Georgia",
+    "HI" = "Hawaii", "ID" = "Idaho", "IL" = "Illinois", "IN" = "Indiana", "IA" = "Iowa",
+    "KS" = "Kansas", "KY" = "Kentucky", "LA" = "Louisiana", "ME" = "Maine", "MD" = "Maryland",
+    "MA" = "Massachusetts", "MI" = "Michigan", "MN" = "Minnesota", "MS" = "Mississippi", "MO" = "Missouri",
+    "MT" = "Montana", "NE" = "Nebraska", "NV" = "Nevada", "NH" = "New Hampshire", "NJ" = "New Jersey",
+    "NM" = "New Mexico", "NY" = "New York", "NC" = "North Carolina", "ND" = "North Dakota", "OH" = "Ohio",
+    "OK" = "Oklahoma", "OR" = "Oregon", "PA" = "Pennsylvania", "RI" = "Rhode Island", "SC" = "South Carolina",
+    "SD" = "South Dakota", "TN" = "Tennessee", "TX" = "Texas", "UT" = "Utah", "VT" = "Vermont",
+    "VA" = "Virginia", "WA" = "Washington", "WV" = "West Virginia", "WI" = "Wisconsin", "WY" = "Wyoming", "DC" = "District Of Columbia"
+  )
+  
+  # Map the state abbreviations to their full names
+  return(state_map[state_abbr])
+}
+
+# Example usage
+expert_ratings$state <- abbr_to_full(expert_ratings$state)
+
+expert_ratings <- expert_ratings |>
+  select(c("state","rating"))
+```
+
+```{r}
+nopred_df <- data.frame(
+  state = states_no_pred
+)
+
+nopred_df <- nopred_df |>
+  left_join(expert_ratings, by="state")
+
+nopred_df <- nopred_df |>
+  left_join(ec_all, by="state") |>
+  select(c("state","electors","rating"))
+  
+
+nopred_df <- nopred_df |>
+  mutate(dwin=ifelse(rating<4,1,0))
+
+nopred_df <- nopred_df |>
+  mutate(dec=dwin*electors)
+
+harris_base <- sum(nopred_df$dec)
+```
+
+```{r}
+# sanity check
+nopred_votes <- sum(nopred_df$electors)
+pred_votes <- sum(ec$electors)
+# nopred_votes+pred_votes
+# 538
+```
+
+
+```{r}
+n_simulations <- 10000  # Number of Monte Carlo simulations
+n_wins <- 0  # Counter for how many times Candidate A wins
+
+n_states <- nrow(data2024)
+# Initialize an empty data frame to store sampled vote shares for each state and each simulation
+sampled_harris_wins <- data.frame(matrix(ncol = n_states, nrow = n_simulations))
+# Set the row names of the data frame to the swing state names
+colnames(sampled_harris_wins) <- data2024$state
+
+# Run Monte Carlo simulations
+for (i in 1:n_simulations) {
+  # together
+  sampled_harris_wins[i, ] <- mapply(function(prob) rbinom(1, size = 1, prob = prob), data2024$pharriswin)
+  
+}
+```
+
+
+```{r echo=FALSE}
+# Ensure the row names (sample_id) are part of the dataframe
+sampled_harris_wins <- sampled_harris_wins %>%
+  mutate(sample_id = rownames(sampled_harris_wins))
+sampled_harris_wins$sample_id <- as.numeric(sampled_harris_wins$sample_id)
+
+# Reshape sampled_vote_shares_df into long format to facilitate joining
+sampled_harris_wins <- sampled_harris_wins %>%
+  tidyr::gather(key = "state", value = "win", -sample_id)
+
+# Join the vote share data with the electoral college data by state name
+joined_data <- sampled_harris_wins %>%
+  left_join(ec, by = c("state" = "state"))
+
+# Ensure electors are numeric as well
+joined_data <- joined_data %>%
+  mutate(electors = as.numeric(electors))
+
+# Calculate the electoral votes won by multiplying vote shares with electors
+joined_data <- joined_data %>%
+  mutate(electoral_votes_won = ifelse(win, electors,0))
+
+# Sum the total electoral votes for each year
+total_electoral_votes_df <- joined_data %>%
+  group_by(sample_id) %>%
+  summarise(total_electoral_votes = sum(electoral_votes_won))
+
+harris <- harris_base + total_electoral_votes_df$total_electoral_votes
+```
+
+```{r echo=FALSE}
+dem_win_pct <- sum(harris>269)/length(harris)*100
+
+# Create the plot
+p <- ggplot(data.frame(harris), aes(x = harris, fill = harris > 269)) +
+  geom_histogram(binwidth = 1) +  # Adjust binwidth if necessary
+  scale_fill_manual(
+    values = c(
+      "TRUE" = "dodgerblue4",
+      "FALSE" = "firebrick1"
+    ),
+    labels = c("TRUE" = "Democratic Win", "FALSE" = "Republican Win")
+  ) +
+  labs(
+    x = "Democratic Electoral College Vote Count",
+    y = "Count",
+    fill = "Outcome",
+    title = paste(
+      "Simulated Outcomes of the Electoral College\n(Democrats win",
+      round(dem_win_pct, 1),
+      "% of the time)"
+    )
+  ) +
+  geom_vline(
+    xintercept = 270,
+    color = "black",
+    linetype = "dashed",
+    size = 1
+  ) +  # Vertical line at 50
+  theme_minimal()
+
+# Display the plot
+print(p)
+```
+
+## Betting odds
 
 ```{r}
 # Function to map state abbreviations to full names
@@ -71,9 +563,8 @@ abbr_to_full <- function(state_abbr) {
 bet <- read.csv("../data/betting_odds.csv") |>
   select(c("harris_odds","state"))
 
-state_odds <- read.csv("../data/state_odds.csv")
-data2024 <- read.csv("../data/data2024.csv")
-state_popvote_gdp_polls <- read.csv("../data/state_popvote_gdp_polls.csv")
+state_odds <- data2024 |>
+  select(state,pharriswin)
 
 bet$state <- abbr_to_full(bet$state)
 
@@ -85,7 +576,8 @@ state_odds <- state_odds |>
 
 ```{r}
 state_odds <- state_odds |>
-  rename(market_odds = "harris_odds", model_odds = "odds")
+  rename(market_odds = "harris_odds", model_odds = "pharriswin")
+state_odds$model_odds <- state_odds$model_odds * 100
 ```
 
 ```{r}
@@ -94,16 +586,12 @@ state_odds$market_odds <- state_odds$market_odds * 100
 
 
 ```{r}
-# Load necessary packages
-library(ggplot2)
-library(ggrepel)  # For better label placement
-
 ggplot(state_odds, aes(x = model_odds, y = market_odds)) +
   geom_point(aes(color = model_odds < 50), size = 1) +  # Conditionally color points
   scale_color_manual(
     values = c("TRUE" = "red", "FALSE" = "blue"),        # Red if < 50, blue otherwise
     name = "Model Odds",                                 # Title for the legend
-    labels = c("Harris >= 50%", "Harris < 50%")                          # Custom labels for the legend
+    labels = c("Harris > 50%", "Harris < 50%")                          # Custom labels for the legend
   ) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +  # Identity line
   geom_vline(xintercept = 50, linetype = "dotted") +  # Vertical line at 50 (not 0.5)
@@ -131,7 +619,7 @@ ggplot(state_odds, aes(x = preds, y = market_odds)) +
   scale_color_manual(
     values = c("TRUE" = "red", "FALSE" = "blue"),        # Red if < 50, blue otherwise
     name = "Model Odds",                                 # Title for the legend
-    labels = c("Harris >= 50%", "Harris < 50%")                          # Custom labels for the legend
+    labels = c("Harris > 50%", "Harris < 50%")                          # Custom labels for the legend
   ) +
   geom_vline(xintercept = 50, linetype = "dotted") + # Vertical line at 0.5 (example)
   geom_hline(yintercept = 50, linetype = "dotted") + # Horizontal line at 0.5 (example)
@@ -152,512 +640,87 @@ state_odds$market_odds_logit <- log(state_odds$market_odds/100/(1-state_odds$mar
 
 
 
+```{r}
+# Create a named vector with state abbreviations
+state_abbr <- c(
+  "Alabama" = "AL", "Alaska" = "AK", "Arizona" = "AZ", "Arkansas" = "AR", "California" = "CA",
+  "Colorado" = "CO", "Connecticut" = "CT", "Delaware" = "DE", "Florida" = "FL", "Georgia" = "GA",
+  "Hawaii" = "HI", "Idaho" = "ID", "Illinois" = "IL", "Indiana" = "IN", "Iowa" = "IA",
+  "Kansas" = "KS", "Kentucky" = "KY", "Louisiana" = "LA", "Maine" = "ME", "Maryland" = "MD",
+  "Massachusetts" = "MA", "Michigan" = "MI", "Minnesota" = "MN", "Mississippi" = "MS",
+  "Missouri" = "MO", "Montana" = "MT", "Nebraska" = "NE", "Nevada" = "NV", "New Hampshire" = "NH",
+  "New Jersey" = "NJ", "New Mexico" = "NM", "New York" = "NY", "North Carolina" = "NC",
+  "North Dakota" = "ND", "Ohio" = "OH", "Oklahoma" = "OK", "Oregon" = "OR", "Pennsylvania" = "PA",
+  "Rhode Island" = "RI", "South Carolina" = "SC", "South Dakota" = "SD", "Tennessee" = "TN",
+  "Texas" = "TX", "Utah" = "UT", "Vermont" = "VT", "Virginia" = "VA", "Washington" = "WA",
+  "West Virginia" = "WV", "Wisconsin" = "WI", "Wyoming" = "WY"
+)
+
+# Create the new column `statecode` by mapping `data2024$state` to the abbreviations and appending `_D_pv2p`
+data2024$statecode <- paste0(state_abbr[data2024$state], "_D_pv2p")
+```
+
+```{r}
+cols_on_sheet <- c("USA_D_pv2p", "AL_D_pv2p", "AK_D_pv2p", "AZ_D_pv2p", "AR_D_pv2p", "CA_D_pv2p", "CO_D_pv2p", 
+  "CT_D_pv2p", "DC_D_pv2p", "DE_D_pv2p", "FL_D_pv2p", "GA_D_pv2p", "HI_D_pv2p", "ID_D_pv2p", 
+  "IL_D_pv2p", "IN_D_pv2p", "IA_D_pv2p", "KS_D_pv2p", "KY_D_pv2p", "LA_D_pv2p", "ME_D_pv2p", 
+  "ME1_D_pv2p", "ME2_D_pv2p", "MD_D_pv2p", "MA_D_pv2p", "MI_D_pv2p", "MN_D_pv2p", "MS_D_pv2p", 
+  "MO_D_pv2p", "MT_D_pv2p", "NE_D_pv2p", "NE1_D_pv2p", "NE2_D_pv2p", "NE3_D_pv2p", "NV_D_pv2p", 
+  "NH_D_pv2p", "NJ_D_pv2p", "NM_D_pv2p", "NY_D_pv2p", "NC_D_pv2p", "ND_D_pv2p", "OH_D_pv2p", 
+  "OK_D_pv2p", "OR_D_pv2p", "PA_D_pv2p", "RI_D_pv2p", "SC_D_pv2p", "SD_D_pv2p", "TN_D_pv2p", 
+  "TX_D_pv2p", "UT_D_pv2p", "VT_D_pv2p", "VA_D_pv2p", "WA_D_pv2p", "WV_D_pv2p", "WI_D_pv2p", 
+  "WY_D_pv2p")
+
+df <- data.frame(statecode=cols_on_sheet)
+df <- df |>
+  mutate(id = rownames(df))
+df$id <- as.numeric(df$id)
+
+submission <- data2024 |>
+  right_join(df, by="statecode") |>
+  select(statecode, preds,id)
+
+write.csv(submission,"submission.csv")
+```
+
 
 
 
 # Appendix
 
-Here are other ideas that didn't improve the model.
-
-## A later economy
-
-Instead of Q2 GDP growth, Q3 GDP growth comparison is closer to the election.
+We verify the OLS assumptions
 
 ```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + q3_gdp_growth + incumbent  + inc_lag,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + q3_gdp_growth + incumbent  + inc_lag,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
+model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = state_popvote_gdp_polls)
+plot(model,1)
 ```
 
+The flat red line shows that linearity holds.
 
-## Partisanship
+The constant dispersion of values regardless of fitted values shows that homogeneity of residual variance holds.
 
-Voters might vote along partisan lines. Let's incorporate the party where the incumbent candidate is from.
+The following plots show constant variance of residuals regardless of predictor values, showing independence.
 
 ```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~inc_poll2p + q2_gdp_growth + incumbent  + inc_lag+ deminc,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + deminc,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
+res <- residuals(model)
+plot(state_popvote_gdp_polls$Q2GDP, res)
+plot(state_popvote_gdp_polls$POLL, res)
+plot(state_popvote_gdp_polls$SIT, res)
+plot(state_popvote_gdp_polls$LAG, res)
 ```
 
-## A longer horizon for the economy
-
-How about using a GDP growth compared to 3 years ago?
+The Q-Q plot below shows that normality holds.
 
 ```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag ,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~inc_poll2p + q2_gdp_growth_4y + incumbent  + inc_lag ,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
+plot(model,2)
 ```
 
-## More sophisticated models
-
-Let's see if using a random forest helps.
-
-```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- ranger(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag ,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)$predictions) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
-```
-
-## Swing state behavior
-
-Swing states might have inherently different dynamics than other states. For example, they are the battleground states where campaign spending are being focused on. Let's add a flag on whether a state is consider a swing state in that election.
-
-```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag + swing,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
-```
-
-## National GDP
-
-Some literature suggests that using national-level GDP is more accurate than using state-level GDP.
+ 
 
 
-```{r}
-# Fit the model excluding observations with the same year
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + national_q2_gdp_growth + incumbent  + inc_lag,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-allrmse <- err
-cat("State-level Abramowitz LOO-CV RMSE:", err, "\n")
-
-all_errors <- c()
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + national_q2_gdp_growth + incumbent  + inc_lag,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr & state%in% swing_states)
-  
-  # Compute squared errors for the test data
-  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
-  
-  # Collect all errors
-  all_errors <- c(all_errors, cur_error)
-}
-
-# Compute and return RMSE
-err <- round(sqrt(mean(all_errors)),2)
-cat("State-level Abramowitz LOO-CV RMSE (swing-states):", err, "\n")
-```
 
 
-## Diagnostics
 
-The diagnostics plots below show that the OLS assumptions hold pretty well (ELIH assumptions). The Q-Q plot in particular looks spectacular.
-
-```{r}
-model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
-              data = state_popvote_gdp_polls)
-
-plot(model)
-```
-
-```{r}
-# Load the required library
-library(ggplot2)
-
-# Assuming your model is called `model` and training data is called `train_data`
-# Calculate predicted values from the model
-train_data <- state_popvote_gdp_polls
-predicted_values <- predict(model, newdata = train_data)
-
-# Calculate residuals (difference between actual values and predicted values)
-residuals <- residuals(model)
-
-# Assuming 'year' column is present in your 'train_data' but not used in the model
-train_data$predicted <- predicted_values
-train_data$residuals <- residuals
-
-# Plot residuals vs predicted values and color-code by 'year'
-ggplot(train_data, aes(x = predicted, y = residuals, color = factor(year))) +
-  geom_point() +                          # Points for residuals vs predicted
-  labs(x = "Predicted Values", y = "Residuals", title = "Residuals vs Predicted Values by Year") +
-  theme_minimal() +                       # Use a minimal theme
-  scale_color_discrete(name = "Year")     # Make sure the legend uses 'Year'
-```
-
-```{r}
-model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
-              data = state_popvote_gdp_polls)
-
-# Calculate predicted values from the model
-train_data <- state_popvote_gdp_polls  # Replace with your actual data
-
-# Add predicted values to the original data
-train_data$predicted <- predicted_values
-
-all_preds <- data.frame(
-  year=numeric(0),
-  state=character(0),
-  preds=numeric(0),
-  inc_pv2p=numeric(0)
-)
-YEARS <- unique(state_popvote_gdp_polls$year)
-
-for (pred_yr in YEARS) {
-  # Subset training data excluding the prediction year
-  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
-  
-  # Fit the model using training data
-  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
-              data = train_data)
-  
-  # Subset test data for the prediction year and swing states
-  test_data <- subset(state_popvote_gdp_polls,
-                      year == pred_yr)
-  
-  # Compute squared errors for the test data
-  test_data$preds <- predict(model, test_data)
-  
-  result <- test_data |>
-    select(c("year","state","preds","inc_pv2p"))
-  
-  # Collect all errors
-  all_preds <- rbind(all_preds, result)
-}
-
-# Plot Fitted (Actual) vs Predicted
-ggplot(all_preds, aes(x = inc_pv2p, y = preds)) +
-  geom_point(aes(color = (inc_pv2p > 50) != (preds > 50)), size = 2) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
-  labs(
-    title = "Fitted vs LOO Predicted Incumbent Two-Party Popular Vote (2008-2020)",
-    x = "Actual Incumbent Two-Party Vote Share",
-    y = "LOO Predicted Incumbent Two-Party Vote Share"
-  ) +
-  scale_color_manual(
-    values = c("TRUE" = "red", "FALSE" = "darkgreen"),
-    labels = c("Correct Prediction", "Incorrect Prediction"),
-    name = "Prediction Accuracy"
-  ) +
-  theme_minimal()
-```
-
-```{r}
-# Subset data for critical predictions
-crit_preds <- subset(all_preds, preds > 45 & preds < 55)
-
-# Create a Prediction Accuracy variable
-crit_preds$PredictionAccuracy <- ifelse(
-  (crit_preds$inc_pv2p > 50) == (crit_preds$preds > 50),
-  "Correct Prediction",
-  "Incorrect Prediction"
-)
-
-# Plot
-ggplot(crit_preds, aes(x = inc_pv2p, y = preds)) +
-  # Highlight quadrants
-  geom_rect(aes(xmin = 45, xmax = 50, ymin = 50, ymax = 55),
-            fill = "lightpink", alpha = 0.3, inherit.aes = FALSE) +
-  geom_rect(aes(xmin = 50, xmax = 55, ymin = 45, ymax = 50),
-            fill = "lightblue", alpha = 0.3, inherit.aes = FALSE) +
-  # Points colored by Prediction Accuracy
-  geom_point(aes(color = PredictionAccuracy), size = 2) +
-  # Diagonal reference line
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red") +
-  # Labels
-  labs(
-    title = "Zoomed plot for predictions between 45% and 55% (2008-2020)",
-    x = "Actual Incumbent Two-Party Vote Share",
-    y = "LOO Predicted Incumbent Two-Party Vote Share"
-  ) +
-  # Custom color scale
-  scale_color_manual(
-    values = c("Correct Prediction" = "darkgreen", "Incorrect Prediction" = "red"),
-    name = "Prediction Accuracy"
-  ) +
-  # Add quadrant labels
-  annotate("text", x = 47.5, y = 54, label = "Actual Loss,\nPredicted Win", 
-           color = "black", size = 3, hjust = 0.5) +
-  annotate("text", x = 52.5, y = 46, label = "Actual Win,\nPredicted Loss", 
-           color = "black", size = 3, hjust = 0.5) +
-  # Add labels only for incorrect predictions
-  geom_text_repel(
-    data = subset(crit_preds, PredictionAccuracy == "Incorrect Prediction"),
-    aes(label = paste(state, year)),
-    size = 3
-  ) +
-  # Set plot limits and theme
-  xlim(45, 55) +
-  ylim(45, 55) +
-  theme_minimal()
-```
 
 
 

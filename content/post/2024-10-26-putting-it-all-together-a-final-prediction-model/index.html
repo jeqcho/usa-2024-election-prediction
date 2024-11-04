@@ -77,29 +77,33 @@ tags: []
 <h1>Prediction</h1>
 <p>We predict the Democratic two-party vote share for states that we have accurate data. This includes all toss up and lean states.</p>
 <pre><code>##    inc_poll2p q2_gdp_growth incumbent  inc_lag swing          state    preds
-## 1    41.32027           5.3     FALSE 40.21595     0       Nebraska 37.80528
-## 2    40.50687           3.2     FALSE 41.60282     0        Montana 37.81957
-## 3    42.99987           3.9     FALSE 42.16418     0       Missouri 39.88315
-## 4    45.52989           3.4     FALSE 45.92330     0           Ohio 43.10296
-## 5    45.90440           2.8     FALSE 47.16928     0          Texas 43.85058
-## 6    46.77861           3.2     FALSE 48.30525     0        Florida 44.85217
-## 7    49.30748           3.5     FALSE 49.31582     1 North Carolina 47.12651
-## 8    49.03057           3.1     FALSE 50.15683     1        Arizona 47.21396
-## 9    49.20110           3.5     FALSE 50.11933     1        Georgia 47.29449
-## 10   50.05523           4.2     FALSE 50.31906     1      Wisconsin 47.95566
-## 11   49.84480           3.2     FALSE 50.58921     1   Pennsylvania 47.97939
-## 12   49.89072           1.8     FALSE 51.22312     1         Nevada 48.36055
-## 13   50.19926           4.2     FALSE 51.41356     1       Michigan 48.41175
-## 14   52.66842           2.1     FALSE 53.74835     0  New Hampshire 51.30502
-## 15   52.76306           1.3     FALSE 53.63951     0      Minnesota 51.42909
-## 16   53.27272           3.2     FALSE 55.15469     0       Virginia 52.10572
-## 17   53.83336           1.7     FALSE 55.51849     0     New Mexico 52.81764
-## 18   57.94527           3.8     FALSE 61.71683     0       New York 57.77366
-## 19   60.56377           2.2     FALSE 59.92550     0     Washington 59.43978
-## 20   62.62017           2.8     FALSE 64.90891     0     California 62.55537
-## 21   64.59140           1.9     FALSE 67.11555     0  Massachusetts 64.89125
-## 22   65.07442           2.3     FALSE 67.02905     0       Maryland 65.20225</code></pre>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+## 1    37.67027           4.8     FALSE 39.30639     0           Utah 34.70161
+## 2    40.27197           3.2     FALSE 41.60282     0        Montana 37.63480
+## 3    41.20502           5.3     FALSE 40.21595     0       Nebraska 37.71462
+## 4    41.13118           2.8     FALSE 41.80495     0        Indiana 38.41583
+## 5    42.70967           3.9     FALSE 42.16418     0       Missouri 39.65488
+## 6    43.60563           4.5     FALSE 44.07339     0 South Carolina 40.89483
+## 7    45.50763           3.4     FALSE 45.92330     0           Ohio 43.08545
+## 8    45.89562           2.8     FALSE 47.16928     0          Texas 43.84368
+## 9    46.46802           3.2     FALSE 48.30525     0        Florida 44.60786
+## 10   48.64684           3.1     FALSE 50.15683     1        Arizona 46.91211
+## 11   49.34202           3.5     FALSE 49.31582     1 North Carolina 47.15368
+## 12   49.23615           3.5     FALSE 50.11933     1        Georgia 47.32206
+## 13   49.87216           3.2     FALSE 50.58921     1   Pennsylvania 48.00091
+## 14   49.65457           1.8     FALSE 51.22312     1         Nevada 48.17480
+## 15   50.40200           4.2     FALSE 50.31906     1      Wisconsin 48.22843
+## 16   50.37702           4.2     FALSE 51.41356     1       Michigan 48.55158
+## 17   52.47830           2.1     FALSE 53.74835     0  New Hampshire 51.15547
+## 18   53.00349           1.3     FALSE 53.63951     0      Minnesota 51.61822
+## 19   53.33396           3.2     FALSE 55.15469     0       Virginia 52.15390
+## 20   53.51912           1.7     FALSE 55.51849     0     New Mexico 52.57045
+## 21   55.84436           2.7     FALSE 56.93832     0       Colorado 54.73955
+## 22   58.68588           3.8     FALSE 61.71683     0       New York 58.35623
+## 23   60.25346           2.2     FALSE 59.92550     0     Washington 59.19569
+## 24   62.80274           2.8     FALSE 64.90891     0     California 62.69898
+## 25   64.25257           1.9     FALSE 67.11555     0  Massachusetts 64.62473
+## 26   64.77992           2.3     FALSE 67.02905     0       Maryland 64.97059</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
 <p>For the rest of the states, which are solid or likely states according to Cook’s Political Report, we will assign it assuming that the expert predictions are correct.</p>
 <p><img src="final-preds.png" alt="Final prediction" />
 Trump wins with 312 against Harris’ 226</p>
@@ -107,9 +111,50 @@ Trump wins with 312 against Harris’ 226</p>
 <div id="uncertainty" class="section level1">
 <h1>Uncertainty</h1>
 <p>Here we simulate 10,000 possible cases. Here we plotted the uncertainty for the states assuming that the errors are independent. Regardless of whether the errors are correlated across states, marginally the plots will look the same.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-35-1.png" width="768" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-36-1.png" width="768" /></p>
 <p>How about the electoral college?</p>
 <p>Here for each simulation we assume that the states share the same error.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
 <p>If we instead assume that states have independent error (which I think is less reasonable than all states sharing the same error), we will have a &lt;2% chance of a Democrat win.</p>
+<p>Updated on 4 Nov to include latest polls.</p>
+</div>
+<div id="appendix" class="section level1">
+<h1>Appendix</h1>
+<p>Here are other ideas that didn’t improve the model.</p>
+<div id="a-later-economy" class="section level2">
+<h2>A later economy</h2>
+<p>Instead of Q2 GDP growth, Q3 GDP growth comparison is closer to the election.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.28</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.69</code></pre>
+</div>
+<div id="partisanship" class="section level2">
+<h2>Partisanship</h2>
+<p>Voters might vote along partisan lines. Let’s incorporate the party where the incumbent candidate is from.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.13</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.59</code></pre>
+</div>
+<div id="a-longer-horizon-for-the-economy" class="section level2">
+<h2>A longer horizon for the economy</h2>
+<p>How about using a GDP growth compared to 3 years ago?</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.18</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.64</code></pre>
+</div>
+<div id="more-sophisticated-models" class="section level2">
+<h2>More sophisticated models</h2>
+<p>Let’s see if using a random forest helps.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 3.05</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 2.65</code></pre>
+</div>
+<div id="swing-state-behavior" class="section level2">
+<h2>Swing state behavior</h2>
+<p>Swing states might have inherently different dynamics than other states. For example, they are the battleground states where campaign spending are being focused on. Let’s add a flag on whether a state is consider a swing state in that election.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 2.19</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 1.53</code></pre>
+</div>
+<div id="national-gdp" class="section level2">
+<h2>National GDP</h2>
+<p>Some literature suggests that using national-level GDP is more accurate than using state-level GDP.</p>
+<pre><code>## State-level Abramowitz LOO-CV RMSE: 12.61</code></pre>
+<pre><code>## State-level Abramowitz LOO-CV RMSE (swing-states): 12.36</code></pre>
+</div>
 </div>
