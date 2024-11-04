@@ -20,7 +20,7 @@ library(tidyverse)
 ```
 
 # Model prediction
-The model predicts a Trump win with 312 against 226, sweeping all seven swing states. See below for vote share by state.
+The model predicts a Trump win with 312 against 226, sweeping all seven swing states. See the section below on "Detailed Model Prediction and Model Uncertainty" for the predicted vote share of each state.
 
 ![Final prediction map](./final-preds.png)
 
@@ -89,8 +89,6 @@ summary(model)
 **Previous election**: an estimate of 0.31320 suggest that every 1% of the vote share from the previous election translates to +0.3% to the current election.
 
 # Model validation
-
-We also verified the OLS assumptions. See appendix below for details
 
 Our in-sample root mean-squared error (RMSE) is given below.
 
@@ -278,6 +276,8 @@ ggplot(crit_preds, aes(x = pv2p, y = preds)) +
   theme_minimal()
 ```
 
+We also verified the OLS assumptions. See appendix below for details
+
 # Detailed Model Prediction and Model Uncertainty
 
 Here are the predictors for 2024 and the corresponding incumbent vote share prediction. Swing states are marked. We also include the 95% prediction interval. Numbers are rounded to 2 decimal points for display.
@@ -300,9 +300,8 @@ data2024 |>
   mutate(lower=round(lower,2))|>
   mutate(upper=round(upper,2))
 ```
-```{r}
 
-```
+
 
 
 Swing states below are marked in purple. The error bar corresponds to the 95% prediction interval.
@@ -377,7 +376,7 @@ ggplot(plotdata_long, aes(x = probability, y = state, fill = candidate)) +
     ))
 ```
 
-We can then sample from this distribution to get a distribution on the electoral college.
+We can then sample from this distribution to get a distribution on the electoral college. Some states are not predicted in our model because polling data is unavailable. Those states are expected to be solid states of either Democrats or Republicans (e.g. [Cook's Political Report](https://www.cookpolitical.com/ratings/presidential-race-ratings)), so we will assume for these states that the expert forecasts are correct.
 
 ```{r echo=FALSE}
 ec_all <- read.csv("../data/corrected_ec_1948_2024.csv") |> filter(year==2024)
@@ -536,6 +535,8 @@ print(p)
 
 ## Betting odds
 
+We compare our model prediction to the odds scrapped from the betting market [Kalshi](https://kalshi.com) on October 28 2024.
+
 ```{r}
 # Function to map state abbreviations to full names
 abbr_to_full <- function(state_abbr) {
@@ -604,6 +605,10 @@ ggplot(state_odds, aes(x = model_odds, y = market_odds)) +
   ) +
   theme_minimal()
 ```
+
+The market shows good fit to non swing-states, including New Hampshire and Minnesota. According to our model, the market overvalues a Harris win in the swing state. This might also suggest that our model underestimate the chances of a Harris win in the swing states.
+
+We also plot the model's predicted vote share against the market odds and note the sigmoid shape.
 
 ```{r}
 state_pv2p_pred <- data2024 |>

@@ -11,7 +11,7 @@ tags: []
 
 <div id="model-prediction" class="section level1">
 <h1>Model prediction</h1>
-<p>The model predicts a Trump win with 312 against 226, sweeping all seven swing states. See below for vote share by state.</p>
+<p>The model predicts a Trump win with 312 against 226, sweeping all seven swing states. See the section below on “Detailed Model Prediction and Model Uncertainty” for the predicted vote share of each state.</p>
 <div class="float">
 <img src="final-preds.png" alt="Final prediction map" />
 <div class="figcaption">Final prediction map</div>
@@ -93,7 +93,6 @@ tags: []
 </div>
 <div id="model-validation" class="section level1">
 <h1>Model validation</h1>
-<p>We also verified the OLS assumptions. See appendix below for details</p>
 <p>Our in-sample root mean-squared error (RMSE) is given below.</p>
 <pre><code>## In-sample RMSE: 1.88</code></pre>
 <p>Our leave-one-out (LOO) RMSE is given below.</p>
@@ -102,6 +101,7 @@ tags: []
 <p>Here we present a plot showing the LOO performance of the model.</p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>We also verified the OLS assumptions. See appendix below for details</p>
 </div>
 <div id="detailed-model-prediction-and-model-uncertainty" class="section level1">
 <h1>Detailed Model Prediction and Model Uncertainty</h1>
@@ -134,25 +134,28 @@ tags: []
 ## 25 64.25   1.9 FALSE 67.12     0  Massachusetts 64.62 60.82 68.42
 ## 26 64.78   2.3 FALSE 67.03     0       Maryland 64.97 61.17 68.77</code></pre>
 <p>Swing states below are marked in purple. The error bar corresponds to the 95% prediction interval.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>OLS also allows us to fit a distribution on the vote share of the states. This allows us to find the probability of a Harris win as shown below.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<p>We can then sample from this distribution to get a distribution on the electoral college.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>We can then sample from this distribution to get a distribution on the electoral college. Some states are not predicted in our model because polling data is unavailable. Those states are expected to be solid states of either Democrats or Republicans (e.g. <a href="https://www.cookpolitical.com/ratings/presidential-race-ratings">Cook’s Political Report</a>), so we will assume for these states that the expert forecasts are correct.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <div id="betting-odds" class="section level2">
 <h2>Betting odds</h2>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>We compare our model prediction to the odds scrapped from the betting market <a href="https://kalshi.com">Kalshi</a> on October 28 2024.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>The market shows good fit to non swing-states, including New Hampshire and Minnesota. According to our model, the market overvalues a Harris win in the swing state. This might also suggest that our model underestimate the chances of a Harris win in the swing states.</p>
+<p>We also plot the model’s predicted vote share against the market odds and note the sigmoid shape.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 </div>
 </div>
 <div id="appendix" class="section level1">
 <h1>Appendix</h1>
 <p>We verify the OLS assumptions</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <p>The flat red line shows that linearity holds.</p>
 <p>The constant dispersion of values regardless of fitted values shows that homogeneity of residual variance holds.</p>
 <p>The following plots show constant variance of residuals regardless of predictor values, showing independence.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-31-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-31-2.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-31-3.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-31-4.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-30-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-30-2.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-30-3.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-30-4.png" width="672" /></p>
 <p>The Q-Q plot below shows that normality holds.</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 </div>
