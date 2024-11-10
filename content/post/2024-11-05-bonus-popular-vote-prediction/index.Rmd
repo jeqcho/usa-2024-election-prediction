@@ -1,0 +1,142 @@
+---
+title: 'Bonus: Popular Vote Prediction'
+author: Jay Chooi
+date: '2024-11-05'
+slug: bonus-popular-vote-prediction
+categories: []
+tags: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+set.seed(123)
+
+library(ranger)
+library(dplyr)
+library(tidyr)
+```
+
+
+```{r}
+library(dplyr)
+
+popvote <- read.csv("../data/popvote_1948-2020.csv")
+
+fred_econ <- read.csv("../data/fred_econ.csv")
+fred_econ <- fred_econ |>
+  filter(quarter==2, !is.na(GDP_growth_quarterly)) |>
+  select(year, GDP_growth_quarterly) |>
+  rename(q2_gdp_growth = GDP_growth_quarterly)
+
+popvote <- popvote |>
+  left_join(fred_econ)
+
+
+popvote_incumbent_party <- popvote |>
+  filter(incumbent_party == TRUE, !is.na(pv2p))
+```
+
+```{r}
+national_polls <- read.csv("../data/new_national_polls_1968-2024.csv")
+
+national_polls_latest <- national_polls %>%
+  group_by(year, party) %>%  # Group by 3 columns
+  arrange(weeks_left) %>%           # Arrange by 'value' in descending order
+  slice(1)                           # Choose the top row per group
+
+national_polls_latest <-national_polls_latest |>
+  select("year","party","poll_support") |>
+  pivot_wider(names_from = party,
+              values_from = poll_support)
+
+national_polls_latest_2024 <- national_polls_latest |>
+  filter(year == 2024)
+
+popvote_incumbent_party <- popvote_incumbent_party |>
+  mutate(dempv2p=ifelse(deminc,pv2p,100-pv2p)) |>
+  mutate(reppv2p=ifelse(deminc,100-pv2p,pv2p))
+
+popvote_incumbent_party <- popvote_incumbent_party |>
+  mutate(lag=ifelse(deminc,lag(dempv2p),lag(reppv2p)))
+
+popvote_incumbent_party <- popvote_incumbent_party |>
+  left_join(national_polls_latest, by="year") |>
+  filter(year>=1968) |>
+  mutate(inc_poll=ifelse(deminc,DEM,REP)/(DEM+REP)*100)
+
+
+```
+
+```{r}
+popvote_incumbent_party <- popvote_incumbent_party |>
+  filter(year>=1992)
+```
+
+
+
+```{r}
+# Load necessary libraries
+library(caret)  # For leave-one-out cross-validation
+
+# Random Forest model (set a seed for reproducibility)
+set.seed(123)
+
+selected <- popvote_incumbent_party
+
+# Step 1: Perform Leave-One-Out Cross-Validation for the linear model
+lm_loo_errors <- sapply(1:nrow(selected), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ inc_poll +q2_gdp_growth + incumbent + lag, data = selected[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, data = selected[i, ])
+  # Calculate the squared error for the excluded observation
+  (selected$pv2p[i] - prediction)^2
+})
+
+pred_errors <- sapply(1:nrow(selected), function(i) {
+  # Fit the model excluding observation i
+  lm_loo <- lm(pv2p ~ inc_poll +q2_gdp_growth + incumbent + lag, data = selected[-i, ])
+  # Predict the excluded observation
+  prediction <- predict(lm_loo, newdata = selected[i, ])
+  # Calculate the squared error for the excluded observation
+  abs(selected$pv2p[i] - prediction)
+})
+
+# Step 3: Calculate the Root Mean Squared Error (RMSE) for both models
+lm_rmse <- round(sqrt(mean(lm_loo_errors)),2)
+lm_mean_error <- round(mean(pred_errors),2)
+# Step 4: Print the results
+cat("Abramowitz LOO-CV RMSE:", lm_rmse, "\n")
+cat("Abramowitz LOO-CV prediction error:", lm_mean_error, "%\n")
+```
+
+```{r}
+poll2024 <- national_polls_latest_2024$DEM/
+  (national_polls_latest_2024$DEM+national_polls_latest_2024$REP)*100
+
+poll2024
+
+data2024 <- data.frame(
+  inc_poll = poll2024,
+  q2_gdp_growth = 3,
+  incumbent = FALSE,
+  lag = 52.26986
+)
+```
+
+```{r}
+model <- lm(pv2p ~ inc_poll+q2_gdp_growth  + incumbent + lag, data = popvote_incumbent_party)
+preds <- predict(model, data2024,interval="predict")
+preds
+```
+
+```{r}
+deg_free <- nrow(popvote_incumbent_party) - length(coef(model))
+scale_factor <- (preds[,3]- preds[,1])/qt(0.975, deg_free)
+
+probability <- pt((50-preds[,1])/ scale_factor, deg_free, lower.tail = TRUE)
+probability
+```
+
+
+
