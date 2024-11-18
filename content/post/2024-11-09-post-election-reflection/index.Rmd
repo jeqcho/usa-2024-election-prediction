@@ -18,7 +18,44 @@ library(ggrepel)
 library(tidyverse)
 ```
 
-# How did our model perform?
+```{r}
+real_swing_states <- c(
+  "Arizona",
+  "Nevada",
+  "Georgia",
+  "North Carolina",
+  "Pennsylvania",
+  "Michigan",
+  "Wisconsin"
+)
+
+competitive_states <- c("Florida", "North Carolina", "Ohio", "Virginia",
+                  "Arizona", "Maine", "Michigan", "Minnesota",
+                  "Nevada", "New Hampshire", "Pennsylvania",
+                  "Wisconsin", "Georgia", "Iowa")
+
+swing_states <- real_swing_states
+```
+
+
+# A recap of our model
+
+Our model is a simple OLS with 4 predictors and an intercept.
+
+\[
+\text{pv2p} = \beta_0 + \beta_1 \cdot \text{G2GDP} + \beta_2 \cdot \text{NETAPP} + \beta_3 \cdot \text{TERM1INC} + \beta_4 \cdot \text{LAG}
+\]
+
+Where:
+
+| Variable        | Explanation                               |
+|-----------------|-------------------------------------------|
+| \(\text{pv2p}\)     | State-level incumbent party pv2p        |
+| \(\text{G2GDP}\)    | State-level Q2 GDP growth               |
+| \(\text{NETAPP}\)   | State-level two-candidate poll          |
+| \(\text{TERM1INC}\) | Sitting president?                      |
+| \(\text{LAG}\)      | State-level previous election pv2p      |
+
 
 ```{r}
 # Function to map state abbreviations to full names
@@ -43,26 +80,23 @@ abbr_to_full <- function(state_abbr) {
 ```
 
 
-# Bias
 
 ```{r}
 # state results from class
-state_results <- read.csv("../data/state_votes_pres_2024.csv")
-state_results <- state_results[state_results$FIPS != "fips",]
-state_results <- state_results |>
-  rename(state=Geographic.Name,
-         total_votes=Total.Vote,
-         harris=Kamala.D..Harris,
-         trump=Donald.J..Trump
-         )
-```
+# state_results <- read.csv("../data/state_votes_pres_2024.csv")
+# state_results <- state_results[state_results$FIPS != "fips",]
+# state_results <- state_results |>
+#   rename(state=Geographic.Name,
+#          total_votes=Total.Vote,
+#          harris=Kamala.D..Harris,
+#          trump=Donald.J..Trump
+#          )
 
-```{r}
-state_results$harris <- as.numeric(state_results$harris)
-state_results$trump <- as.numeric(state_results$trump)
-state_results$inc_pv2p <- state_results$harris / (state_results$harris + state_results$trump) * 100
-truth2024 <- state_results |>
-  select(state,inc_pv2p)
+# state_results$harris <- as.numeric(state_results$harris)
+# state_results$trump <- as.numeric(state_results$trump)
+# state_results$inc_pv2p <- state_results$harris / (state_results$harris + state_results$trump) * 100
+# truth2024 <- state_results |>
+#   select(state,inc_pv2p)
 ```
 
 ```{r}
@@ -70,8 +104,7 @@ truth2024 <- state_results |>
 truth2024 <- read.csv("../data/results.csv")
 truth2024 <- truth2024 |>
   mutate(inc_pv2p = harris_votes/(trump_votes+harris_votes)*100) |>
-  select(state,inc_pv2p) |>
-  mutate(state=abbr_to_full(state))
+  select(state,inc_pv2p)
 ```
 
 ```{r}
@@ -90,6 +123,41 @@ all_data <- state_popvote_gdp_polls |>
   select(colnames(data2024))
 
 all_data <- rbind(all_data, data2024)
+```
+
+```{r}
+
+all_errors <- c()
+YEARS <- unique(state_popvote_gdp_polls$year)
+
+for (pred_yr in YEARS) {
+  # Subset training data excluding the prediction year
+  train_data <- subset(state_popvote_gdp_polls, year != pred_yr)
+  
+  # Fit the model using training data
+  model <- lm(formula = inc_pv2p ~ inc_poll2p + q2_gdp_growth + incumbent  + inc_lag,
+              data = train_data)
+  
+  # Subset test data for the prediction year and swing states
+  test_data <- subset(state_popvote_gdp_polls,
+                      year == pred_yr)
+  
+  # Compute squared errors for the test data
+  cur_error <- (test_data$inc_pv2p - predict(model, test_data)) ^ 2
+  
+  # Collect all errors
+  all_errors <- c(all_errors, cur_error)
+}
+
+# Compute and return RMSE
+err <- round(sqrt(mean(all_errors)),2)
+allrmse <- err
+
+```
+
+
+
+```{r}
 
 
 all_data <- all_data %>%
@@ -132,246 +200,313 @@ for (yr in unique(all_data$year)) {
 write.csv(all_data, "../data/all_data.csv")
 ```
 
+We predicted a Trump win with 312 against 226 electoral votes. Here are the actual results `pv2p` and the prediction `preds`.
+
+```{r}
+all_data|>filter(year==2024)|>select(-c(year,nopoll_preds)) |>
+  mutate(POLL=round(POLL,1),LAG=round(LAG,1),pv2p=round(pv2p,1),preds=round(preds,1))
+```
+
+
+```{r}
+plotdata2024 <- all_data|>filter(year==2024)
+plotdata2024$state <- factor(plotdata2024$state, levels = plotdata2024$state)
+
+
+
+ggplot(plotdata2024, aes(x = state, y = preds)) +
+  geom_point(aes(color = preds < 50), size = 1, shape = 16) +  # Dots for predicted vote share
+  geom_point(aes(y = pv2p, shape = "Observed", color = pv2p < 50), size = 2) +  # New marker for observed vote share
+  geom_errorbar(aes(ymin = preds - allrmse, ymax = preds + allrmse), width = 0.2) +  # Error bars
+  scale_color_manual(values = c("TRUE" = "firebrick1", "FALSE" = "dodgerblue4"),
+                     name = "Predicted state winner",
+                     labels = c("Harris", "Trump")) +  # Custom color scale for the winner
+  scale_shape_manual(values = c("Observed" = 4), 
+                     name = "Actual results", 
+                     labels = c("Observed Vote Share")) +  # Custom shape scale
+  labs(
+    title = "Predicted Democratic Two-Party Vote Share by State",
+    x = "State",
+    y = "Vote Share"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(
+      angle = 90, 
+      hjust = 1,
+      color = ifelse(plotdata2024$state %in% swing_states, "purple", "black") # Color condition
+    )
+  )
+```
+
+Most of the actual results fall within the 95\% confidence interval. We note that states at the far end of the spectrum like Utah and Montana on the left and Massachusetts and Maryland on the right has a systematic regression towards the mean. This could mean that our model works best for tight races and the linear coefficients don't hold too well for strongholds. Call this **Problem A** which we will address later in a section. The model overestimates the support for the strongholds on both sides.
+
+Note that within swing states, Harris overperformed our predictions across the board.
+
+Here is the test RMSE for 2024
+```{r}
+sqrt(mean(
+  (all_data|>filter(year==2024)|>mutate(r=(pv2p-preds)^2))$r
+   ))
+```
+
+It can be interpreted that the actual results are within 1.5\% vote share difference with our predictions.
+
+
+# National bias
+
+I am also interested to investigate whether the error for each state is correlated in each election. If that's the case, that will make predictions harder since nice theoretical assumptions don't hold anymore, and the election results will be severely different from our forecasts if every state swings towards the same direction instead random swings whose effects cancel each other out.
+
 ```{r}
 # find the bias
-all_data$bias <- all_data$inc_pv2p - all_data$preds
+all_data$bias <- all_data$pv2p - all_data$preds
 ```
 
-
-
-
-
-
-# How useful are the polls?
+Here each dot represents a state and how much the model prediction is biased from the actual result. We see that on 2008 and 2016 the spread is centered around 0, indicating unbiasedness, while in 2012 the model had a national bias underestimating the incumbent (Obama) while in 2020 the model overestimated Trump and in 2024 it slightly overestimated Harris. Importantly, notice that the **bias of each state swings together**. This is important because it tells us that the bias is correlated across states in the same year.
 
 
 ```{r}
-# get the predictions from the polls
-state_odds <- read.csv("../data/state_odds.csv")
-
-model_preds <- data2024 |>
-  select(state,preds,year)
-
-data2024 <- data2024 %>%
-  rename(
-    pv2p = inc_pv2p,
-    Q2GDP = q2_gdp_growth,
-    POLL = inc_poll2p,
-    SIT = incumbent,
-    LAG = inc_lag
-  )
-
-all_data_no_2024 <- all_data |>
-  filter(year<2024)
+ggplot(all_data, aes(x = factor(year), y = bias)) +
+  geom_violin(trim = FALSE) +
+  geom_jitter(width=0,height=0,alpha=0.3)+
+  labs(title = "Deviation of model prediction from actual election result",
+       x = "Years",
+       y = "Bias favouring incumbents") +
+  theme_minimal()
 ```
 
+## Are certain states perculiar?
+
+Let's see if there is any state that we consistently miss using our model.
+
 ```{r}
-for (yr in unique(all_data$year)) {
-  # Split data into training and test sets
-  train_data <- all_data |> filter(year != yr)
-  test_data <- all_data |> filter(year == yr)
-  
-  # Fit models on training data
-  nopoll_model <- lm(formula = pv2p ~ Q2GDP + SIT + LAG, data = train_data)
-  poll_model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = train_data)
-  
-  # Generate predictions for test data
-  add <- data.frame(
-    preds = predict(poll_model, test_data),
-    nopoll_preds = predict(nopoll_model, test_data)
-  )
-  
-  # Combine predictions with the test data
-  test_data <- test_data |> mutate(preds = add$preds, nopoll_preds = add$nopoll_preds)
-  
-  # Update all_data with the test_data containing predictions
-  all_data[all_data$year == yr, c("preds", "nopoll_preds")] <- test_data[, c("preds", "nopoll_preds")]
-}
+ggplot(all_data, aes(x = factor(state), y = bias)) +
+  geom_violin(trim = FALSE) +
+  labs(title = "Deviation of model prediction from actual election result",
+       x = "States Predicted by the Model",
+       y = "Bias favouring incumbents") +
+  theme_minimal()+
+  theme(axis.text.x = element_blank()) # Turns off x-axis labels
 ```
 
+The plot shows that there are no states where we systematically overestimate or underestimate the incumbent over the years.
+
+## GDP growth is bad for the incumbent?
+
+Here are the coefficients for our final model
+
 ```{r}
-swing_states <- c(
-  "Arizona",
-  "Nevada",
-  "Georgia",
-  "North Carolina",
-  "Pennsylvania",
-  "Michigan",
-  "Wisconsin"
-)
-
-blue_states <- (data2024 |>
-  filter(pv2p > 50) |>
-  select(state) |>
-  filter(!(state %in% swing_states)))$state
-
-red_states <- (data2024 |>
-  filter(pv2p < 50) |>
-  select(state) |>
-  filter(!(state %in% swing_states)))$state
+model <- lm(formula = pv2p ~ POLL + Q2GDP + SIT + 
+    LAG, data = all_data|>filter(year!=2024))
+summary(model)
 ```
 
+Notice that the coefficient for the GDP is negative. I suppose that this is because there is multi-colinearity among the predictors, which can result in the model to attribute some of the effects from the GDP to another closely associated predictor. Let's compute the Variance Inflation Factor (VIF) to check whether any values are greater than 10.
 
 ```{r}
-# Reshape data to long format
-alldata_long <- data2024 %>%
-  filter(state %in% swing_states) |>
-  select(state, POLL, pv2p, preds, nopoll_preds) %>%
-  pivot_longer(
-    cols = c(POLL, pv2p, preds, nopoll_preds),
-    names_to = "variable",
-    values_to = "value"
-  )
+# Load necessary library
+library(car)
 
-# Plotting
-ggplot(alldata_long, aes(x = state, y = value - 50, fill = variable)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  labs(title = "Swing states", x = "State", y = "Harris popular vote margin") +
-  theme_minimal() +
-  scale_fill_manual(
-    values = c(
-      "POLL" = "goldenrod",
-      # warm yellow
-      "pv2p" = "seagreen",
-      # muted green
-      "preds" = "mediumpurple4",
-      # deep purple
-      "nopoll_preds" = "darkkhaki"      # earthy tone
-    ),
-    labels = c(
-      "POLL" = "Poll",
-      "pv2p" = "Actual Result",
-      "preds" = "Model (Fundamentals + Poll)",
-      "nopoll_preds" = "Model (Fundamentals Only)"
-    )
+# Fit the linear model
+model <- lm(pv2p ~ POLL + Q2GDP + SIT + LAG, data = subset(all_data, year != 2024))
+
+# Compute VIF
+vif_values <- vif(model)
+
+# Display VIF values
+print(vif_values)
+```
+
+Although GDP was not, it shows that POLL and LAG are closely associated. Let's look at the pairwise correlation.
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(reshape2) # For melting the correlation matrix into long format
+
+# Select the predictors and filter for years != 2024
+predictors <- subset(all_data, year != 2024)[, c("POLL", "Q2GDP", "SIT", "LAG")]
+
+# Compute pairwise correlations
+correlation_matrix <- cor(predictors)
+
+# Convert correlation matrix to long format for ggplot
+correlation_long <- melt(correlation_matrix)
+
+# Plot the heatmap with numbers
+ggplot(correlation_long, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  geom_text(aes(label = round(value, 2)), color = "black", size = 4) + # Add correlation numbers
+  scale_fill_gradient2(low = "red", high = "blue", mid = "white", midpoint = 0,
+                       name = "Correlation") +
+  labs(
+    title = "Correlation Heatmap of Predictors",
+    x = "Predictor",
+    y = "Predictor"
   ) +
-  coord_cartesian(ylim = c(-5, 5))
-```
-
-```{r}
-# Reshape data to long format
-alldata_long <- alldata2024 %>%
-  filter(state%in% red_states) |>
-  select(state, POLL, pv2p, preds, nopoll_preds) %>%
-  pivot_longer(cols = c(POLL, pv2p, preds, nopoll_preds),
-               names_to = "variable",
-               values_to = "value")
-
-# Plotting
-ggplot(alldata_long, aes(x = state, y = value-50, fill = variable)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  labs(title = "Red states",
-       x = "State",
-       y = "Harris popular vote margin") +
   theme_minimal() +
-  scale_fill_manual(
-    values = c(
-      "POLL" = "goldenrod",
-      # warm yellow
-      "pv2p" = "seagreen",
-      # muted green
-      "preds" = "mediumpurple4",
-      # deep purple
-      "nopoll_preds" = "darkkhaki"      # earthy tone
-    ),
-    labels = c(
-      "POLL" = "Poll",
-      "pv2p" = "Actual Result",
-      "preds" = "Model (Fundamentals + Poll)",
-      "nopoll_preds" = "Model (Fundamentals Only)"
-    )
-  ) +
- coord_cartesian(ylim=c(-20,20))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+Since there is high correlation between LAG and POLL, we have to employ penalization. Call this **Problem B**.
+
+## Addressing the problems
+
+### Problem A
+
+We first try to solve problem A by applying transformations. The linear model output doesn't limit to between 0 and 1, so we can attempt using a logistic regression instead.
+
 ```{r}
-# remove those not yet done counted
-selected_blue_states <- blue_states[!(blue_states %in% c("California","Maryland", "Colorado"))]
-
-# Reshape data to long format
-alldata_long <- alldata2024 %>%
-  filter(state%in% selected_blue_states) |>
-  select(state, POLL, pv2p, preds, nopoll_preds) %>%
-  pivot_longer(cols = c(POLL, pv2p, preds, nopoll_preds),
-               names_to = "variable",
-               values_to = "value")
-
-# Plotting
-ggplot(alldata_long, aes(x = state, y = value-50, fill = variable)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  labs(title = "Blue states",
-       x = "State",
-       y = "Harris popular vote margin") +
-  theme_minimal() +
-  scale_fill_manual(
-    values = c(
-      "POLL" = "goldenrod",
-      # warm yellow
-      "pv2p" = "seagreen",
-      # muted green
-      "preds" = "mediumpurple4",
-      # deep purple
-      "nopoll_preds" = "darkkhaki"      # earthy tone
-    ),
-    labels = c(
-      "POLL" = "Poll",
-      "pv2p" = "Actual Result",
-      "preds" = "Model (Fundamentals + Poll)",
-      "nopoll_preds" = "Model (Fundamentals Only)"
-    )
-  ) +
- coord_cartesian(ylim=c(-20,20))
+logitify <- function(x){log(x/(1-x))}
+invlogitify <- function(x){exp(x)/(1+exp(x) )}
 ```
 
 
 ```{r}
-# Initialize an empty vector to store average poll errors
-avg_poll_errors <- c()
-avg_nopoll_model_errors <- c()
-avg_model_errors <- c()
+# install.packages("betareg")
+model <- lm(logitify(pv2p/100) ~ POLL + Q2GDP + SIT + LAG, 
+                 data = subset(all_data, year != 2024))
+newpreds <- invlogitify(predict(model,subset(all_data, year == 2024)))*100
+rmse_log <- sqrt(mean( (newpreds - subset(all_data, year == 2024)$pv2p)^2 ))
 
-mse_poll_errors <- c()
-mse_nopoll_model_errors <- c()
-mse_model_errors <- c()
+model <- lm(pv2p ~ POLL + Q2GDP + SIT + LAG, 
+                 data = subset(all_data, year != 2024))
+newpreds <- predict(model,subset(all_data, year == 2024))
+rmse_lm <- sqrt(mean( (newpreds - subset(all_data, year == 2024)$pv2p)^2 ))
 
-# Loop through each unique year in all_data
-for (yr in unique(all_data$year)) {
-  dat <- all_data |> filter(year == yr)
-    
-    # Append the result to the avg_poll_errors vector
-    avg_poll_errors <- c(avg_poll_errors, mean(abs(dat$POLL - dat$pv2p)))
-  avg_nopoll_model_errors <- c(avg_nopoll_model_errors, mean(abs(dat$nopoll_preds - dat$pv2p)))
-  avg_model_errors <- c(avg_model_errors, mean(abs(dat$preds - dat$pv2p)))
-  
-  # Append the result to the avg_poll_errors vector
-    mse_poll_errors <- c(mse_poll_errors, sqrt(mean((dat$POLL - dat$pv2p)^2)))
-  mse_nopoll_model_errors <- c(mse_nopoll_model_errors, sqrt(mean((dat$nopoll_preds - dat$pv2p))^2))
-  mse_model_errors <- c(mse_model_errors, sqrt(mean((dat$preds - dat$pv2p))^2))
+cat("RMSE (linear): ", rmse_lm,"\n")
+cat("RMSE (logit): ", rmse_log)
+```
+
+Logit transformation doesn't help. If we have more time, I would like to explore possible transformations so that the regression will output values between 0 to 1 and has better performance than our current model.
+
+### Problem B
+
+We will apply penalization via ridge regression as an experiment. The test data is 2024 and the train data are the 2008 to 2020 elections. We will scan through the penalty coefficient from $0.001$ to $100$.
+
+```{r}
+# Normalize numeric columns
+# Apply normalization
+scaled_all_data <- all_data
+scaled_all_data$POLL <- scale(scaled_all_data$POLL)
+scaled_all_data$Q2GDP <- scale(scaled_all_data$Q2GDP)
+scaled_all_data$LAG <- scale(scaled_all_data$LAG)
+scaled_all_data <- scaled_all_data |> select(POLL,Q2GDP, LAG,pv2p, SIT,year)
+
+test_data <- subset(scaled_all_data,year==2024) |>select(-year)
+train_data <- subset(scaled_all_data,year!=2024) |>select(-year)
+
+lambdas <- 10^seq(-3, 2, length.out = 100)
+
+# normalize
+library(glmnet)
+# Split data into predictors and response
+y <- train_data$pv2p  # Replace with your response column name
+X <- as.matrix(train_data[, -which(names(train_data) == "pv2p")])  # Exclude the response column
+X_test <- as.matrix(test_data[, -which(names(test_data) == "pv2p")])
+
+trainrmse <- c()
+testrmse <- c()
+
+for(lambda in lambdas){
+  ridge_model <- glmnet(X, y, alpha=0,lambda = lambda)
+  trainrmse <- c(trainrmse,sqrt(mean((predict(ridge_model, newx = X) - train_data$pv2p)^2)))
+  testrmse <- c(testrmse,sqrt(mean((predict(ridge_model, newx = X_test) - test_data$pv2p)^2)))
 }
 
-errors <- data.frame(
-  year = unique(all_data$year),
-  avg_poll_errors = round(avg_poll_errors, 2),
-  avg_nopoll_model_errors = round(avg_nopoll_model_errors, 2),
-  avg_model_errors = round(avg_model_errors, 2),
-  mse_poll_errors = round(mse_poll_errors, 2),
-  mse_nopoll_model_errors = round(mse_nopoll_model_errors, 2),
-  mse_model_errors = round(mse_model_errors, 2)
+# plot the train test loss over
+```
+
+```{r}
+# Create a data frame for ggplot
+rmse_data <- data.frame(
+  Lambda = lambdas,
+  TrainRMSE = trainrmse,
+  TestRMSE = testrmse
 )
 
-# Calculate the averages for all columns except 'year'
-average_errors <- colMeans(errors[, -1], na.rm = TRUE)
+# Reshape data for easier plotting
+library(tidyr)
+rmse_long <- rmse_data %>%
+  pivot_longer(cols = c(TrainRMSE, TestRMSE), names_to = "Type", values_to = "RMSE")
 
-# Display the results
-average_errors
-
-
+# Plot with ggplot
+ggplot(rmse_long, aes(x = log10(Lambda), y = RMSE, color = Type)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Train and Test RMSE vs Lambda",
+    x = "log10(Lambda)",
+    y = "RMSE",
+    color = "Dataset"
+  ) +
+  theme_minimal()
 ```
+
+Regularization works. The attentive reader might point out that the test RMSE is consistently lower than the train RMSE, but this is ok as a proof of concept and it might be the case that the 2024 election is more predictable than the others.
+
 ```{r}
+rmse <- min(testrmse)
+dex <- which.min(testrmse)
+lambda <- lambdas[dex]
 
-max(filter(errors, year==2024)$avg_model_errors)
+cat("Minimum 2024 RMSE is", rmse,'\n')
+cat("Chosen lambda is", lambda)
 ```
 
+The new model has a lower RMSE than our model.
 
 
 
-# A comparison with polls
+The model predicts the following
+
+```{r}
+glm_model <- glmnet(X, y, alpha=0,lambda = lambda)
+preds <- predict(glm_model,newx=X_test)
+```
+
+Here are the coefficients (the variables are standardized)
+
+```{r}
+coef(glm_model)
+```
+
+Unfortunately, the negative GDP situation is still there. Here are the predictions of the new model.
+
+```{r}
+plotdata2024 <- all_data|>filter(year==2024)
+plotdata2024$state <- factor(plotdata2024$state, levels = plotdata2024$state)
+plotdata2024$preds_glm <- preds
+
+ggplot(plotdata2024, aes(x = state, y = preds)) +
+  geom_point(aes(color = preds < 50), size = 1, shape = 16) +  # Dots for predicted vote share
+  geom_point(aes(y = preds_glm, shape = "Ridge Regression", color = preds_glm < 50), size = 1) +  # Dots for ridge regression vote share
+  geom_point(aes(y = pv2p, shape = "Observed", color = pv2p < 50), size = 2) +  # New marker for observed vote share
+  geom_errorbar(aes(ymin = preds - allrmse, ymax = preds + allrmse), width = 0.2) +  # Error bars
+  scale_color_manual(
+    values = c("TRUE" = "firebrick1", "FALSE" = "dodgerblue4"),
+    name = "Predicted State Winner",
+    labels = c("Harris", "Trump")
+  ) +  # Custom color scale for the winner
+  scale_shape_manual(
+    values = c("Observed" = 4, "Ridge Regression" = 2),
+    name = "Result Types",
+    labels = c("Observed Vote Share", "Ridge Regression")
+  ) +  # Custom shape scale
+  labs(
+    title = "Predicted Democratic Two-Party Vote Share by State",
+    x = "State",
+    y = "Vote Share"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(
+      angle = 90,
+      hjust = 1,
+      color = ifelse(plotdata2024$state %in% swing_states, "purple", "black")  # Color condition for swing states
+    )
+  )
+```
+
+Note that the ridge regression performed better than our model by making better predictions for the stronghold states, while the prediction for the swing states are relatively unchanged. In this case, we have also found a partial solution towards **Problem A**.
+
+If we have more time, I would like to do a full-fledged model regularization, while incorporating a scheme where the training data and test data are partitioned by random years as batches. This will possibly yield a stronger model and likely solve the negative GDP problem.
