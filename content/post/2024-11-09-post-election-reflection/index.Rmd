@@ -1,0 +1,377 @@
+---
+title: Post-election Reflection
+author: Jay Chooi
+date: '2024-11-09'
+slug: post-election-reflection
+categories: []
+tags: []
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+set.seed(123)
+
+library(dplyr)
+library(ranger)
+library(ggplot2)
+library(ggrepel)
+library(tidyverse)
+```
+
+# How did our model perform?
+
+```{r}
+# Function to map state abbreviations to full names
+abbr_to_full <- function(state_abbr) {
+  # Create a named vector where the names are abbreviations and the values are full names
+  state_map <- c(
+    "AL" = "Alabama", "AK" = "Alaska", "AZ" = "Arizona", "AR" = "Arkansas", "CA" = "California",
+    "CO" = "Colorado", "CT" = "Connecticut", "DE" = "Delaware", "FL" = "Florida", "GA" = "Georgia",
+    "HI" = "Hawaii", "ID" = "Idaho", "IL" = "Illinois", "IN" = "Indiana", "IA" = "Iowa",
+    "KS" = "Kansas", "KY" = "Kentucky", "LA" = "Louisiana", "ME" = "Maine", "MD" = "Maryland",
+    "MA" = "Massachusetts", "MI" = "Michigan", "MN" = "Minnesota", "MS" = "Mississippi", "MO" = "Missouri",
+    "MT" = "Montana", "NE" = "Nebraska", "NV" = "Nevada", "NH" = "New Hampshire", "NJ" = "New Jersey",
+    "NM" = "New Mexico", "NY" = "New York", "NC" = "North Carolina", "ND" = "North Dakota", "OH" = "Ohio",
+    "OK" = "Oklahoma", "OR" = "Oregon", "PA" = "Pennsylvania", "RI" = "Rhode Island", "SC" = "South Carolina",
+    "SD" = "South Dakota", "TN" = "Tennessee", "TX" = "Texas", "UT" = "Utah", "VT" = "Vermont",
+    "VA" = "Virginia", "WA" = "Washington", "WV" = "West Virginia", "WI" = "Wisconsin", "WY" = "Wyoming", "DC" = "District Of Columbia"
+  )
+  
+  # Map the state abbreviations to their full names
+  return(state_map[state_abbr])
+}
+```
+
+
+# Bias
+
+```{r}
+# state results from class
+state_results <- read.csv("../data/state_votes_pres_2024.csv")
+state_results <- state_results[state_results$FIPS != "fips",]
+state_results <- state_results |>
+  rename(state=Geographic.Name,
+         total_votes=Total.Vote,
+         harris=Kamala.D..Harris,
+         trump=Donald.J..Trump
+         )
+```
+
+```{r}
+state_results$harris <- as.numeric(state_results$harris)
+state_results$trump <- as.numeric(state_results$trump)
+state_results$inc_pv2p <- state_results$harris / (state_results$harris + state_results$trump) * 100
+truth2024 <- state_results |>
+  select(state,inc_pv2p)
+```
+
+```{r}
+# another way to get the state results (by scraping)
+truth2024 <- read.csv("../data/results.csv")
+truth2024 <- truth2024 |>
+  mutate(inc_pv2p = harris_votes/(trump_votes+harris_votes)*100) |>
+  select(state,inc_pv2p) |>
+  mutate(state=abbr_to_full(state))
+```
+
+```{r}
+# combine all data including 2024
+# and rename them
+data2024 <- read.csv("../data/data2024.csv")
+data2024$year <- 2024
+data2024$X <- NULL
+data2024$preds <- NULL
+data2024 <- data2024 |>
+  left_join(truth2024,by="state")
+
+state_popvote_gdp_polls <- read.csv("../data/state_popvote_gdp_polls.csv")
+
+all_data <- state_popvote_gdp_polls |>
+  select(colnames(data2024))
+
+all_data <- rbind(all_data, data2024)
+
+
+all_data <- all_data %>%
+  rename(
+    pv2p = inc_pv2p,
+    Q2GDP = q2_gdp_growth,
+    POLL = inc_poll2p,
+    SIT = incumbent,
+    LAG = inc_lag
+  )
+```
+
+```{r}
+# add the model predictions
+for (yr in unique(all_data$year)) {
+  # Split data into training and test sets
+  train_data <- all_data |> filter(year != yr)
+  test_data <- all_data |> filter(year == yr)
+  
+  # Fit models on training data
+  nopoll_model <- lm(formula = pv2p ~ Q2GDP + SIT + LAG, data = train_data)
+  poll_model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = train_data)
+  
+  # Generate predictions for test data
+  add <- data.frame(
+    preds = predict(poll_model, test_data),
+    nopoll_preds = predict(nopoll_model, test_data)
+  )
+  
+  # Combine predictions with the test data
+  test_data <- test_data |> mutate(preds = add$preds, nopoll_preds = add$nopoll_preds)
+  
+  # Update all_data with the test_data containing predictions
+  all_data[all_data$year == yr, c("preds", "nopoll_preds")] <- test_data[, c("preds", "nopoll_preds")]
+}
+```
+
+```{r}
+# save this data
+write.csv(all_data, "../data/all_data.csv")
+```
+
+```{r}
+# find the bias
+all_data$bias <- all_data$inc_pv2p - all_data$preds
+```
+
+
+
+
+
+
+# How useful are the polls?
+
+
+```{r}
+# get the predictions from the polls
+state_odds <- read.csv("../data/state_odds.csv")
+
+model_preds <- data2024 |>
+  select(state,preds,year)
+
+data2024 <- data2024 %>%
+  rename(
+    pv2p = inc_pv2p,
+    Q2GDP = q2_gdp_growth,
+    POLL = inc_poll2p,
+    SIT = incumbent,
+    LAG = inc_lag
+  )
+
+all_data_no_2024 <- all_data |>
+  filter(year<2024)
+```
+
+```{r}
+for (yr in unique(all_data$year)) {
+  # Split data into training and test sets
+  train_data <- all_data |> filter(year != yr)
+  test_data <- all_data |> filter(year == yr)
+  
+  # Fit models on training data
+  nopoll_model <- lm(formula = pv2p ~ Q2GDP + SIT + LAG, data = train_data)
+  poll_model <- lm(formula = pv2p ~ Q2GDP + POLL + SIT + LAG, data = train_data)
+  
+  # Generate predictions for test data
+  add <- data.frame(
+    preds = predict(poll_model, test_data),
+    nopoll_preds = predict(nopoll_model, test_data)
+  )
+  
+  # Combine predictions with the test data
+  test_data <- test_data |> mutate(preds = add$preds, nopoll_preds = add$nopoll_preds)
+  
+  # Update all_data with the test_data containing predictions
+  all_data[all_data$year == yr, c("preds", "nopoll_preds")] <- test_data[, c("preds", "nopoll_preds")]
+}
+```
+
+```{r}
+swing_states <- c(
+  "Arizona",
+  "Nevada",
+  "Georgia",
+  "North Carolina",
+  "Pennsylvania",
+  "Michigan",
+  "Wisconsin"
+)
+
+blue_states <- (data2024 |>
+  filter(pv2p > 50) |>
+  select(state) |>
+  filter(!(state %in% swing_states)))$state
+
+red_states <- (data2024 |>
+  filter(pv2p < 50) |>
+  select(state) |>
+  filter(!(state %in% swing_states)))$state
+```
+
+
+```{r}
+# Reshape data to long format
+alldata_long <- data2024 %>%
+  filter(state %in% swing_states) |>
+  select(state, POLL, pv2p, preds, nopoll_preds) %>%
+  pivot_longer(
+    cols = c(POLL, pv2p, preds, nopoll_preds),
+    names_to = "variable",
+    values_to = "value"
+  )
+
+# Plotting
+ggplot(alldata_long, aes(x = state, y = value - 50, fill = variable)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Swing states", x = "State", y = "Harris popular vote margin") +
+  theme_minimal() +
+  scale_fill_manual(
+    values = c(
+      "POLL" = "goldenrod",
+      # warm yellow
+      "pv2p" = "seagreen",
+      # muted green
+      "preds" = "mediumpurple4",
+      # deep purple
+      "nopoll_preds" = "darkkhaki"      # earthy tone
+    ),
+    labels = c(
+      "POLL" = "Poll",
+      "pv2p" = "Actual Result",
+      "preds" = "Model (Fundamentals + Poll)",
+      "nopoll_preds" = "Model (Fundamentals Only)"
+    )
+  ) +
+  coord_cartesian(ylim = c(-5, 5))
+```
+
+```{r}
+# Reshape data to long format
+alldata_long <- alldata2024 %>%
+  filter(state%in% red_states) |>
+  select(state, POLL, pv2p, preds, nopoll_preds) %>%
+  pivot_longer(cols = c(POLL, pv2p, preds, nopoll_preds),
+               names_to = "variable",
+               values_to = "value")
+
+# Plotting
+ggplot(alldata_long, aes(x = state, y = value-50, fill = variable)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Red states",
+       x = "State",
+       y = "Harris popular vote margin") +
+  theme_minimal() +
+  scale_fill_manual(
+    values = c(
+      "POLL" = "goldenrod",
+      # warm yellow
+      "pv2p" = "seagreen",
+      # muted green
+      "preds" = "mediumpurple4",
+      # deep purple
+      "nopoll_preds" = "darkkhaki"      # earthy tone
+    ),
+    labels = c(
+      "POLL" = "Poll",
+      "pv2p" = "Actual Result",
+      "preds" = "Model (Fundamentals + Poll)",
+      "nopoll_preds" = "Model (Fundamentals Only)"
+    )
+  ) +
+ coord_cartesian(ylim=c(-20,20))
+```
+```{r}
+# remove those not yet done counted
+selected_blue_states <- blue_states[!(blue_states %in% c("California","Maryland", "Colorado"))]
+
+# Reshape data to long format
+alldata_long <- alldata2024 %>%
+  filter(state%in% selected_blue_states) |>
+  select(state, POLL, pv2p, preds, nopoll_preds) %>%
+  pivot_longer(cols = c(POLL, pv2p, preds, nopoll_preds),
+               names_to = "variable",
+               values_to = "value")
+
+# Plotting
+ggplot(alldata_long, aes(x = state, y = value-50, fill = variable)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(title = "Blue states",
+       x = "State",
+       y = "Harris popular vote margin") +
+  theme_minimal() +
+  scale_fill_manual(
+    values = c(
+      "POLL" = "goldenrod",
+      # warm yellow
+      "pv2p" = "seagreen",
+      # muted green
+      "preds" = "mediumpurple4",
+      # deep purple
+      "nopoll_preds" = "darkkhaki"      # earthy tone
+    ),
+    labels = c(
+      "POLL" = "Poll",
+      "pv2p" = "Actual Result",
+      "preds" = "Model (Fundamentals + Poll)",
+      "nopoll_preds" = "Model (Fundamentals Only)"
+    )
+  ) +
+ coord_cartesian(ylim=c(-20,20))
+```
+
+
+```{r}
+# Initialize an empty vector to store average poll errors
+avg_poll_errors <- c()
+avg_nopoll_model_errors <- c()
+avg_model_errors <- c()
+
+mse_poll_errors <- c()
+mse_nopoll_model_errors <- c()
+mse_model_errors <- c()
+
+# Loop through each unique year in all_data
+for (yr in unique(all_data$year)) {
+  dat <- all_data |> filter(year == yr)
+    
+    # Append the result to the avg_poll_errors vector
+    avg_poll_errors <- c(avg_poll_errors, mean(abs(dat$POLL - dat$pv2p)))
+  avg_nopoll_model_errors <- c(avg_nopoll_model_errors, mean(abs(dat$nopoll_preds - dat$pv2p)))
+  avg_model_errors <- c(avg_model_errors, mean(abs(dat$preds - dat$pv2p)))
+  
+  # Append the result to the avg_poll_errors vector
+    mse_poll_errors <- c(mse_poll_errors, sqrt(mean((dat$POLL - dat$pv2p)^2)))
+  mse_nopoll_model_errors <- c(mse_nopoll_model_errors, sqrt(mean((dat$nopoll_preds - dat$pv2p))^2))
+  mse_model_errors <- c(mse_model_errors, sqrt(mean((dat$preds - dat$pv2p))^2))
+}
+
+errors <- data.frame(
+  year = unique(all_data$year),
+  avg_poll_errors = round(avg_poll_errors, 2),
+  avg_nopoll_model_errors = round(avg_nopoll_model_errors, 2),
+  avg_model_errors = round(avg_model_errors, 2),
+  mse_poll_errors = round(mse_poll_errors, 2),
+  mse_nopoll_model_errors = round(mse_nopoll_model_errors, 2),
+  mse_model_errors = round(mse_model_errors, 2)
+)
+
+# Calculate the averages for all columns except 'year'
+average_errors <- colMeans(errors[, -1], na.rm = TRUE)
+
+# Display the results
+average_errors
+
+
+```
+```{r}
+
+max(filter(errors, year==2024)$avg_model_errors)
+```
+
+
+
+
+# A comparison with polls
