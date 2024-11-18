@@ -455,10 +455,6 @@ cat("Chosen lambda is", lambda)
 
 The new model has a lower RMSE than our model.
 
-
-
-The model predicts the following
-
 ```{r}
 glm_model <- glmnet(X, y, alpha=0,lambda = lambda)
 preds <- predict(glm_model,newx=X_test)
