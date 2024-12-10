@@ -218,7 +218,7 @@ Aside from the U.S. president, the Senate and House elections were also held. Th
 
 # Forecasts
 
-[Sabato](https://centerforpolitics.org/crystalball/2024-president/) gave Nevada a "Lean Democrat", while [Cook] considered it a "Toss Up". In [538]'s simulations, Harris won 50 times out of 100. In my forecast, I predicted that Harris will win 48.17\% of the two-party vote, with a 95\% prediction interval of (44.40\%, 51.95\%).
+[Sabato](https://centerforpolitics.org/crystalball/2024-president/) gave Nevada a "Lean Democrat", while [Cook](https://www.cookpolitical.com/ratings/presidential-race-ratings) considered it a "Toss Up". In [538](https://projects.fivethirtyeight.com/2024-election-forecast/)'s simulations, Harris won 50 times out of 100. In my forecast, I predicted that Harris will win 48.17\% of the two-party vote, with a 95\% prediction interval of (44.40\%, 51.95\%).
 
 ![](state-voteshare-prediction.png)
 
@@ -237,8 +237,6 @@ The actual election results show Trump winning 751,205 votes and Harris 705,197.
 The expert ratings are correct to call it a close race, defying only Sabato's lean Democrat rating.
 
 # Campaign
-Drawing on the news you have been following and other sources if necessary, briefly summarize the campaign in the state.  For example, you might consider the candidates and issues of “candidate quality” and the volume and content of their campaign, including the air and ground campaign, and the associated news coverage.  Particular examples can be useful here. Be sure to cite your sources.
-
 
 First we compare the campaign spending of both parties in Nevada. One way of measuring this is looking at the ad spend on Meta (otherwise known as Facebook). Data from [the Wesleyan Media Project](https://geo-ad-spending-813751399605.us-central1.run.app/) shows that Democrats outspent Republicans by a huge margin, at least on Meta.
 
@@ -307,7 +305,8 @@ ggplot(v, aes(x = x, y = y, fill = y)) +
   theme_minimal() +
   theme(legend.position = "none")  # Hide legend as it is clear
 ```
-As to the topic of ads, most ads in Nevada talk about housing (33\%), followed by immigration (31\%). Notably ads from both parties frequently mentioned housing, with 35\% of Democrat ads (second highest after abortion) and 21\% of Republican ads. Note that housing is also the most frequent topic across all states (29\%). The Republicans are seen to play an insurgent role, with many of their ads mentioning inflation (43\%).
+
+As to the topic of ads, most ads in Nevada talk about housing (33\%), followed by immigration (31\%). Notably, ads from both parties frequently mentioned housing, with 35\% of Democrat ads (second highest after abortion) and 21\% of Republican ads. Note that housing is also the most frequent topic across all states (29\%). The Republicans are seen to play an insurgent role, with many of their ads mentioning inflation (43\%).
 
 ```{r}
 # Reshape the data to long format for easier plotting
@@ -336,7 +335,7 @@ ggplot(data_long, aes(x = Category, y = Value, fill = Group)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
  
- To further analyze the campaign narrative, I have scrapped all 400+ articles from [The Nevada Independent](https://thenevadaindependent.com/) that have the tag "Election 2024" on them. I then pass this through a large-language model (Anthropic's [Claude 3.5 Sonnet](https://www.anthropic.com/news/claude-3-5-sonnet)) to classify who will be most satisfied with the article: Democrat, Republican or Neutral. We also classified the news articles by how Vavreck classified candidate speeches [@noauthor_message_2009] to see what news are associated with each party.
+ To further analyze the campaign narrative, I have scrapped all 400+ articles from [The Nevada Independent](https://thenevadaindependent.com/) that have the tag "Election 2024" on them. I then pass this through a large-language model (Anthropic's [Claude 3.5 Sonnet](https://www.anthropic.com/news/claude-3-5-sonnet)) to classify who will be most satisfied with the article: Democrat, Republican or Neutral. We also classified the news articles by how Vavreck classified candidate speeches [@noauthor_message_2009] to see what are the topics of the news associated with each party.
  
 ```{r}
 # ni for nevada independent
@@ -355,6 +354,7 @@ ggplot(data = ni, aes(x = response, fill = response)) +
        y = "Count") +
   theme_minimal()
 ```
+
 The Nevada Independent has more articles that will please a Democrat than a Republican, but most of the articles are neutral.
 
 As expected of a local newspaper, most articles tagged as 2024 Election falls under the Domestic Policy category, followed by Traits. Economy was featured in some of the articles, with Foreign Policy and Defense taking a back seat.
@@ -380,8 +380,10 @@ ggplot(data = ni, aes(x = response, fill = category)) +
   theme_minimal()
 ```
  
-It turns out that the Republicans focused more on traits and economy. This shows that the Trump campaign is running an insurgent campaign treating the perception of the economy as bad, and offering voters a chance to change into a new administration. Note that in a previous graphic above, we showed that the Trump campaign aired mostly ads focused on inflation.
+It turns out that the Republicans focused more on traits and economy. This shows that the Trump campaign is running an insurgent campaign treating the perception of the economy as bad, and offering voters a chance to change into a new administration. Note that as in a previous graphic above, we showed that the Trump campaign aired mostly inflation ads.
 
 # A Possible Explanation of the Democrat Defeat
 
-Although we have predicted that the odds are stacked against the Democrats at 82\% to 18\%, it could have been possible that Democrats would have won if they applied an optimal campaign strategy. However, with the odds in their favor, the Trump campaign has successfully applied an insurgent campaign to focus on the economy and sealed any chances of a Democrat win. The Democrat defeat in Nevada and elsewhere is a product of the local perception of a bad economy and the successful focus of the Trump campaign on the economy. Biden pulled out of the race in June when it was clear that the odds are against the incumbent party due to the economy. Harris was given a very tough chance but that chance was blown when her campaign did not focus on clariyfing and distancing their responsibility from the economy as theorized by Vavreck.
+Although we have predicted that the odds are stacked against the Democrats at 82\% to 18\%, it could have been possible that Democrats would have won if they applied an optimal campaign strategy. However, with the odds in their favor, the Trump campaign has successfully applied an insurgent campaign to focus on the economy and sealed any chances of a Democrat win. The Democrat defeat in Nevada and elsewhere is a product of the local perception of a bad economy and the successful focus of the Trump campaign on the economy. Biden pulled out of the race in June when it was clear that the odds are against the incumbent party due to the economy. Harris was given a very tough chance but that chance was blown when her campaign did not focus on clariyfing and distancing their responsibility from the economy. This election can serve as an example for Vavreck's theory on how to run a successful insurgent campaign against an incumbent that failed to clarify.
+
+# References
