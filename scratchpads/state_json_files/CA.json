@@ -1,1 +1,3490 @@
-{"5001": {"statePostal": "CA", "reportingunitName": "Alameda", "reportingunitID": "5001", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06001", "electTotal": 54, "lastUpdated": "2024-11-17T05:18:32.798000Z", "precinctsReporting": 541, "eevp": 95.0, "precinctsTotal": 570, "precinctsReportingPct": 94.91, "candidates": [{"candidateID": "64984", "voteCount": 484751, "votePct": 74.47}, {"candidateID": "8639", "voteCount": 137659, "votePct": 21.15}, {"candidateID": "895", "voteCount": 13435, "votePct": 2.06}, {"candidateID": "71841", "voteCount": 6622, "votePct": 1.02}, {"candidateID": "73180", "voteCount": 6024, "votePct": 0.93}, {"candidateID": "69459", "voteCount": 2459, "votePct": 0.38}], "parameters": {"vote": {"expected": {"actual": 685211, "eevpCap": 99.0}, "total": 650950, "registered": 950534}, "precinctsReportingActual": 570, "precinctsReportingProportional": 541}}, "5002": {"statePostal": "CA", "reportingunitName": "Alpine", "reportingunitID": "5002", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06003", "electTotal": 54, "lastUpdated": "2024-11-10T20:10:12.703000Z", "precinctsReporting": 5, "eevp": 94.0, "precinctsTotal": 5, "precinctsReportingPct": 100.0, "candidates": [{"candidateID": "64984", "voteCount": 444, "votePct": 64.44}, {"candidateID": "8639", "voteCount": 231, "votePct": 33.53}, {"candidateID": "71841", "voteCount": 6, "votePct": 0.87}, {"candidateID": "895", "voteCount": 4, "votePct": 0.58}, {"candidateID": "69459", "voteCount": 2, "votePct": 0.29}, {"candidateID": "73180", "voteCount": 2, "votePct": 0.29}], "parameters": {"vote": {"expected": {"actual": 733, "eevpCap": 99.0}, "total": 689, "registered": 948}, "precinctsReportingActual": 5, "precinctsReportingProportional": 5}}, "5003": {"statePostal": "CA", "reportingunitName": "Amador", "reportingunitID": "5003", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06005", "electTotal": 54, "lastUpdated": "2024-11-14T00:49:33.962000Z", "precinctsReporting": 46, "eevp": 97.72, "precinctsTotal": 47, "precinctsReportingPct": 97.87, "candidates": [{"candidateID": "8639", "voteCount": 13981, "votePct": 62.58}, {"candidateID": "64984", "voteCount": 7766, "votePct": 34.76}, {"candidateID": "71841", "voteCount": 326, "votePct": 1.46}, {"candidateID": "69459", "voteCount": 129, "votePct": 0.58}, {"candidateID": "895", "voteCount": 74, "votePct": 0.33}, {"candidateID": "73180", "voteCount": 66, "votePct": 0.3}], "parameters": {"vote": {"expected": {"actual": 22864, "eevpCap": 99.0}, "total": 22342, "registered": 26217}, "precinctsReportingActual": 47, "precinctsReportingProportional": 46}}, "5004": {"statePostal": "CA", "reportingunitName": "Butte", "reportingunitID": "5004", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06007", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 122, "eevp": 92.32, "precinctsTotal": 132, "precinctsReportingPct": 92.42, "candidates": [{"candidateID": "8639", "voteCount": 45030, "votePct": 49.82}, {"candidateID": "64984", "voteCount": 42360, "votePct": 46.87}, {"candidateID": "71841", "voteCount": 1529, "votePct": 1.69}, {"candidateID": "895", "voteCount": 655, "votePct": 0.72}, {"candidateID": "69459", "voteCount": 495, "votePct": 0.55}, {"candidateID": "73180", "voteCount": 314, "votePct": 0.35}], "parameters": {"vote": {"expected": {"actual": 97906, "eevpCap": 99.0}, "total": 90383, "registered": 121973}, "precinctsReportingActual": 131, "precinctsReportingProportional": 122}}, "5005": {"statePostal": "CA", "reportingunitName": "Calaveras", "reportingunitID": "5005", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06009", "electTotal": 54, "lastUpdated": "2024-11-17T05:17:32.244000Z", "precinctsReporting": 24, "eevp": 98.0, "precinctsTotal": 25, "precinctsReportingPct": 96.0, "candidates": [{"candidateID": "8639", "voteCount": 16606, "votePct": 62.78}, {"candidateID": "64984", "voteCount": 9172, "votePct": 34.68}, {"candidateID": "71841", "voteCount": 389, "votePct": 1.47}, {"candidateID": "69459", "voteCount": 121, "votePct": 0.46}, {"candidateID": "895", "voteCount": 108, "votePct": 0.41}, {"candidateID": "73180", "voteCount": 55, "votePct": 0.21}], "parameters": {"vote": {"expected": {"actual": 26991, "eevpCap": 99.0}, "total": 26451, "registered": 32626}, "precinctsReportingActual": 25, "precinctsReportingProportional": 24}}, "5006": {"statePostal": "CA", "reportingunitName": "Colusa", "reportingunitID": "5006", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06011", "electTotal": 54, "lastUpdated": "2024-11-11T22:39:11.048000Z", "precinctsReporting": 17, "eevp": 89.01, "precinctsTotal": 19, "precinctsReportingPct": 89.47, "candidates": [{"candidateID": "8639", "voteCount": 4267, "votePct": 63.05}, {"candidateID": "64984", "voteCount": 2331, "votePct": 34.44}, {"candidateID": "71841", "voteCount": 98, "votePct": 1.45}, {"candidateID": "73180", "voteCount": 32, "votePct": 0.47}, {"candidateID": "69459", "voteCount": 21, "votePct": 0.31}, {"candidateID": "895", "voteCount": 19, "votePct": 0.28}], "parameters": {"vote": {"expected": {"actual": 7604, "eevpCap": 99.0}, "total": 6768, "registered": 10515}, "precinctsReportingActual": 19, "precinctsReportingProportional": 17}}, "5007": {"statePostal": "CA", "reportingunitName": "Contra Costa", "reportingunitID": "5007", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06013", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 886, "eevp": 95.69, "precinctsTotal": 926, "precinctsReportingPct": 95.68, "candidates": [{"candidateID": "64984", "voteCount": 344649, "votePct": 67.53}, {"candidateID": "8639", "voteCount": 148811, "votePct": 29.16}, {"candidateID": "895", "voteCount": 6401, "votePct": 1.25}, {"candidateID": "71841", "voteCount": 6335, "votePct": 1.24}, {"candidateID": "69459", "voteCount": 2303, "votePct": 0.45}, {"candidateID": "73180", "voteCount": 1900, "votePct": 0.37}], "parameters": {"vote": {"expected": {"actual": 533402, "eevpCap": 99.0}, "total": 510399, "registered": 714337}, "precinctsReportingActual": 926, "precinctsReportingProportional": 886}}, "5008": {"statePostal": "CA", "reportingunitName": "Del Norte", "reportingunitID": "5008", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06015", "electTotal": 54, "lastUpdated": "2024-11-15T03:23:58.508000Z", "precinctsReporting": 18, "eevp": 96.0, "precinctsTotal": 19, "precinctsReportingPct": 94.74, "candidates": [{"candidateID": "8639", "voteCount": 5823, "votePct": 56.45}, {"candidateID": "64984", "voteCount": 4195, "votePct": 40.67}, {"candidateID": "71841", "voteCount": 156, "votePct": 1.51}, {"candidateID": "895", "voteCount": 63, "votePct": 0.61}, {"candidateID": "73180", "voteCount": 41, "votePct": 0.4}, {"candidateID": "69459", "voteCount": 37, "votePct": 0.36}], "parameters": {"vote": {"expected": {"actual": 10745, "eevpCap": 99.0}, "total": 10315, "registered": 14783}, "precinctsReportingActual": 19, "precinctsReportingProportional": 18}}, "5009": {"statePostal": "CA", "reportingunitName": "El Dorado", "reportingunitID": "5009", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06017", "electTotal": 54, "lastUpdated": "2024-11-17T05:15:22.229000Z", "precinctsReporting": 160, "eevp": 97.0, "precinctsTotal": 165, "precinctsReportingPct": 96.97, "candidates": [{"candidateID": "8639", "voteCount": 60344, "votePct": 54.57}, {"candidateID": "64984", "voteCount": 47191, "votePct": 42.68}, {"candidateID": "71841", "voteCount": 1461, "votePct": 1.32}, {"candidateID": "69459", "voteCount": 726, "votePct": 0.66}, {"candidateID": "895", "voteCount": 688, "votePct": 0.62}, {"candidateID": "73180", "voteCount": 164, "votePct": 0.15}], "parameters": {"vote": {"expected": {"actual": 113994, "eevpCap": 99.0}, "total": 110574, "registered": 133171}, "precinctsReportingActual": 165, "precinctsReportingProportional": 160}}, "5010": {"statePostal": "CA", "reportingunitName": "Fresno", "reportingunitID": "5010", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06019", "electTotal": 54, "lastUpdated": "2024-11-16T01:54:09.671000Z", "precinctsReporting": 440, "eevp": 92.0, "precinctsTotal": 478, "precinctsReportingPct": 92.05, "candidates": [{"candidateID": "8639", "voteCount": 154580, "votePct": 51.12}, {"candidateID": "64984", "voteCount": 140063, "votePct": 46.32}, {"candidateID": "71841", "voteCount": 3646, "votePct": 1.21}, {"candidateID": "895", "voteCount": 1779, "votePct": 0.59}, {"candidateID": "73180", "voteCount": 1257, "votePct": 0.42}, {"candidateID": "69459", "voteCount": 1034, "votePct": 0.34}], "parameters": {"vote": {"expected": {"actual": 328651, "eevpCap": 99.0}, "total": 302359, "registered": 511713}, "precinctsReportingActual": 478, "precinctsReportingProportional": 440}}, "5011": {"statePostal": "CA", "reportingunitName": "Glenn", "reportingunitID": "5011", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06021", "electTotal": 54, "lastUpdated": "2024-11-10T20:29:23.557000Z", "precinctsReporting": 91, "eevp": 88.0, "precinctsTotal": 103, "precinctsReportingPct": 88.35, "candidates": [{"candidateID": "8639", "voteCount": 6662, "votePct": 66.47}, {"candidateID": "64984", "voteCount": 3099, "votePct": 30.92}, {"candidateID": "71841", "voteCount": 156, "votePct": 1.56}, {"candidateID": "69459", "voteCount": 45, "votePct": 0.45}, {"candidateID": "73180", "voteCount": 30, "votePct": 0.3}, {"candidateID": "895", "voteCount": 30, "votePct": 0.3}], "parameters": {"vote": {"expected": {"actual": 11389, "eevpCap": 99.0}, "total": 10022, "registered": 13746}, "precinctsReportingActual": 103, "precinctsReportingProportional": 91}}, "5012": {"statePostal": "CA", "reportingunitName": "Humboldt", "reportingunitID": "5012", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06023", "electTotal": 54, "lastUpdated": "2024-11-17T05:13:32.121000Z", "precinctsReporting": 91, "eevp": 85.0, "precinctsTotal": 107, "precinctsReportingPct": 85.05, "candidates": [{"candidateID": "64984", "voteCount": 33442, "votePct": 61.99}, {"candidateID": "8639", "voteCount": 18151, "votePct": 33.64}, {"candidateID": "895", "voteCount": 903, "votePct": 1.67}, {"candidateID": "71841", "voteCount": 815, "votePct": 1.51}, {"candidateID": "73180", "voteCount": 357, "votePct": 0.66}, {"candidateID": "69459", "voteCount": 281, "votePct": 0.52}], "parameters": {"vote": {"expected": {"actual": 63469, "eevpCap": 99.0}, "total": 53949, "registered": 82097}, "precinctsReportingActual": 107, "precinctsReportingProportional": 91}}, "5013": {"statePostal": "CA", "reportingunitName": "Imperial", "reportingunitID": "5013", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06025", "electTotal": 54, "lastUpdated": "2024-11-16T22:04:38.018000Z", "precinctsReporting": 255, "eevp": 84.0, "precinctsTotal": 304, "precinctsReportingPct": 83.88, "candidates": [{"candidateID": "64984", "voteCount": 22776, "votePct": 49.89}, {"candidateID": "8639", "voteCount": 21657, "votePct": 47.44}, {"candidateID": "71841", "voteCount": 686, "votePct": 1.5}, {"candidateID": "73180", "voteCount": 244, "votePct": 0.53}, {"candidateID": "895", "voteCount": 208, "votePct": 0.46}, {"candidateID": "69459", "voteCount": 77, "votePct": 0.17}], "parameters": {"vote": {"expected": {"actual": 54343, "eevpCap": 99.0}, "total": 45648, "registered": 88694}, "precinctsReportingActual": 304, "precinctsReportingProportional": 255}}, "5014": {"statePostal": "CA", "reportingunitName": "Inyo", "reportingunitID": "5014", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06027", "electTotal": 54, "lastUpdated": "2024-11-13T21:38:42.772000Z", "precinctsReporting": 15, "eevp": 86.33, "precinctsTotal": 17, "precinctsReportingPct": 88.24, "candidates": [{"candidateID": "8639", "voteCount": 4353, "votePct": 49.9}, {"candidateID": "64984", "voteCount": 4098, "votePct": 46.98}, {"candidateID": "71841", "voteCount": 128, "votePct": 1.47}, {"candidateID": "895", "voteCount": 71, "votePct": 0.81}, {"candidateID": "73180", "voteCount": 37, "votePct": 0.42}, {"candidateID": "69459", "voteCount": 36, "votePct": 0.41}], "parameters": {"vote": {"expected": {"actual": 10104, "eevpCap": 99.0}, "total": 8723, "registered": 10770}, "precinctsReportingActual": 17, "precinctsReportingProportional": 15}}, "5015": {"statePostal": "CA", "reportingunitName": "Kern", "reportingunitID": "5015", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06029", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 782, "eevp": 95.29, "precinctsTotal": 821, "precinctsReportingPct": 95.25, "candidates": [{"candidateID": "8639", "voteCount": 162755, "votePct": 59.15}, {"candidateID": "64984", "voteCount": 105404, "votePct": 38.31}, {"candidateID": "71841", "voteCount": 3665, "votePct": 1.33}, {"candidateID": "895", "voteCount": 1317, "votePct": 0.48}, {"candidateID": "69459", "voteCount": 1024, "votePct": 0.37}, {"candidateID": "73180", "voteCount": 977, "votePct": 0.36}], "parameters": {"vote": {"expected": {"actual": 288748, "eevpCap": 99.0}, "total": 275142, "registered": 451797}, "precinctsReportingActual": 821, "precinctsReportingProportional": 782}}, "5016": {"statePostal": "CA", "reportingunitName": "Kings", "reportingunitID": "5016", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06031", "electTotal": 54, "lastUpdated": "2024-11-15T22:24:43.973000Z", "precinctsReporting": 121, "eevp": 94.67, "precinctsTotal": 128, "precinctsReportingPct": 94.53, "candidates": [{"candidateID": "8639", "voteCount": 24485, "votePct": 60.37}, {"candidateID": "64984", "voteCount": 15179, "votePct": 37.43}, {"candidateID": "71841", "voteCount": 525, "votePct": 1.29}, {"candidateID": "69459", "voteCount": 130, "votePct": 0.32}, {"candidateID": "73180", "voteCount": 123, "votePct": 0.3}, {"candidateID": "895", "voteCount": 115, "votePct": 0.28}], "parameters": {"vote": {"expected": {"actual": 42842, "eevpCap": 99.0}, "total": 40557, "registered": 63512}, "precinctsReportingActual": 128, "precinctsReportingProportional": 121}}, "5017": {"statePostal": "CA", "reportingunitName": "Lake", "reportingunitID": "5017", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06033", "electTotal": 54, "lastUpdated": "2024-11-15T01:04:46.002000Z", "precinctsReporting": 15, "eevp": 30.37, "precinctsTotal": 48, "precinctsReportingPct": 31.25, "candidates": [{"candidateID": "64984", "voteCount": 4239, "votePct": 49.68}, {"candidateID": "8639", "voteCount": 4077, "votePct": 47.78}, {"candidateID": "71841", "voteCount": 120, "votePct": 1.41}, {"candidateID": "895", "voteCount": 48, "votePct": 0.56}, {"candidateID": "69459", "voteCount": 25, "votePct": 0.29}, {"candidateID": "73180", "voteCount": 23, "votePct": 0.27}], "parameters": {"vote": {"expected": {"actual": 28093, "eevpCap": 99.0}, "total": 8532, "registered": 37368}, "precinctsReportingActual": 48, "precinctsReportingProportional": 15}}, "5018": {"statePostal": "CA", "reportingunitName": "Lassen", "reportingunitID": "5018", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06035", "electTotal": 54, "lastUpdated": "2024-11-15T22:24:43.973000Z", "precinctsReporting": 52, "eevp": 92.39, "precinctsTotal": 56, "precinctsReportingPct": 92.86, "candidates": [{"candidateID": "8639", "voteCount": 8343, "votePct": 75.69}, {"candidateID": "64984", "voteCount": 2412, "votePct": 21.88}, {"candidateID": "71841", "voteCount": 165, "votePct": 1.5}, {"candidateID": "69459", "voteCount": 53, "votePct": 0.48}, {"candidateID": "73180", "voteCount": 27, "votePct": 0.24}, {"candidateID": "895", "voteCount": 22, "votePct": 0.2}], "parameters": {"vote": {"expected": {"actual": 11930, "eevpCap": 99.0}, "total": 11022, "registered": 14701}, "precinctsReportingActual": 56, "precinctsReportingProportional": 52}}, "5019": {"statePostal": "CA", "reportingunitName": "Los Angeles", "reportingunitID": "5019", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06037", "electTotal": 54, "lastUpdated": "2024-11-16T01:24:41.531000Z", "precinctsReporting": 2964, "eevp": 96.0, "precinctsTotal": 3087, "precinctsReportingPct": 96.02, "candidates": [{"candidateID": "64984", "voteCount": 2383646, "votePct": 64.96}, {"candidateID": "8639", "voteCount": 1166210, "votePct": 31.78}, {"candidateID": "71841", "voteCount": 45230, "votePct": 1.23}, {"candidateID": "895", "voteCount": 40381, "votePct": 1.1}, {"candidateID": "73180", "voteCount": 20986, "votePct": 0.57}, {"candidateID": "69459", "voteCount": 12693, "votePct": 0.35}], "parameters": {"vote": {"expected": {"actual": 3822027, "eevpCap": 99.0}, "total": 3669146, "registered": 5702012}, "precinctsReportingActual": 0, "precinctsReportingProportional": 2964}}, "5020": {"statePostal": "CA", "reportingunitName": "Madera", "reportingunitID": "5020", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06039", "electTotal": 54, "lastUpdated": "2024-11-15T20:30:45.000000Z", "precinctsReporting": 74, "eevp": 94.57, "precinctsTotal": 78, "precinctsReportingPct": 94.87, "candidates": [{"candidateID": "8639", "voteCount": 31829, "votePct": 59.13}, {"candidateID": "64984", "voteCount": 20721, "votePct": 38.49}, {"candidateID": "71841", "voteCount": 661, "votePct": 1.23}, {"candidateID": "895", "voteCount": 265, "votePct": 0.49}, {"candidateID": "69459", "voteCount": 181, "votePct": 0.34}, {"candidateID": "73180", "voteCount": 174, "votePct": 0.32}], "parameters": {"vote": {"expected": {"actual": 56924, "eevpCap": 99.0}, "total": 53831, "registered": 76676}, "precinctsReportingActual": 0, "precinctsReportingProportional": 74}}, "5021": {"statePostal": "CA", "reportingunitName": "Marin", "reportingunitID": "5021", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06041", "electTotal": 54, "lastUpdated": "2024-11-15T22:24:43.973000Z", "precinctsReporting": 139, "eevp": 95.0, "precinctsTotal": 146, "precinctsReportingPct": 95.21, "candidates": [{"candidateID": "64984", "voteCount": 111478, "votePct": 80.6}, {"candidateID": "8639", "voteCount": 23104, "votePct": 16.7}, {"candidateID": "895", "voteCount": 1512, "votePct": 1.09}, {"candidateID": "71841", "voteCount": 1322, "votePct": 0.96}, {"candidateID": "69459", "voteCount": 622, "votePct": 0.45}, {"candidateID": "73180", "voteCount": 278, "votePct": 0.2}], "parameters": {"vote": {"expected": {"actual": 145596, "eevpCap": 99.0}, "total": 138316, "registered": 170653}, "precinctsReportingActual": 146, "precinctsReportingProportional": 139}}, "5022": {"statePostal": "CA", "reportingunitName": "Mariposa", "reportingunitID": "5022", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06043", "electTotal": 54, "lastUpdated": "2024-11-15T19:26:47.812000Z", "precinctsReporting": 26, "eevp": 97.68, "precinctsTotal": 27, "precinctsReportingPct": 96.3, "candidates": [{"candidateID": "8639", "voteCount": 5619, "votePct": 59.15}, {"candidateID": "64984", "voteCount": 3618, "votePct": 38.09}, {"candidateID": "71841", "voteCount": 137, "votePct": 1.44}, {"candidateID": "895", "voteCount": 60, "votePct": 0.63}, {"candidateID": "69459", "voteCount": 42, "votePct": 0.44}, {"candidateID": "73180", "voteCount": 23, "votePct": 0.24}], "parameters": {"vote": {"expected": {"actual": 9725, "eevpCap": 99.0}, "total": 9499, "registered": 11641}, "precinctsReportingActual": 27, "precinctsReportingProportional": 26}}, "5023": {"statePostal": "CA", "reportingunitName": "Mendocino", "reportingunitID": "5023", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06045", "electTotal": 54, "lastUpdated": "2024-11-14T20:38:48.273000Z", "precinctsReporting": 143, "eevp": 58.44, "precinctsTotal": 245, "precinctsReportingPct": 58.37, "candidates": [{"candidateID": "64984", "voteCount": 14937, "votePct": 62.98}, {"candidateID": "8639", "voteCount": 7921, "votePct": 33.4}, {"candidateID": "71841", "voteCount": 397, "votePct": 1.67}, {"candidateID": "895", "voteCount": 241, "votePct": 1.02}, {"candidateID": "69459", "voteCount": 125, "votePct": 0.53}, {"candidateID": "73180", "voteCount": 97, "votePct": 0.41}], "parameters": {"vote": {"expected": {"actual": 40584, "eevpCap": 99.0}, "total": 23718, "registered": 53748}, "precinctsReportingActual": 245, "precinctsReportingProportional": 143}}, "5024": {"statePostal": "CA", "reportingunitName": "Merced", "reportingunitID": "5024", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06047", "electTotal": 54, "lastUpdated": "2024-11-15T00:24:34.336000Z", "precinctsReporting": 581, "eevp": 79.65, "precinctsTotal": 729, "precinctsReportingPct": 79.7, "candidates": [{"candidateID": "8639", "voteCount": 36096, "votePct": 51.89}, {"candidateID": "64984", "voteCount": 31798, "votePct": 45.71}, {"candidateID": "71841", "voteCount": 893, "votePct": 1.28}, {"candidateID": "895", "voteCount": 320, "votePct": 0.46}, {"candidateID": "73180", "voteCount": 265, "votePct": 0.38}, {"candidateID": "69459", "voteCount": 193, "votePct": 0.28}], "parameters": {"vote": {"expected": {"actual": 87340, "eevpCap": 99.0}, "total": 69565, "registered": 130472}, "precinctsReportingActual": 729, "precinctsReportingProportional": 581}}, "5025": {"statePostal": "CA", "reportingunitName": "Modoc", "reportingunitID": "5025", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06049", "electTotal": 54, "lastUpdated": "2024-11-16T00:58:47.545000Z", "precinctsReporting": 20, "eevp": 92.99, "precinctsTotal": 21, "precinctsReportingPct": 95.24, "candidates": [{"candidateID": "8639", "voteCount": 2747, "votePct": 71.91}, {"candidateID": "64984", "voteCount": 955, "votePct": 25.0}, {"candidateID": "71841", "voteCount": 83, "votePct": 2.17}, {"candidateID": "69459", "voteCount": 17, "votePct": 0.45}, {"candidateID": "895", "voteCount": 13, "votePct": 0.34}, {"candidateID": "73180", "voteCount": 5, "votePct": 0.13}], "parameters": {"vote": {"expected": {"actual": 4108, "eevpCap": 99.0}, "total": 3820, "registered": 5099}, "precinctsReportingActual": 21, "precinctsReportingProportional": 20}}, "5026": {"statePostal": "CA", "reportingunitName": "Mono", "reportingunitID": "5026", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06051", "electTotal": 54, "lastUpdated": "2024-11-16T02:27:32.969000Z", "precinctsReporting": 12, "eevp": 96.9, "precinctsTotal": 12, "precinctsReportingPct": 100.0, "candidates": [{"candidateID": "64984", "voteCount": 3484, "votePct": 58.02}, {"candidateID": "8639", "voteCount": 2273, "votePct": 37.85}, {"candidateID": "71841", "voteCount": 112, "votePct": 1.87}, {"candidateID": "895", "voteCount": 60, "votePct": 1.0}, {"candidateID": "69459", "voteCount": 52, "votePct": 0.87}, {"candidateID": "73180", "voteCount": 24, "votePct": 0.4}], "parameters": {"vote": {"expected": {"actual": 6197, "eevpCap": 99.0}, "total": 6005, "registered": 7632}, "precinctsReportingActual": 12, "precinctsReportingProportional": 12}}, "5027": {"statePostal": "CA", "reportingunitName": "Monterey", "reportingunitID": "5027", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06053", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 202, "eevp": 96.93, "precinctsTotal": 208, "precinctsReportingPct": 97.12, "candidates": [{"candidateID": "64984", "voteCount": 89610, "votePct": 63.8}, {"candidateID": "8639", "voteCount": 46632, "votePct": 33.2}, {"candidateID": "71841", "voteCount": 1852, "votePct": 1.32}, {"candidateID": "895", "voteCount": 1158, "votePct": 0.82}, {"candidateID": "69459", "voteCount": 662, "votePct": 0.47}, {"candidateID": "73180", "voteCount": 551, "votePct": 0.39}], "parameters": {"vote": {"expected": {"actual": 144914, "eevpCap": 99.0}, "total": 140465, "registered": 213603}, "precinctsReportingActual": 208, "precinctsReportingProportional": 202}}, "5028": {"statePostal": "CA", "reportingunitName": "Napa", "reportingunitID": "5028", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06055", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 179, "eevp": 87.68, "precinctsTotal": 204, "precinctsReportingPct": 87.75, "candidates": [{"candidateID": "64984", "voteCount": 37904, "votePct": 65.89}, {"candidateID": "8639", "voteCount": 17950, "votePct": 31.2}, {"candidateID": "71841", "voteCount": 838, "votePct": 1.46}, {"candidateID": "895", "voteCount": 389, "votePct": 0.68}, {"candidateID": "69459", "voteCount": 266, "votePct": 0.46}, {"candidateID": "73180", "voteCount": 176, "votePct": 0.31}], "parameters": {"vote": {"expected": {"actual": 65609, "eevpCap": 99.0}, "total": 57523, "registered": 84482}, "precinctsReportingActual": 204, "precinctsReportingProportional": 179}}, "5029": {"statePostal": "CA", "reportingunitName": "Nevada", "reportingunitID": "5029", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06057", "electTotal": 54, "lastUpdated": "2024-11-17T04:14:40.541000Z", "precinctsReporting": 81, "eevp": 69.0, "precinctsTotal": 118, "precinctsReportingPct": 68.64, "candidates": [{"candidateID": "64984", "voteCount": 24396, "votePct": 53.61}, {"candidateID": "8639", "voteCount": 19639, "votePct": 43.16}, {"candidateID": "71841", "voteCount": 697, "votePct": 1.53}, {"candidateID": "895", "voteCount": 411, "votePct": 0.9}, {"candidateID": "69459", "voteCount": 241, "votePct": 0.53}, {"candidateID": "73180", "voteCount": 120, "votePct": 0.26}], "parameters": {"vote": {"expected": {"actual": 65948, "eevpCap": 99.0}, "total": 45504, "registered": 74577}, "precinctsReportingActual": 118, "precinctsReportingProportional": 81}}, "5030": {"statePostal": "CA", "reportingunitName": "Orange", "reportingunitID": "5030", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06059", "electTotal": 54, "lastUpdated": "2024-11-17T01:26:46.724000Z", "precinctsReporting": 2143, "eevp": 93.4, "precinctsTotal": 2294, "precinctsReportingPct": 93.42, "candidates": [{"candidateID": "64984", "voteCount": 669091, "votePct": 49.76}, {"candidateID": "8639", "voteCount": 632785, "votePct": 47.06}, {"candidateID": "71841", "voteCount": 15862, "votePct": 1.18}, {"candidateID": "895", "voteCount": 15762, "votePct": 1.17}, {"candidateID": "69459", "voteCount": 6583, "votePct": 0.49}, {"candidateID": "73180", "voteCount": 4525, "votePct": 0.34}], "parameters": {"vote": {"expected": {"actual": 1439610, "eevpCap": 99.0}, "total": 1344608, "registered": 1831530}, "precinctsReportingActual": 2294, "precinctsReportingProportional": 2143}}, "5031": {"statePostal": "CA", "reportingunitName": "Placer", "reportingunitID": "5031", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06061", "electTotal": 54, "lastUpdated": "2024-11-17T04:11:09.882000Z", "precinctsReporting": 308, "eevp": 93.0, "precinctsTotal": 331, "precinctsReportingPct": 93.05, "candidates": [{"candidateID": "8639", "voteCount": 117922, "votePct": 52.78}, {"candidateID": "64984", "voteCount": 98983, "votePct": 44.31}, {"candidateID": "71841", "voteCount": 3092, "votePct": 1.38}, {"candidateID": "895", "voteCount": 1526, "votePct": 0.68}, {"candidateID": "69459", "voteCount": 1471, "votePct": 0.66}, {"candidateID": "73180", "voteCount": 414, "votePct": 0.19}], "parameters": {"vote": {"expected": {"actual": 240224, "eevpCap": 99.0}, "total": 223408, "registered": 286828}, "precinctsReportingActual": 331, "precinctsReportingProportional": 308}}, "5032": {"statePostal": "CA", "reportingunitName": "Plumas", "reportingunitID": "5032", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06063", "electTotal": 54, "lastUpdated": "2024-11-17T04:08:19.787000Z", "precinctsReporting": 28, "eevp": 97.0, "precinctsTotal": 29, "precinctsReportingPct": 96.55, "candidates": [{"candidateID": "8639", "voteCount": 5718, "votePct": 56.86}, {"candidateID": "64984", "voteCount": 4017, "votePct": 39.95}, {"candidateID": "71841", "voteCount": 181, "votePct": 1.8}, {"candidateID": "895", "voteCount": 57, "votePct": 0.57}, {"candidateID": "69459", "voteCount": 54, "votePct": 0.54}, {"candidateID": "73180", "voteCount": 29, "votePct": 0.29}], "parameters": {"vote": {"expected": {"actual": 10367, "eevpCap": 99.0}, "total": 10056, "registered": 13589}, "precinctsReportingActual": 29, "precinctsReportingProportional": 28}}, "5033": {"statePostal": "CA", "reportingunitName": "Riverside", "reportingunitID": "5033", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06065", "electTotal": 54, "lastUpdated": "2024-11-17T17:45:36.701000Z", "precinctsReporting": 1266, "eevp": 94.11, "precinctsTotal": 1345, "precinctsReportingPct": 94.13, "candidates": [{"candidateID": "8639", "voteCount": 440563, "votePct": 49.08}, {"candidateID": "64984", "voteCount": 433141, "votePct": 48.26}, {"candidateID": "71841", "voteCount": 10741, "votePct": 1.2}, {"candidateID": "895", "voteCount": 6945, "votePct": 0.77}, {"candidateID": "73180", "voteCount": 3144, "votePct": 0.35}, {"candidateID": "69459", "voteCount": 3039, "votePct": 0.34}], "parameters": {"vote": {"expected": {"actual": 953774, "eevpCap": 99.0}, "total": 897573, "registered": 1348896}, "precinctsReportingActual": 1345, "precinctsReportingProportional": 1266}}, "5034": {"statePostal": "CA", "reportingunitName": "Sacramento", "reportingunitID": "5034", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06067", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:51.677000Z", "precinctsReporting": 611, "eevp": 89.0, "precinctsTotal": 686, "precinctsReportingPct": 89.07, "candidates": [{"candidateID": "64984", "voteCount": 349970, "votePct": 58.24}, {"candidateID": "8639", "voteCount": 230431, "votePct": 38.34}, {"candidateID": "71841", "voteCount": 8216, "votePct": 1.37}, {"candidateID": "895", "voteCount": 6747, "votePct": 1.12}, {"candidateID": "69459", "voteCount": 2974, "votePct": 0.49}, {"candidateID": "73180", "voteCount": 2605, "votePct": 0.43}], "parameters": {"vote": {"expected": {"actual": 675217, "eevpCap": 99.0}, "total": 600943, "registered": 877211}, "precinctsReportingActual": 0, "precinctsReportingProportional": 611}}, "5035": {"statePostal": "CA", "reportingunitName": "San Benito", "reportingunitID": "5035", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06069", "electTotal": 54, "lastUpdated": "2024-11-16T22:03:37.259000Z", "precinctsReporting": 39, "eevp": 96.0, "precinctsTotal": 41, "precinctsReportingPct": 95.12, "candidates": [{"candidateID": "64984", "voteCount": 15009, "votePct": 54.95}, {"candidateID": "8639", "voteCount": 11557, "votePct": 42.31}, {"candidateID": "71841", "voteCount": 414, "votePct": 1.52}, {"candidateID": "895", "voteCount": 156, "votePct": 0.57}, {"candidateID": "73180", "voteCount": 91, "votePct": 0.33}, {"candidateID": "69459", "voteCount": 88, "votePct": 0.32}], "parameters": {"vote": {"expected": {"actual": 28453, "eevpCap": 99.0}, "total": 27315, "registered": 37153}, "precinctsReportingActual": 41, "precinctsReportingProportional": 39}}, "5036": {"statePostal": "CA", "reportingunitName": "San Bernardino", "reportingunitID": "5036", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06071", "electTotal": 54, "lastUpdated": "2024-11-17T04:01:29.542000Z", "precinctsReporting": 2556, "eevp": 89.0, "precinctsTotal": 2872, "precinctsReportingPct": 89.0, "candidates": [{"candidateID": "8639", "voteCount": 342031, "votePct": 49.52}, {"candidateID": "64984", "voteCount": 329741, "votePct": 47.74}, {"candidateID": "71841", "voteCount": 9163, "votePct": 1.33}, {"candidateID": "895", "voteCount": 5035, "votePct": 0.73}, {"candidateID": "73180", "voteCount": 2579, "votePct": 0.37}, {"candidateID": "69459", "voteCount": 2152, "votePct": 0.31}], "parameters": {"vote": {"expected": {"actual": 776069, "eevpCap": 99.0}, "total": 690701, "registered": 1191003}, "precinctsReportingActual": 2872, "precinctsReportingProportional": 2556}}, "5037": {"statePostal": "CA", "reportingunitName": "San Diego", "reportingunitID": "5037", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06073", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 2536, "eevp": 95.0, "precinctsTotal": 2669, "precinctsReportingPct": 95.02, "candidates": [{"candidateID": "64984", "voteCount": 813796, "votePct": 57.04}, {"candidateID": "8639", "voteCount": 571339, "votePct": 40.04}, {"candidateID": "71841", "voteCount": 15910, "votePct": 1.12}, {"candidateID": "895", "voteCount": 13592, "votePct": 0.95}, {"candidateID": "69459", "voteCount": 7330, "votePct": 0.51}, {"candidateID": "73180", "voteCount": 4822, "votePct": 0.34}], "parameters": {"vote": {"expected": {"actual": 1501883, "eevpCap": 99.0}, "total": 1426789, "registered": 1938487}, "precinctsReportingActual": 0, "precinctsReportingProportional": 2536}}, "5038": {"statePostal": "CA", "reportingunitName": "San Francisco", "reportingunitID": "5038", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06075", "electTotal": 54, "lastUpdated": "2024-11-17T01:39:55.176000Z", "precinctsReporting": 499, "eevp": 97.0, "precinctsTotal": 514, "precinctsReportingPct": 97.08, "candidates": [{"candidateID": "64984", "voteCount": 321975, "votePct": 80.38}, {"candidateID": "8639", "voteCount": 62084, "votePct": 15.5}, {"candidateID": "895", "voteCount": 6852, "votePct": 1.71}, {"candidateID": "71841", "voteCount": 4206, "votePct": 1.05}, {"candidateID": "73180", "voteCount": 3609, "votePct": 0.9}, {"candidateID": "69459", "voteCount": 1856, "votePct": 0.46}], "parameters": {"vote": {"expected": {"actual": 412971, "eevpCap": 99.0}, "total": 400582, "registered": 510401}, "precinctsReportingActual": 514, "precinctsReportingProportional": 499}}, "5039": {"statePostal": "CA", "reportingunitName": "San Joaquin", "reportingunitID": "5039", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06077", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 255, "eevp": 93.91, "precinctsTotal": 272, "precinctsReportingPct": 93.75, "candidates": [{"candidateID": "8639", "voteCount": 121104, "votePct": 48.72}, {"candidateID": "64984", "voteCount": 119912, "votePct": 48.24}, {"candidateID": "71841", "voteCount": 3245, "votePct": 1.31}, {"candidateID": "895", "voteCount": 2396, "votePct": 0.96}, {"candidateID": "73180", "voteCount": 1192, "votePct": 0.48}, {"candidateID": "69459", "voteCount": 724, "votePct": 0.29}], "parameters": {"vote": {"expected": {"actual": 264701, "eevpCap": 99.0}, "total": 248573, "registered": 378801}, "precinctsReportingActual": 0, "precinctsReportingProportional": 255}}, "5040": {"statePostal": "CA", "reportingunitName": "San Luis Obispo", "reportingunitID": "5040", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06079", "electTotal": 54, "lastUpdated": "2024-11-15T03:29:08.862000Z", "precinctsReporting": 101, "eevp": 64.0, "precinctsTotal": 158, "precinctsReportingPct": 63.92, "candidates": [{"candidateID": "64984", "voteCount": 57047, "votePct": 56.05}, {"candidateID": "8639", "voteCount": 42267, "votePct": 41.53}, {"candidateID": "71841", "voteCount": 1184, "votePct": 1.16}, {"candidateID": "895", "voteCount": 577, "votePct": 0.57}, {"candidateID": "69459", "voteCount": 511, "votePct": 0.5}, {"candidateID": "73180", "voteCount": 189, "votePct": 0.19}], "parameters": {"vote": {"expected": {"actual": 159023, "eevpCap": 99.0}, "total": 101775, "registered": 179396}, "precinctsReportingActual": 158, "precinctsReportingProportional": 101}}, "5041": {"statePostal": "CA", "reportingunitName": "San Mateo", "reportingunitID": "5041", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06081", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 321, "eevp": 95.05, "precinctsTotal": 338, "precinctsReportingPct": 94.97, "candidates": [{"candidateID": "64984", "voteCount": 238733, "votePct": 73.67}, {"candidateID": "8639", "voteCount": 74650, "votePct": 23.04}, {"candidateID": "895", "voteCount": 3999, "votePct": 1.23}, {"candidateID": "71841", "voteCount": 3676, "votePct": 1.13}, {"candidateID": "69459", "voteCount": 1654, "votePct": 0.51}, {"candidateID": "73180", "voteCount": 1331, "votePct": 0.41}], "parameters": {"vote": {"expected": {"actual": 340911, "eevpCap": 99.0}, "total": 324043, "registered": 436700}, "precinctsReportingActual": 338, "precinctsReportingProportional": 321}}, "5042": {"statePostal": "CA", "reportingunitName": "Santa Barbara", "reportingunitID": "5042", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06083", "electTotal": 54, "lastUpdated": "2024-11-15T20:33:50.133000Z", "precinctsReporting": 268, "eevp": 93.0, "precinctsTotal": 288, "precinctsReportingPct": 93.06, "candidates": [{"candidateID": "64984", "voteCount": 109546, "votePct": 61.7}, {"candidateID": "8639", "voteCount": 62576, "votePct": 35.24}, {"candidateID": "71841", "voteCount": 2477, "votePct": 1.4}, {"candidateID": "895", "voteCount": 1318, "votePct": 0.74}, {"candidateID": "69459", "voteCount": 884, "votePct": 0.5}, {"candidateID": "73180", "voteCount": 754, "votePct": 0.42}], "parameters": {"vote": {"expected": {"actual": 190919, "eevpCap": 99.0}, "total": 177555, "registered": 238947}, "precinctsReportingActual": 288, "precinctsReportingProportional": 268}}, "5043": {"statePostal": "CA", "reportingunitName": "Santa Clara", "reportingunitID": "5043", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06085", "electTotal": 54, "lastUpdated": "2024-11-16T01:07:29.863000Z", "precinctsReporting": 751, "eevp": 95.78, "precinctsTotal": 784, "precinctsReportingPct": 95.79, "candidates": [{"candidateID": "64984", "voteCount": 499429, "votePct": 68.21}, {"candidateID": "8639", "voteCount": 204699, "votePct": 27.96}, {"candidateID": "895", "voteCount": 11803, "votePct": 1.61}, {"candidateID": "71841", "voteCount": 9051, "votePct": 1.24}, {"candidateID": "69459", "voteCount": 4041, "votePct": 0.55}, {"candidateID": "73180", "voteCount": 3155, "votePct": 0.43}], "parameters": {"vote": {"expected": {"actual": 764472, "eevpCap": 99.0}, "total": 732178, "registered": 1037777}, "precinctsReportingActual": 686, "precinctsReportingProportional": 751}}, "5044": {"statePostal": "CA", "reportingunitName": "Santa Cruz", "reportingunitID": "5044", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06087", "electTotal": 54, "lastUpdated": "2024-11-17T03:56:29.371000Z", "precinctsReporting": 184, "eevp": 94.0, "precinctsTotal": 196, "precinctsReportingPct": 93.88, "candidates": [{"candidateID": "64984", "voteCount": 96997, "votePct": 75.3}, {"candidateID": "8639", "voteCount": 26924, "votePct": 20.9}, {"candidateID": "71841", "voteCount": 1981, "votePct": 1.54}, {"candidateID": "895", "voteCount": 1652, "votePct": 1.28}, {"candidateID": "73180", "voteCount": 671, "votePct": 0.52}, {"candidateID": "69459", "voteCount": 587, "votePct": 0.46}], "parameters": {"vote": {"expected": {"actual": 137034, "eevpCap": 99.0}, "total": 128812, "registered": 168185}, "precinctsReportingActual": 0, "precinctsReportingProportional": 184}}, "5045": {"statePostal": "CA", "reportingunitName": "Shasta", "reportingunitID": "5045", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06089", "electTotal": 54, "lastUpdated": "2024-11-16T20:54:46.689000Z", "precinctsReporting": 52, "eevp": 76.72, "precinctsTotal": 68, "precinctsReportingPct": 76.47, "candidates": [{"candidateID": "8639", "voteCount": 48099, "votePct": 66.68}, {"candidateID": "64984", "voteCount": 22255, "votePct": 30.85}, {"candidateID": "71841", "voteCount": 998, "votePct": 1.38}, {"candidateID": "69459", "voteCount": 321, "votePct": 0.45}, {"candidateID": "895", "voteCount": 275, "votePct": 0.38}, {"candidateID": "73180", "voteCount": 182, "votePct": 0.25}], "parameters": {"vote": {"expected": {"actual": 94020, "eevpCap": 99.0}, "total": 72130, "registered": 113931}, "precinctsReportingActual": 68, "precinctsReportingProportional": 52}}, "5046": {"statePostal": "CA", "reportingunitName": "Sierra", "reportingunitID": "5046", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06091", "electTotal": 54, "lastUpdated": "2024-11-15T03:23:28.471000Z", "precinctsReporting": 19, "eevp": 98.98, "precinctsTotal": 19, "precinctsReportingPct": 100.0, "candidates": [{"candidateID": "8639", "voteCount": 1065, "votePct": 60.79}, {"candidateID": "64984", "voteCount": 641, "votePct": 36.59}, {"candidateID": "71841", "voteCount": 27, "votePct": 1.54}, {"candidateID": "69459", "voteCount": 13, "votePct": 0.74}, {"candidateID": "895", "voteCount": 4, "votePct": 0.23}, {"candidateID": "73180", "voteCount": 2, "votePct": 0.11}], "parameters": {"vote": {"expected": {"actual": 1770, "eevpCap": 99.0}, "total": 1752, "registered": 2193}, "precinctsReportingActual": 0, "precinctsReportingProportional": 19}}, "5047": {"statePostal": "CA", "reportingunitName": "Siskiyou", "reportingunitID": "5047", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06093", "electTotal": 54, "lastUpdated": "2024-11-17T03:53:29.291000Z", "precinctsReporting": 60, "eevp": 97.0, "precinctsTotal": 62, "precinctsReportingPct": 96.77, "candidates": [{"candidateID": "8639", "voteCount": 12373, "votePct": 57.9}, {"candidateID": "64984", "voteCount": 8301, "votePct": 38.84}, {"candidateID": "71841", "voteCount": 394, "votePct": 1.84}, {"candidateID": "895", "voteCount": 138, "votePct": 0.65}, {"candidateID": "69459", "voteCount": 99, "votePct": 0.46}, {"candidateID": "73180", "voteCount": 65, "votePct": 0.3}], "parameters": {"vote": {"expected": {"actual": 22031, "eevpCap": 99.0}, "total": 21370, "registered": 27963}, "precinctsReportingActual": 62, "precinctsReportingProportional": 60}}, "5048": {"statePostal": "CA", "reportingunitName": "Solano", "reportingunitID": "5048", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06095", "electTotal": 54, "lastUpdated": "2024-11-16T01:24:41.531000Z", "precinctsReporting": 228, "eevp": 96.0, "precinctsTotal": 238, "precinctsReportingPct": 95.8, "candidates": [{"candidateID": "64984", "voteCount": 111995, "votePct": 60.2}, {"candidateID": "8639", "voteCount": 68689, "votePct": 36.92}, {"candidateID": "71841", "voteCount": 2381, "votePct": 1.28}, {"candidateID": "895", "voteCount": 1444, "votePct": 0.78}, {"candidateID": "69459", "voteCount": 786, "votePct": 0.42}, {"candidateID": "73180", "voteCount": 756, "votePct": 0.41}], "parameters": {"vote": {"expected": {"actual": 193803, "eevpCap": 99.0}, "total": 186051, "registered": 266043}, "precinctsReportingActual": 238, "precinctsReportingProportional": 228}}, "5049": {"statePostal": "CA", "reportingunitName": "Sonoma", "reportingunitID": "5049", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06097", "electTotal": 54, "lastUpdated": "2024-11-15T22:24:43.973000Z", "precinctsReporting": 449, "eevp": 89.13, "precinctsTotal": 504, "precinctsReportingPct": 89.09, "candidates": [{"candidateID": "64984", "voteCount": 165330, "votePct": 71.62}, {"candidateID": "8639", "voteCount": 58108, "votePct": 25.17}, {"candidateID": "71841", "voteCount": 3453, "votePct": 1.5}, {"candidateID": "895", "voteCount": 2036, "votePct": 0.88}, {"candidateID": "69459", "voteCount": 1014, "votePct": 0.44}, {"candidateID": "73180", "voteCount": 915, "votePct": 0.4}], "parameters": {"vote": {"expected": {"actual": 259005, "eevpCap": 99.0}, "total": 230856, "registered": 304906}, "precinctsReportingActual": 378, "precinctsReportingProportional": 449}}, "5050": {"statePostal": "CA", "reportingunitName": "Stanislaus", "reportingunitID": "5050", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06099", "electTotal": 54, "lastUpdated": "2024-11-15T19:00:47.206000Z", "precinctsReporting": 232, "eevp": 81.0, "precinctsTotal": 286, "precinctsReportingPct": 81.12, "candidates": [{"candidateID": "8639", "voteCount": 88232, "votePct": 54.18}, {"candidateID": "64984", "voteCount": 70636, "votePct": 43.38}, {"candidateID": "71841", "voteCount": 2186, "votePct": 1.34}, {"candidateID": "895", "voteCount": 762, "votePct": 0.47}, {"candidateID": "73180", "voteCount": 541, "votePct": 0.33}, {"candidateID": "69459", "voteCount": 481, "votePct": 0.3}], "parameters": {"vote": {"expected": {"actual": 201035, "eevpCap": 99.0}, "total": 162838, "registered": 290690}, "precinctsReportingActual": 286, "precinctsReportingProportional": 232}}, "5051": {"statePostal": "CA", "reportingunitName": "Sutter", "reportingunitID": "5051", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06101", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 23, "eevp": 94.19, "precinctsTotal": 24, "precinctsReportingPct": 95.83, "candidates": [{"candidateID": "8639", "voteCount": 24529, "votePct": 64.54}, {"candidateID": "64984", "voteCount": 12573, "votePct": 33.08}, {"candidateID": "71841", "voteCount": 498, "votePct": 1.31}, {"candidateID": "895", "voteCount": 187, "votePct": 0.49}, {"candidateID": "69459", "voteCount": 134, "votePct": 0.35}, {"candidateID": "73180", "voteCount": 85, "votePct": 0.22}], "parameters": {"vote": {"expected": {"actual": 40352, "eevpCap": 99.0}, "total": 38006, "registered": 53495}, "precinctsReportingActual": 24, "precinctsReportingProportional": 23}}, "5052": {"statePostal": "CA", "reportingunitName": "Tehama", "reportingunitID": "5052", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06103", "electTotal": 54, "lastUpdated": "2024-11-17T03:50:39.702000Z", "precinctsReporting": 31, "eevp": 77.0, "precinctsTotal": 40, "precinctsReportingPct": 77.5, "candidates": [{"candidateID": "8639", "voteCount": 14615, "votePct": 68.58}, {"candidateID": "64984", "voteCount": 6219, "votePct": 29.18}, {"candidateID": "71841", "voteCount": 311, "votePct": 1.46}, {"candidateID": "69459", "voteCount": 72, "votePct": 0.34}, {"candidateID": "895", "voteCount": 56, "votePct": 0.26}, {"candidateID": "73180", "voteCount": 38, "votePct": 0.18}], "parameters": {"vote": {"expected": {"actual": 27677, "eevpCap": 99.0}, "total": 21311, "registered": 36892}, "precinctsReportingActual": 40, "precinctsReportingProportional": 31}}, "5053": {"statePostal": "CA", "reportingunitName": "Trinity", "reportingunitID": "5053", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06105", "electTotal": 54, "lastUpdated": "2024-11-17T03:47:49.026000Z", "precinctsReporting": 9, "eevp": 92.99, "precinctsTotal": 10, "precinctsReportingPct": 90.0, "candidates": [{"candidateID": "8639", "voteCount": 2866, "votePct": 52.53}, {"candidateID": "64984", "voteCount": 2381, "votePct": 43.64}, {"candidateID": "71841", "voteCount": 110, "votePct": 2.02}, {"candidateID": "895", "voteCount": 60, "votePct": 1.1}, {"candidateID": "69459", "voteCount": 25, "votePct": 0.46}, {"candidateID": "73180", "voteCount": 14, "votePct": 0.26}], "parameters": {"vote": {"expected": {"actual": 5867, "eevpCap": 99.0}, "total": 5456, "registered": 7326}, "precinctsReportingActual": 10, "precinctsReportingProportional": 9}}, "5054": {"statePostal": "CA", "reportingunitName": "Tulare", "reportingunitID": "5054", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06107", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 323, "eevp": 94.0, "precinctsTotal": 344, "precinctsReportingPct": 93.9, "candidates": [{"candidateID": "8639", "voteCount": 77523, "votePct": 59.28}, {"candidateID": "64984", "voteCount": 50269, "votePct": 38.44}, {"candidateID": "71841", "voteCount": 1631, "votePct": 1.25}, {"candidateID": "895", "voteCount": 538, "votePct": 0.41}, {"candidateID": "69459", "voteCount": 425, "votePct": 0.33}, {"candidateID": "73180", "voteCount": 382, "votePct": 0.29}], "parameters": {"vote": {"expected": {"actual": 139115, "eevpCap": 99.0}, "total": 130768, "registered": 215580}, "precinctsReportingActual": 344, "precinctsReportingProportional": 323}}, "5055": {"statePostal": "CA", "reportingunitName": "Tuolumne", "reportingunitID": "5055", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06109", "electTotal": 54, "lastUpdated": "2024-11-15T03:27:18.716000Z", "precinctsReporting": 40, "eevp": 97.0, "precinctsTotal": 41, "precinctsReportingPct": 97.56, "candidates": [{"candidateID": "8639", "voteCount": 17039, "votePct": 59.63}, {"candidateID": "64984", "voteCount": 10849, "votePct": 37.97}, {"candidateID": "71841", "voteCount": 388, "votePct": 1.36}, {"candidateID": "69459", "voteCount": 128, "votePct": 0.45}, {"candidateID": "895", "voteCount": 115, "votePct": 0.4}, {"candidateID": "73180", "voteCount": 57, "votePct": 0.2}], "parameters": {"vote": {"expected": {"actual": 29460, "eevpCap": 99.0}, "total": 28576, "registered": 35031}, "precinctsReportingActual": 41, "precinctsReportingProportional": 40}}, "5056": {"statePostal": "CA", "reportingunitName": "Ventura", "reportingunitID": "5056", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06111", "electTotal": 54, "lastUpdated": "2024-11-15T03:22:28.569000Z", "precinctsReporting": 1334, "eevp": 94.0, "precinctsTotal": 1419, "precinctsReportingPct": 94.01, "candidates": [{"candidateID": "64984", "voteCount": 199782, "votePct": 55.94}, {"candidateID": "8639", "voteCount": 147493, "votePct": 41.3}, {"candidateID": "71841", "voteCount": 4421, "votePct": 1.24}, {"candidateID": "895", "voteCount": 2628, "votePct": 0.74}, {"candidateID": "69459", "voteCount": 1554, "votePct": 0.44}, {"candidateID": "73180", "voteCount": 1270, "votePct": 0.36}], "parameters": {"vote": {"expected": {"actual": 379945, "eevpCap": 99.0}, "total": 357148, "registered": 512532}, "precinctsReportingActual": 1136, "precinctsReportingProportional": 1334}}, "5057": {"statePostal": "CA", "reportingunitName": "Yolo", "reportingunitID": "5057", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06113", "electTotal": 54, "lastUpdated": "2024-11-16T00:44:49.289000Z", "precinctsReporting": 52, "eevp": 88.97, "precinctsTotal": 59, "precinctsReportingPct": 88.14, "candidates": [{"candidateID": "64984", "voteCount": 55088, "votePct": 65.72}, {"candidateID": "8639", "voteCount": 25732, "votePct": 30.7}, {"candidateID": "71841", "voteCount": 1133, "votePct": 1.35}, {"candidateID": "895", "voteCount": 1008, "votePct": 1.2}, {"candidateID": "73180", "voteCount": 443, "votePct": 0.53}, {"candidateID": "69459", "voteCount": 416, "votePct": 0.5}], "parameters": {"vote": {"expected": {"actual": 94212, "eevpCap": 99.0}, "total": 83820, "registered": 115633}, "precinctsReportingActual": 59, "precinctsReportingProportional": 52}}, "5058": {"statePostal": "CA", "reportingunitName": "Yuba", "reportingunitID": "5058", "reportingunitLevel": 2, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "subunit", "fipsCode": "06115", "electTotal": 54, "lastUpdated": "2024-11-15T03:21:28.448000Z", "precinctsReporting": 23, "eevp": 67.0, "precinctsTotal": 35, "precinctsReportingPct": 65.71, "candidates": [{"candidateID": "8639", "voteCount": 16895, "votePct": 61.32}, {"candidateID": "64984", "voteCount": 9879, "votePct": 35.86}, {"candidateID": "71841", "voteCount": 433, "votePct": 1.57}, {"candidateID": "895", "voteCount": 135, "votePct": 0.49}, {"candidateID": "69459", "voteCount": 122, "votePct": 0.44}, {"candidateID": "73180", "voteCount": 86, "votePct": 0.31}], "parameters": {"vote": {"expected": {"actual": 41119, "eevpCap": 99.0}, "total": 27550, "registered": 43136}, "precinctsReportingActual": 35, "precinctsReportingProportional": 23}}, "summary": {"statePostal": "CA", "stateName": "California", "reportingunitID": "5", "reportingunitLevel": 1, "pollClosingTime": "2024-11-06T04:00:00.000000Z", "level": "state", "electTotal": 54, "lastUpdated": "2024-11-17T17:45:36.701000Z", "precinctsReporting": 23115, "eevp": 93.16, "precinctsTotal": 24811, "precinctsReportingPct": 93.16, "candidates": [{"candidateID": "64984", "voteCount": 8879703, "winner": "X", "electWon": 54, "votePct": 58.79, "calledAt": "2024-11-06T04:00:06.346Z", "colorIndex": 0}, {"candidateID": "8639", "voteCount": 5747743, "votePct": 38.05, "colorIndex": 1}, {"candidateID": "71841", "voteCount": 186813, "votePct": 1.24}, {"candidateID": "895", "voteCount": 158553, "votePct": 1.05}, {"candidateID": "73180", "voteCount": 68318, "votePct": 0.45}, {"candidateID": "69459", "voteCount": 63630, "votePct": 0.42}], "parameters": {"vote": {"expected": {"actual": 16213030, "eevpCap": 99.0}, "total": 15104760, "registered": 22310352}, "precinctsReportingActual": 17296, "precinctsReportingProportional": 23115}, "raceID": "20241105CA0", "test": false, "resultsType": "live"}}
+{
+    "5001": {
+        "statePostal": "CA",
+        "reportingunitName": "Alameda",
+        "reportingunitID": "5001",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06001",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T05:18:32.798000Z",
+        "precinctsReporting": 541,
+        "eevp": 95.0,
+        "precinctsTotal": 570,
+        "precinctsReportingPct": 94.91,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 484751,
+                "votePct": 74.47
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 137659,
+                "votePct": 21.15
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 13435,
+                "votePct": 2.06
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 6622,
+                "votePct": 1.02
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 6024,
+                "votePct": 0.93
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 2459,
+                "votePct": 0.38
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 685211,
+                    "eevpCap": 99.0
+                },
+                "total": 650950,
+                "registered": 950534
+            },
+            "precinctsReportingActual": 570,
+            "precinctsReportingProportional": 541
+        }
+    },
+    "5002": {
+        "statePostal": "CA",
+        "reportingunitName": "Alpine",
+        "reportingunitID": "5002",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06003",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-10T20:10:12.703000Z",
+        "precinctsReporting": 5,
+        "eevp": 94.0,
+        "precinctsTotal": 5,
+        "precinctsReportingPct": 100.0,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 444,
+                "votePct": 64.44
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 231,
+                "votePct": 33.53
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 6,
+                "votePct": 0.87
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 4,
+                "votePct": 0.58
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 2,
+                "votePct": 0.29
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 2,
+                "votePct": 0.29
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 733,
+                    "eevpCap": 99.0
+                },
+                "total": 689,
+                "registered": 948
+            },
+            "precinctsReportingActual": 5,
+            "precinctsReportingProportional": 5
+        }
+    },
+    "5003": {
+        "statePostal": "CA",
+        "reportingunitName": "Amador",
+        "reportingunitID": "5003",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06005",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-14T00:49:33.962000Z",
+        "precinctsReporting": 46,
+        "eevp": 97.72,
+        "precinctsTotal": 47,
+        "precinctsReportingPct": 97.87,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 13981,
+                "votePct": 62.58
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 7766,
+                "votePct": 34.76
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 326,
+                "votePct": 1.46
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 129,
+                "votePct": 0.58
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 74,
+                "votePct": 0.33
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 66,
+                "votePct": 0.3
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 22864,
+                    "eevpCap": 99.0
+                },
+                "total": 22342,
+                "registered": 26217
+            },
+            "precinctsReportingActual": 47,
+            "precinctsReportingProportional": 46
+        }
+    },
+    "5004": {
+        "statePostal": "CA",
+        "reportingunitName": "Butte",
+        "reportingunitID": "5004",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06007",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 122,
+        "eevp": 92.32,
+        "precinctsTotal": 132,
+        "precinctsReportingPct": 92.42,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 45030,
+                "votePct": 49.82
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 42360,
+                "votePct": 46.87
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1529,
+                "votePct": 1.69
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 655,
+                "votePct": 0.72
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 495,
+                "votePct": 0.55
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 314,
+                "votePct": 0.35
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 97906,
+                    "eevpCap": 99.0
+                },
+                "total": 90383,
+                "registered": 121973
+            },
+            "precinctsReportingActual": 131,
+            "precinctsReportingProportional": 122
+        }
+    },
+    "5005": {
+        "statePostal": "CA",
+        "reportingunitName": "Calaveras",
+        "reportingunitID": "5005",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06009",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T05:17:32.244000Z",
+        "precinctsReporting": 24,
+        "eevp": 98.0,
+        "precinctsTotal": 25,
+        "precinctsReportingPct": 96.0,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 16606,
+                "votePct": 62.78
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 9172,
+                "votePct": 34.68
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 389,
+                "votePct": 1.47
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 121,
+                "votePct": 0.46
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 108,
+                "votePct": 0.41
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 55,
+                "votePct": 0.21
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 26991,
+                    "eevpCap": 99.0
+                },
+                "total": 26451,
+                "registered": 32626
+            },
+            "precinctsReportingActual": 25,
+            "precinctsReportingProportional": 24
+        }
+    },
+    "5006": {
+        "statePostal": "CA",
+        "reportingunitName": "Colusa",
+        "reportingunitID": "5006",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06011",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-11T22:39:11.048000Z",
+        "precinctsReporting": 17,
+        "eevp": 89.01,
+        "precinctsTotal": 19,
+        "precinctsReportingPct": 89.47,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 4267,
+                "votePct": 63.05
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 2331,
+                "votePct": 34.44
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 98,
+                "votePct": 1.45
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 32,
+                "votePct": 0.47
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 21,
+                "votePct": 0.31
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 19,
+                "votePct": 0.28
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 7604,
+                    "eevpCap": 99.0
+                },
+                "total": 6768,
+                "registered": 10515
+            },
+            "precinctsReportingActual": 19,
+            "precinctsReportingProportional": 17
+        }
+    },
+    "5007": {
+        "statePostal": "CA",
+        "reportingunitName": "Contra Costa",
+        "reportingunitID": "5007",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06013",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 886,
+        "eevp": 95.69,
+        "precinctsTotal": 926,
+        "precinctsReportingPct": 95.68,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 344649,
+                "votePct": 67.53
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 148811,
+                "votePct": 29.16
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 6401,
+                "votePct": 1.25
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 6335,
+                "votePct": 1.24
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 2303,
+                "votePct": 0.45
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 1900,
+                "votePct": 0.37
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 533402,
+                    "eevpCap": 99.0
+                },
+                "total": 510399,
+                "registered": 714337
+            },
+            "precinctsReportingActual": 926,
+            "precinctsReportingProportional": 886
+        }
+    },
+    "5008": {
+        "statePostal": "CA",
+        "reportingunitName": "Del Norte",
+        "reportingunitID": "5008",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06015",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T03:23:58.508000Z",
+        "precinctsReporting": 18,
+        "eevp": 96.0,
+        "precinctsTotal": 19,
+        "precinctsReportingPct": 94.74,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 5823,
+                "votePct": 56.45
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 4195,
+                "votePct": 40.67
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 156,
+                "votePct": 1.51
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 63,
+                "votePct": 0.61
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 41,
+                "votePct": 0.4
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 37,
+                "votePct": 0.36
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 10745,
+                    "eevpCap": 99.0
+                },
+                "total": 10315,
+                "registered": 14783
+            },
+            "precinctsReportingActual": 19,
+            "precinctsReportingProportional": 18
+        }
+    },
+    "5009": {
+        "statePostal": "CA",
+        "reportingunitName": "El Dorado",
+        "reportingunitID": "5009",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06017",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T05:15:22.229000Z",
+        "precinctsReporting": 160,
+        "eevp": 97.0,
+        "precinctsTotal": 165,
+        "precinctsReportingPct": 96.97,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 60344,
+                "votePct": 54.57
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 47191,
+                "votePct": 42.68
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1461,
+                "votePct": 1.32
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 726,
+                "votePct": 0.66
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 688,
+                "votePct": 0.62
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 164,
+                "votePct": 0.15
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 113994,
+                    "eevpCap": 99.0
+                },
+                "total": 110574,
+                "registered": 133171
+            },
+            "precinctsReportingActual": 165,
+            "precinctsReportingProportional": 160
+        }
+    },
+    "5010": {
+        "statePostal": "CA",
+        "reportingunitName": "Fresno",
+        "reportingunitID": "5010",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06019",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T01:54:09.671000Z",
+        "precinctsReporting": 440,
+        "eevp": 92.0,
+        "precinctsTotal": 478,
+        "precinctsReportingPct": 92.05,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 154580,
+                "votePct": 51.12
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 140063,
+                "votePct": 46.32
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 3646,
+                "votePct": 1.21
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1779,
+                "votePct": 0.59
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 1257,
+                "votePct": 0.42
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 1034,
+                "votePct": 0.34
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 328651,
+                    "eevpCap": 99.0
+                },
+                "total": 302359,
+                "registered": 511713
+            },
+            "precinctsReportingActual": 478,
+            "precinctsReportingProportional": 440
+        }
+    },
+    "5011": {
+        "statePostal": "CA",
+        "reportingunitName": "Glenn",
+        "reportingunitID": "5011",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06021",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-10T20:29:23.557000Z",
+        "precinctsReporting": 91,
+        "eevp": 88.0,
+        "precinctsTotal": 103,
+        "precinctsReportingPct": 88.35,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 6662,
+                "votePct": 66.47
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 3099,
+                "votePct": 30.92
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 156,
+                "votePct": 1.56
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 45,
+                "votePct": 0.45
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 30,
+                "votePct": 0.3
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 30,
+                "votePct": 0.3
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 11389,
+                    "eevpCap": 99.0
+                },
+                "total": 10022,
+                "registered": 13746
+            },
+            "precinctsReportingActual": 103,
+            "precinctsReportingProportional": 91
+        }
+    },
+    "5012": {
+        "statePostal": "CA",
+        "reportingunitName": "Humboldt",
+        "reportingunitID": "5012",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06023",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T05:13:32.121000Z",
+        "precinctsReporting": 91,
+        "eevp": 85.0,
+        "precinctsTotal": 107,
+        "precinctsReportingPct": 85.05,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 33442,
+                "votePct": 61.99
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 18151,
+                "votePct": 33.64
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 903,
+                "votePct": 1.67
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 815,
+                "votePct": 1.51
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 357,
+                "votePct": 0.66
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 281,
+                "votePct": 0.52
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 63469,
+                    "eevpCap": 99.0
+                },
+                "total": 53949,
+                "registered": 82097
+            },
+            "precinctsReportingActual": 107,
+            "precinctsReportingProportional": 91
+        }
+    },
+    "5013": {
+        "statePostal": "CA",
+        "reportingunitName": "Imperial",
+        "reportingunitID": "5013",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06025",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T22:04:38.018000Z",
+        "precinctsReporting": 255,
+        "eevp": 84.0,
+        "precinctsTotal": 304,
+        "precinctsReportingPct": 83.88,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 22776,
+                "votePct": 49.89
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 21657,
+                "votePct": 47.44
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 686,
+                "votePct": 1.5
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 244,
+                "votePct": 0.53
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 208,
+                "votePct": 0.46
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 77,
+                "votePct": 0.17
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 54343,
+                    "eevpCap": 99.0
+                },
+                "total": 45648,
+                "registered": 88694
+            },
+            "precinctsReportingActual": 304,
+            "precinctsReportingProportional": 255
+        }
+    },
+    "5014": {
+        "statePostal": "CA",
+        "reportingunitName": "Inyo",
+        "reportingunitID": "5014",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06027",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-13T21:38:42.772000Z",
+        "precinctsReporting": 15,
+        "eevp": 86.33,
+        "precinctsTotal": 17,
+        "precinctsReportingPct": 88.24,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 4353,
+                "votePct": 49.9
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 4098,
+                "votePct": 46.98
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 128,
+                "votePct": 1.47
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 71,
+                "votePct": 0.81
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 37,
+                "votePct": 0.42
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 36,
+                "votePct": 0.41
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 10104,
+                    "eevpCap": 99.0
+                },
+                "total": 8723,
+                "registered": 10770
+            },
+            "precinctsReportingActual": 17,
+            "precinctsReportingProportional": 15
+        }
+    },
+    "5015": {
+        "statePostal": "CA",
+        "reportingunitName": "Kern",
+        "reportingunitID": "5015",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06029",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 782,
+        "eevp": 95.29,
+        "precinctsTotal": 821,
+        "precinctsReportingPct": 95.25,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 162755,
+                "votePct": 59.15
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 105404,
+                "votePct": 38.31
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 3665,
+                "votePct": 1.33
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1317,
+                "votePct": 0.48
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 1024,
+                "votePct": 0.37
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 977,
+                "votePct": 0.36
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 288748,
+                    "eevpCap": 99.0
+                },
+                "total": 275142,
+                "registered": 451797
+            },
+            "precinctsReportingActual": 821,
+            "precinctsReportingProportional": 782
+        }
+    },
+    "5016": {
+        "statePostal": "CA",
+        "reportingunitName": "Kings",
+        "reportingunitID": "5016",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06031",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T22:24:43.973000Z",
+        "precinctsReporting": 121,
+        "eevp": 94.67,
+        "precinctsTotal": 128,
+        "precinctsReportingPct": 94.53,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 24485,
+                "votePct": 60.37
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 15179,
+                "votePct": 37.43
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 525,
+                "votePct": 1.29
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 130,
+                "votePct": 0.32
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 123,
+                "votePct": 0.3
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 115,
+                "votePct": 0.28
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 42842,
+                    "eevpCap": 99.0
+                },
+                "total": 40557,
+                "registered": 63512
+            },
+            "precinctsReportingActual": 128,
+            "precinctsReportingProportional": 121
+        }
+    },
+    "5017": {
+        "statePostal": "CA",
+        "reportingunitName": "Lake",
+        "reportingunitID": "5017",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06033",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T01:04:46.002000Z",
+        "precinctsReporting": 15,
+        "eevp": 30.37,
+        "precinctsTotal": 48,
+        "precinctsReportingPct": 31.25,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 4239,
+                "votePct": 49.68
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 4077,
+                "votePct": 47.78
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 120,
+                "votePct": 1.41
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 48,
+                "votePct": 0.56
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 25,
+                "votePct": 0.29
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 23,
+                "votePct": 0.27
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 28093,
+                    "eevpCap": 99.0
+                },
+                "total": 8532,
+                "registered": 37368
+            },
+            "precinctsReportingActual": 48,
+            "precinctsReportingProportional": 15
+        }
+    },
+    "5018": {
+        "statePostal": "CA",
+        "reportingunitName": "Lassen",
+        "reportingunitID": "5018",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06035",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T22:24:43.973000Z",
+        "precinctsReporting": 52,
+        "eevp": 92.39,
+        "precinctsTotal": 56,
+        "precinctsReportingPct": 92.86,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 8343,
+                "votePct": 75.69
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 2412,
+                "votePct": 21.88
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 165,
+                "votePct": 1.5
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 53,
+                "votePct": 0.48
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 27,
+                "votePct": 0.24
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 22,
+                "votePct": 0.2
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 11930,
+                    "eevpCap": 99.0
+                },
+                "total": 11022,
+                "registered": 14701
+            },
+            "precinctsReportingActual": 56,
+            "precinctsReportingProportional": 52
+        }
+    },
+    "5019": {
+        "statePostal": "CA",
+        "reportingunitName": "Los Angeles",
+        "reportingunitID": "5019",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06037",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T01:24:41.531000Z",
+        "precinctsReporting": 2964,
+        "eevp": 96.0,
+        "precinctsTotal": 3087,
+        "precinctsReportingPct": 96.02,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 2383646,
+                "votePct": 64.96
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 1166210,
+                "votePct": 31.78
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 45230,
+                "votePct": 1.23
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 40381,
+                "votePct": 1.1
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 20986,
+                "votePct": 0.57
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 12693,
+                "votePct": 0.35
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 3822027,
+                    "eevpCap": 99.0
+                },
+                "total": 3669146,
+                "registered": 5702012
+            },
+            "precinctsReportingActual": 0,
+            "precinctsReportingProportional": 2964
+        }
+    },
+    "5020": {
+        "statePostal": "CA",
+        "reportingunitName": "Madera",
+        "reportingunitID": "5020",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06039",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T20:30:45.000000Z",
+        "precinctsReporting": 74,
+        "eevp": 94.57,
+        "precinctsTotal": 78,
+        "precinctsReportingPct": 94.87,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 31829,
+                "votePct": 59.13
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 20721,
+                "votePct": 38.49
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 661,
+                "votePct": 1.23
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 265,
+                "votePct": 0.49
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 181,
+                "votePct": 0.34
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 174,
+                "votePct": 0.32
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 56924,
+                    "eevpCap": 99.0
+                },
+                "total": 53831,
+                "registered": 76676
+            },
+            "precinctsReportingActual": 0,
+            "precinctsReportingProportional": 74
+        }
+    },
+    "5021": {
+        "statePostal": "CA",
+        "reportingunitName": "Marin",
+        "reportingunitID": "5021",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06041",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T22:24:43.973000Z",
+        "precinctsReporting": 139,
+        "eevp": 95.0,
+        "precinctsTotal": 146,
+        "precinctsReportingPct": 95.21,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 111478,
+                "votePct": 80.6
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 23104,
+                "votePct": 16.7
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1512,
+                "votePct": 1.09
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1322,
+                "votePct": 0.96
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 622,
+                "votePct": 0.45
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 278,
+                "votePct": 0.2
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 145596,
+                    "eevpCap": 99.0
+                },
+                "total": 138316,
+                "registered": 170653
+            },
+            "precinctsReportingActual": 146,
+            "precinctsReportingProportional": 139
+        }
+    },
+    "5022": {
+        "statePostal": "CA",
+        "reportingunitName": "Mariposa",
+        "reportingunitID": "5022",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06043",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T19:26:47.812000Z",
+        "precinctsReporting": 26,
+        "eevp": 97.68,
+        "precinctsTotal": 27,
+        "precinctsReportingPct": 96.3,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 5619,
+                "votePct": 59.15
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 3618,
+                "votePct": 38.09
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 137,
+                "votePct": 1.44
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 60,
+                "votePct": 0.63
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 42,
+                "votePct": 0.44
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 23,
+                "votePct": 0.24
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 9725,
+                    "eevpCap": 99.0
+                },
+                "total": 9499,
+                "registered": 11641
+            },
+            "precinctsReportingActual": 27,
+            "precinctsReportingProportional": 26
+        }
+    },
+    "5023": {
+        "statePostal": "CA",
+        "reportingunitName": "Mendocino",
+        "reportingunitID": "5023",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06045",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-14T20:38:48.273000Z",
+        "precinctsReporting": 143,
+        "eevp": 58.44,
+        "precinctsTotal": 245,
+        "precinctsReportingPct": 58.37,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 14937,
+                "votePct": 62.98
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 7921,
+                "votePct": 33.4
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 397,
+                "votePct": 1.67
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 241,
+                "votePct": 1.02
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 125,
+                "votePct": 0.53
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 97,
+                "votePct": 0.41
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 40584,
+                    "eevpCap": 99.0
+                },
+                "total": 23718,
+                "registered": 53748
+            },
+            "precinctsReportingActual": 245,
+            "precinctsReportingProportional": 143
+        }
+    },
+    "5024": {
+        "statePostal": "CA",
+        "reportingunitName": "Merced",
+        "reportingunitID": "5024",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06047",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T00:24:34.336000Z",
+        "precinctsReporting": 581,
+        "eevp": 79.65,
+        "precinctsTotal": 729,
+        "precinctsReportingPct": 79.7,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 36096,
+                "votePct": 51.89
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 31798,
+                "votePct": 45.71
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 893,
+                "votePct": 1.28
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 320,
+                "votePct": 0.46
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 265,
+                "votePct": 0.38
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 193,
+                "votePct": 0.28
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 87340,
+                    "eevpCap": 99.0
+                },
+                "total": 69565,
+                "registered": 130472
+            },
+            "precinctsReportingActual": 729,
+            "precinctsReportingProportional": 581
+        }
+    },
+    "5025": {
+        "statePostal": "CA",
+        "reportingunitName": "Modoc",
+        "reportingunitID": "5025",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06049",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:58:47.545000Z",
+        "precinctsReporting": 20,
+        "eevp": 92.99,
+        "precinctsTotal": 21,
+        "precinctsReportingPct": 95.24,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 2747,
+                "votePct": 71.91
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 955,
+                "votePct": 25.0
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 83,
+                "votePct": 2.17
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 17,
+                "votePct": 0.45
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 13,
+                "votePct": 0.34
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 5,
+                "votePct": 0.13
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 4108,
+                    "eevpCap": 99.0
+                },
+                "total": 3820,
+                "registered": 5099
+            },
+            "precinctsReportingActual": 21,
+            "precinctsReportingProportional": 20
+        }
+    },
+    "5026": {
+        "statePostal": "CA",
+        "reportingunitName": "Mono",
+        "reportingunitID": "5026",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06051",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T02:27:32.969000Z",
+        "precinctsReporting": 12,
+        "eevp": 96.9,
+        "precinctsTotal": 12,
+        "precinctsReportingPct": 100.0,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 3484,
+                "votePct": 58.02
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 2273,
+                "votePct": 37.85
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 112,
+                "votePct": 1.87
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 60,
+                "votePct": 1.0
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 52,
+                "votePct": 0.87
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 24,
+                "votePct": 0.4
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 6197,
+                    "eevpCap": 99.0
+                },
+                "total": 6005,
+                "registered": 7632
+            },
+            "precinctsReportingActual": 12,
+            "precinctsReportingProportional": 12
+        }
+    },
+    "5027": {
+        "statePostal": "CA",
+        "reportingunitName": "Monterey",
+        "reportingunitID": "5027",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06053",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 202,
+        "eevp": 96.93,
+        "precinctsTotal": 208,
+        "precinctsReportingPct": 97.12,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 89610,
+                "votePct": 63.8
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 46632,
+                "votePct": 33.2
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1852,
+                "votePct": 1.32
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1158,
+                "votePct": 0.82
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 662,
+                "votePct": 0.47
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 551,
+                "votePct": 0.39
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 144914,
+                    "eevpCap": 99.0
+                },
+                "total": 140465,
+                "registered": 213603
+            },
+            "precinctsReportingActual": 208,
+            "precinctsReportingProportional": 202
+        }
+    },
+    "5028": {
+        "statePostal": "CA",
+        "reportingunitName": "Napa",
+        "reportingunitID": "5028",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06055",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 179,
+        "eevp": 87.68,
+        "precinctsTotal": 204,
+        "precinctsReportingPct": 87.75,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 37904,
+                "votePct": 65.89
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 17950,
+                "votePct": 31.2
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 838,
+                "votePct": 1.46
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 389,
+                "votePct": 0.68
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 266,
+                "votePct": 0.46
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 176,
+                "votePct": 0.31
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 65609,
+                    "eevpCap": 99.0
+                },
+                "total": 57523,
+                "registered": 84482
+            },
+            "precinctsReportingActual": 204,
+            "precinctsReportingProportional": 179
+        }
+    },
+    "5029": {
+        "statePostal": "CA",
+        "reportingunitName": "Nevada",
+        "reportingunitID": "5029",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06057",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T04:14:40.541000Z",
+        "precinctsReporting": 81,
+        "eevp": 69.0,
+        "precinctsTotal": 118,
+        "precinctsReportingPct": 68.64,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 24396,
+                "votePct": 53.61
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 19639,
+                "votePct": 43.16
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 697,
+                "votePct": 1.53
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 411,
+                "votePct": 0.9
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 241,
+                "votePct": 0.53
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 120,
+                "votePct": 0.26
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 65948,
+                    "eevpCap": 99.0
+                },
+                "total": 45504,
+                "registered": 74577
+            },
+            "precinctsReportingActual": 118,
+            "precinctsReportingProportional": 81
+        }
+    },
+    "5030": {
+        "statePostal": "CA",
+        "reportingunitName": "Orange",
+        "reportingunitID": "5030",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06059",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T01:26:46.724000Z",
+        "precinctsReporting": 2143,
+        "eevp": 93.4,
+        "precinctsTotal": 2294,
+        "precinctsReportingPct": 93.42,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 669091,
+                "votePct": 49.76
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 632785,
+                "votePct": 47.06
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 15862,
+                "votePct": 1.18
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 15762,
+                "votePct": 1.17
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 6583,
+                "votePct": 0.49
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 4525,
+                "votePct": 0.34
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 1439610,
+                    "eevpCap": 99.0
+                },
+                "total": 1344608,
+                "registered": 1831530
+            },
+            "precinctsReportingActual": 2294,
+            "precinctsReportingProportional": 2143
+        }
+    },
+    "5031": {
+        "statePostal": "CA",
+        "reportingunitName": "Placer",
+        "reportingunitID": "5031",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06061",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T04:11:09.882000Z",
+        "precinctsReporting": 308,
+        "eevp": 93.0,
+        "precinctsTotal": 331,
+        "precinctsReportingPct": 93.05,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 117922,
+                "votePct": 52.78
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 98983,
+                "votePct": 44.31
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 3092,
+                "votePct": 1.38
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1526,
+                "votePct": 0.68
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 1471,
+                "votePct": 0.66
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 414,
+                "votePct": 0.19
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 240224,
+                    "eevpCap": 99.0
+                },
+                "total": 223408,
+                "registered": 286828
+            },
+            "precinctsReportingActual": 331,
+            "precinctsReportingProportional": 308
+        }
+    },
+    "5032": {
+        "statePostal": "CA",
+        "reportingunitName": "Plumas",
+        "reportingunitID": "5032",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06063",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T04:08:19.787000Z",
+        "precinctsReporting": 28,
+        "eevp": 97.0,
+        "precinctsTotal": 29,
+        "precinctsReportingPct": 96.55,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 5718,
+                "votePct": 56.86
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 4017,
+                "votePct": 39.95
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 181,
+                "votePct": 1.8
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 57,
+                "votePct": 0.57
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 54,
+                "votePct": 0.54
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 29,
+                "votePct": 0.29
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 10367,
+                    "eevpCap": 99.0
+                },
+                "total": 10056,
+                "registered": 13589
+            },
+            "precinctsReportingActual": 29,
+            "precinctsReportingProportional": 28
+        }
+    },
+    "5033": {
+        "statePostal": "CA",
+        "reportingunitName": "Riverside",
+        "reportingunitID": "5033",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06065",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T17:45:36.701000Z",
+        "precinctsReporting": 1266,
+        "eevp": 94.11,
+        "precinctsTotal": 1345,
+        "precinctsReportingPct": 94.13,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 440563,
+                "votePct": 49.08
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 433141,
+                "votePct": 48.26
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 10741,
+                "votePct": 1.2
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 6945,
+                "votePct": 0.77
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 3144,
+                "votePct": 0.35
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 3039,
+                "votePct": 0.34
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 953774,
+                    "eevpCap": 99.0
+                },
+                "total": 897573,
+                "registered": 1348896
+            },
+            "precinctsReportingActual": 1345,
+            "precinctsReportingProportional": 1266
+        }
+    },
+    "5034": {
+        "statePostal": "CA",
+        "reportingunitName": "Sacramento",
+        "reportingunitID": "5034",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06067",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:51.677000Z",
+        "precinctsReporting": 611,
+        "eevp": 89.0,
+        "precinctsTotal": 686,
+        "precinctsReportingPct": 89.07,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 349970,
+                "votePct": 58.24
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 230431,
+                "votePct": 38.34
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 8216,
+                "votePct": 1.37
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 6747,
+                "votePct": 1.12
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 2974,
+                "votePct": 0.49
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 2605,
+                "votePct": 0.43
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 675217,
+                    "eevpCap": 99.0
+                },
+                "total": 600943,
+                "registered": 877211
+            },
+            "precinctsReportingActual": 0,
+            "precinctsReportingProportional": 611
+        }
+    },
+    "5035": {
+        "statePostal": "CA",
+        "reportingunitName": "San Benito",
+        "reportingunitID": "5035",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06069",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T22:03:37.259000Z",
+        "precinctsReporting": 39,
+        "eevp": 96.0,
+        "precinctsTotal": 41,
+        "precinctsReportingPct": 95.12,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 15009,
+                "votePct": 54.95
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 11557,
+                "votePct": 42.31
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 414,
+                "votePct": 1.52
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 156,
+                "votePct": 0.57
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 91,
+                "votePct": 0.33
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 88,
+                "votePct": 0.32
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 28453,
+                    "eevpCap": 99.0
+                },
+                "total": 27315,
+                "registered": 37153
+            },
+            "precinctsReportingActual": 41,
+            "precinctsReportingProportional": 39
+        }
+    },
+    "5036": {
+        "statePostal": "CA",
+        "reportingunitName": "San Bernardino",
+        "reportingunitID": "5036",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06071",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T04:01:29.542000Z",
+        "precinctsReporting": 2556,
+        "eevp": 89.0,
+        "precinctsTotal": 2872,
+        "precinctsReportingPct": 89.0,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 342031,
+                "votePct": 49.52
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 329741,
+                "votePct": 47.74
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 9163,
+                "votePct": 1.33
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 5035,
+                "votePct": 0.73
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 2579,
+                "votePct": 0.37
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 2152,
+                "votePct": 0.31
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 776069,
+                    "eevpCap": 99.0
+                },
+                "total": 690701,
+                "registered": 1191003
+            },
+            "precinctsReportingActual": 2872,
+            "precinctsReportingProportional": 2556
+        }
+    },
+    "5037": {
+        "statePostal": "CA",
+        "reportingunitName": "San Diego",
+        "reportingunitID": "5037",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06073",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 2536,
+        "eevp": 95.0,
+        "precinctsTotal": 2669,
+        "precinctsReportingPct": 95.02,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 813796,
+                "votePct": 57.04
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 571339,
+                "votePct": 40.04
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 15910,
+                "votePct": 1.12
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 13592,
+                "votePct": 0.95
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 7330,
+                "votePct": 0.51
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 4822,
+                "votePct": 0.34
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 1501883,
+                    "eevpCap": 99.0
+                },
+                "total": 1426789,
+                "registered": 1938487
+            },
+            "precinctsReportingActual": 0,
+            "precinctsReportingProportional": 2536
+        }
+    },
+    "5038": {
+        "statePostal": "CA",
+        "reportingunitName": "San Francisco",
+        "reportingunitID": "5038",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06075",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T01:39:55.176000Z",
+        "precinctsReporting": 499,
+        "eevp": 97.0,
+        "precinctsTotal": 514,
+        "precinctsReportingPct": 97.08,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 321975,
+                "votePct": 80.38
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 62084,
+                "votePct": 15.5
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 6852,
+                "votePct": 1.71
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 4206,
+                "votePct": 1.05
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 3609,
+                "votePct": 0.9
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 1856,
+                "votePct": 0.46
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 412971,
+                    "eevpCap": 99.0
+                },
+                "total": 400582,
+                "registered": 510401
+            },
+            "precinctsReportingActual": 514,
+            "precinctsReportingProportional": 499
+        }
+    },
+    "5039": {
+        "statePostal": "CA",
+        "reportingunitName": "San Joaquin",
+        "reportingunitID": "5039",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06077",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 255,
+        "eevp": 93.91,
+        "precinctsTotal": 272,
+        "precinctsReportingPct": 93.75,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 121104,
+                "votePct": 48.72
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 119912,
+                "votePct": 48.24
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 3245,
+                "votePct": 1.31
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 2396,
+                "votePct": 0.96
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 1192,
+                "votePct": 0.48
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 724,
+                "votePct": 0.29
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 264701,
+                    "eevpCap": 99.0
+                },
+                "total": 248573,
+                "registered": 378801
+            },
+            "precinctsReportingActual": 0,
+            "precinctsReportingProportional": 255
+        }
+    },
+    "5040": {
+        "statePostal": "CA",
+        "reportingunitName": "San Luis Obispo",
+        "reportingunitID": "5040",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06079",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T03:29:08.862000Z",
+        "precinctsReporting": 101,
+        "eevp": 64.0,
+        "precinctsTotal": 158,
+        "precinctsReportingPct": 63.92,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 57047,
+                "votePct": 56.05
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 42267,
+                "votePct": 41.53
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1184,
+                "votePct": 1.16
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 577,
+                "votePct": 0.57
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 511,
+                "votePct": 0.5
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 189,
+                "votePct": 0.19
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 159023,
+                    "eevpCap": 99.0
+                },
+                "total": 101775,
+                "registered": 179396
+            },
+            "precinctsReportingActual": 158,
+            "precinctsReportingProportional": 101
+        }
+    },
+    "5041": {
+        "statePostal": "CA",
+        "reportingunitName": "San Mateo",
+        "reportingunitID": "5041",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06081",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 321,
+        "eevp": 95.05,
+        "precinctsTotal": 338,
+        "precinctsReportingPct": 94.97,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 238733,
+                "votePct": 73.67
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 74650,
+                "votePct": 23.04
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 3999,
+                "votePct": 1.23
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 3676,
+                "votePct": 1.13
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 1654,
+                "votePct": 0.51
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 1331,
+                "votePct": 0.41
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 340911,
+                    "eevpCap": 99.0
+                },
+                "total": 324043,
+                "registered": 436700
+            },
+            "precinctsReportingActual": 338,
+            "precinctsReportingProportional": 321
+        }
+    },
+    "5042": {
+        "statePostal": "CA",
+        "reportingunitName": "Santa Barbara",
+        "reportingunitID": "5042",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06083",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T20:33:50.133000Z",
+        "precinctsReporting": 268,
+        "eevp": 93.0,
+        "precinctsTotal": 288,
+        "precinctsReportingPct": 93.06,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 109546,
+                "votePct": 61.7
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 62576,
+                "votePct": 35.24
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 2477,
+                "votePct": 1.4
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1318,
+                "votePct": 0.74
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 884,
+                "votePct": 0.5
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 754,
+                "votePct": 0.42
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 190919,
+                    "eevpCap": 99.0
+                },
+                "total": 177555,
+                "registered": 238947
+            },
+            "precinctsReportingActual": 288,
+            "precinctsReportingProportional": 268
+        }
+    },
+    "5043": {
+        "statePostal": "CA",
+        "reportingunitName": "Santa Clara",
+        "reportingunitID": "5043",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06085",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T01:07:29.863000Z",
+        "precinctsReporting": 751,
+        "eevp": 95.78,
+        "precinctsTotal": 784,
+        "precinctsReportingPct": 95.79,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 499429,
+                "votePct": 68.21
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 204699,
+                "votePct": 27.96
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 11803,
+                "votePct": 1.61
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 9051,
+                "votePct": 1.24
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 4041,
+                "votePct": 0.55
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 3155,
+                "votePct": 0.43
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 764472,
+                    "eevpCap": 99.0
+                },
+                "total": 732178,
+                "registered": 1037777
+            },
+            "precinctsReportingActual": 686,
+            "precinctsReportingProportional": 751
+        }
+    },
+    "5044": {
+        "statePostal": "CA",
+        "reportingunitName": "Santa Cruz",
+        "reportingunitID": "5044",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06087",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T03:56:29.371000Z",
+        "precinctsReporting": 184,
+        "eevp": 94.0,
+        "precinctsTotal": 196,
+        "precinctsReportingPct": 93.88,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 96997,
+                "votePct": 75.3
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 26924,
+                "votePct": 20.9
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1981,
+                "votePct": 1.54
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1652,
+                "votePct": 1.28
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 671,
+                "votePct": 0.52
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 587,
+                "votePct": 0.46
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 137034,
+                    "eevpCap": 99.0
+                },
+                "total": 128812,
+                "registered": 168185
+            },
+            "precinctsReportingActual": 0,
+            "precinctsReportingProportional": 184
+        }
+    },
+    "5045": {
+        "statePostal": "CA",
+        "reportingunitName": "Shasta",
+        "reportingunitID": "5045",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06089",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T20:54:46.689000Z",
+        "precinctsReporting": 52,
+        "eevp": 76.72,
+        "precinctsTotal": 68,
+        "precinctsReportingPct": 76.47,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 48099,
+                "votePct": 66.68
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 22255,
+                "votePct": 30.85
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 998,
+                "votePct": 1.38
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 321,
+                "votePct": 0.45
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 275,
+                "votePct": 0.38
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 182,
+                "votePct": 0.25
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 94020,
+                    "eevpCap": 99.0
+                },
+                "total": 72130,
+                "registered": 113931
+            },
+            "precinctsReportingActual": 68,
+            "precinctsReportingProportional": 52
+        }
+    },
+    "5046": {
+        "statePostal": "CA",
+        "reportingunitName": "Sierra",
+        "reportingunitID": "5046",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06091",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T03:23:28.471000Z",
+        "precinctsReporting": 19,
+        "eevp": 98.98,
+        "precinctsTotal": 19,
+        "precinctsReportingPct": 100.0,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 1065,
+                "votePct": 60.79
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 641,
+                "votePct": 36.59
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 27,
+                "votePct": 1.54
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 13,
+                "votePct": 0.74
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 4,
+                "votePct": 0.23
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 2,
+                "votePct": 0.11
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 1770,
+                    "eevpCap": 99.0
+                },
+                "total": 1752,
+                "registered": 2193
+            },
+            "precinctsReportingActual": 0,
+            "precinctsReportingProportional": 19
+        }
+    },
+    "5047": {
+        "statePostal": "CA",
+        "reportingunitName": "Siskiyou",
+        "reportingunitID": "5047",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06093",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T03:53:29.291000Z",
+        "precinctsReporting": 60,
+        "eevp": 97.0,
+        "precinctsTotal": 62,
+        "precinctsReportingPct": 96.77,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 12373,
+                "votePct": 57.9
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 8301,
+                "votePct": 38.84
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 394,
+                "votePct": 1.84
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 138,
+                "votePct": 0.65
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 99,
+                "votePct": 0.46
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 65,
+                "votePct": 0.3
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 22031,
+                    "eevpCap": 99.0
+                },
+                "total": 21370,
+                "registered": 27963
+            },
+            "precinctsReportingActual": 62,
+            "precinctsReportingProportional": 60
+        }
+    },
+    "5048": {
+        "statePostal": "CA",
+        "reportingunitName": "Solano",
+        "reportingunitID": "5048",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06095",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T01:24:41.531000Z",
+        "precinctsReporting": 228,
+        "eevp": 96.0,
+        "precinctsTotal": 238,
+        "precinctsReportingPct": 95.8,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 111995,
+                "votePct": 60.2
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 68689,
+                "votePct": 36.92
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 2381,
+                "votePct": 1.28
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1444,
+                "votePct": 0.78
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 786,
+                "votePct": 0.42
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 756,
+                "votePct": 0.41
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 193803,
+                    "eevpCap": 99.0
+                },
+                "total": 186051,
+                "registered": 266043
+            },
+            "precinctsReportingActual": 238,
+            "precinctsReportingProportional": 228
+        }
+    },
+    "5049": {
+        "statePostal": "CA",
+        "reportingunitName": "Sonoma",
+        "reportingunitID": "5049",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06097",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T22:24:43.973000Z",
+        "precinctsReporting": 449,
+        "eevp": 89.13,
+        "precinctsTotal": 504,
+        "precinctsReportingPct": 89.09,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 165330,
+                "votePct": 71.62
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 58108,
+                "votePct": 25.17
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 3453,
+                "votePct": 1.5
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 2036,
+                "votePct": 0.88
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 1014,
+                "votePct": 0.44
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 915,
+                "votePct": 0.4
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 259005,
+                    "eevpCap": 99.0
+                },
+                "total": 230856,
+                "registered": 304906
+            },
+            "precinctsReportingActual": 378,
+            "precinctsReportingProportional": 449
+        }
+    },
+    "5050": {
+        "statePostal": "CA",
+        "reportingunitName": "Stanislaus",
+        "reportingunitID": "5050",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06099",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T19:00:47.206000Z",
+        "precinctsReporting": 232,
+        "eevp": 81.0,
+        "precinctsTotal": 286,
+        "precinctsReportingPct": 81.12,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 88232,
+                "votePct": 54.18
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 70636,
+                "votePct": 43.38
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 2186,
+                "votePct": 1.34
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 762,
+                "votePct": 0.47
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 541,
+                "votePct": 0.33
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 481,
+                "votePct": 0.3
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 201035,
+                    "eevpCap": 99.0
+                },
+                "total": 162838,
+                "registered": 290690
+            },
+            "precinctsReportingActual": 286,
+            "precinctsReportingProportional": 232
+        }
+    },
+    "5051": {
+        "statePostal": "CA",
+        "reportingunitName": "Sutter",
+        "reportingunitID": "5051",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06101",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 23,
+        "eevp": 94.19,
+        "precinctsTotal": 24,
+        "precinctsReportingPct": 95.83,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 24529,
+                "votePct": 64.54
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 12573,
+                "votePct": 33.08
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 498,
+                "votePct": 1.31
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 187,
+                "votePct": 0.49
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 134,
+                "votePct": 0.35
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 85,
+                "votePct": 0.22
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 40352,
+                    "eevpCap": 99.0
+                },
+                "total": 38006,
+                "registered": 53495
+            },
+            "precinctsReportingActual": 24,
+            "precinctsReportingProportional": 23
+        }
+    },
+    "5052": {
+        "statePostal": "CA",
+        "reportingunitName": "Tehama",
+        "reportingunitID": "5052",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06103",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T03:50:39.702000Z",
+        "precinctsReporting": 31,
+        "eevp": 77.0,
+        "precinctsTotal": 40,
+        "precinctsReportingPct": 77.5,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 14615,
+                "votePct": 68.58
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 6219,
+                "votePct": 29.18
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 311,
+                "votePct": 1.46
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 72,
+                "votePct": 0.34
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 56,
+                "votePct": 0.26
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 38,
+                "votePct": 0.18
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 27677,
+                    "eevpCap": 99.0
+                },
+                "total": 21311,
+                "registered": 36892
+            },
+            "precinctsReportingActual": 40,
+            "precinctsReportingProportional": 31
+        }
+    },
+    "5053": {
+        "statePostal": "CA",
+        "reportingunitName": "Trinity",
+        "reportingunitID": "5053",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06105",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T03:47:49.026000Z",
+        "precinctsReporting": 9,
+        "eevp": 92.99,
+        "precinctsTotal": 10,
+        "precinctsReportingPct": 90.0,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 2866,
+                "votePct": 52.53
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 2381,
+                "votePct": 43.64
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 110,
+                "votePct": 2.02
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 60,
+                "votePct": 1.1
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 25,
+                "votePct": 0.46
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 14,
+                "votePct": 0.26
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 5867,
+                    "eevpCap": 99.0
+                },
+                "total": 5456,
+                "registered": 7326
+            },
+            "precinctsReportingActual": 10,
+            "precinctsReportingProportional": 9
+        }
+    },
+    "5054": {
+        "statePostal": "CA",
+        "reportingunitName": "Tulare",
+        "reportingunitID": "5054",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06107",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 323,
+        "eevp": 94.0,
+        "precinctsTotal": 344,
+        "precinctsReportingPct": 93.9,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 77523,
+                "votePct": 59.28
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 50269,
+                "votePct": 38.44
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1631,
+                "votePct": 1.25
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 538,
+                "votePct": 0.41
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 425,
+                "votePct": 0.33
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 382,
+                "votePct": 0.29
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 139115,
+                    "eevpCap": 99.0
+                },
+                "total": 130768,
+                "registered": 215580
+            },
+            "precinctsReportingActual": 344,
+            "precinctsReportingProportional": 323
+        }
+    },
+    "5055": {
+        "statePostal": "CA",
+        "reportingunitName": "Tuolumne",
+        "reportingunitID": "5055",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06109",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T03:27:18.716000Z",
+        "precinctsReporting": 40,
+        "eevp": 97.0,
+        "precinctsTotal": 41,
+        "precinctsReportingPct": 97.56,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 17039,
+                "votePct": 59.63
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 10849,
+                "votePct": 37.97
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 388,
+                "votePct": 1.36
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 128,
+                "votePct": 0.45
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 115,
+                "votePct": 0.4
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 57,
+                "votePct": 0.2
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 29460,
+                    "eevpCap": 99.0
+                },
+                "total": 28576,
+                "registered": 35031
+            },
+            "precinctsReportingActual": 41,
+            "precinctsReportingProportional": 40
+        }
+    },
+    "5056": {
+        "statePostal": "CA",
+        "reportingunitName": "Ventura",
+        "reportingunitID": "5056",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06111",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T03:22:28.569000Z",
+        "precinctsReporting": 1334,
+        "eevp": 94.0,
+        "precinctsTotal": 1419,
+        "precinctsReportingPct": 94.01,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 199782,
+                "votePct": 55.94
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 147493,
+                "votePct": 41.3
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 4421,
+                "votePct": 1.24
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 2628,
+                "votePct": 0.74
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 1554,
+                "votePct": 0.44
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 1270,
+                "votePct": 0.36
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 379945,
+                    "eevpCap": 99.0
+                },
+                "total": 357148,
+                "registered": 512532
+            },
+            "precinctsReportingActual": 1136,
+            "precinctsReportingProportional": 1334
+        }
+    },
+    "5057": {
+        "statePostal": "CA",
+        "reportingunitName": "Yolo",
+        "reportingunitID": "5057",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06113",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-16T00:44:49.289000Z",
+        "precinctsReporting": 52,
+        "eevp": 88.97,
+        "precinctsTotal": 59,
+        "precinctsReportingPct": 88.14,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 55088,
+                "votePct": 65.72
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 25732,
+                "votePct": 30.7
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 1133,
+                "votePct": 1.35
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 1008,
+                "votePct": 1.2
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 443,
+                "votePct": 0.53
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 416,
+                "votePct": 0.5
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 94212,
+                    "eevpCap": 99.0
+                },
+                "total": 83820,
+                "registered": 115633
+            },
+            "precinctsReportingActual": 59,
+            "precinctsReportingProportional": 52
+        }
+    },
+    "5058": {
+        "statePostal": "CA",
+        "reportingunitName": "Yuba",
+        "reportingunitID": "5058",
+        "reportingunitLevel": 2,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "subunit",
+        "fipsCode": "06115",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-15T03:21:28.448000Z",
+        "precinctsReporting": 23,
+        "eevp": 67.0,
+        "precinctsTotal": 35,
+        "precinctsReportingPct": 65.71,
+        "candidates": [
+            {
+                "candidateID": "8639",
+                "voteCount": 16895,
+                "votePct": 61.32
+            },
+            {
+                "candidateID": "64984",
+                "voteCount": 9879,
+                "votePct": 35.86
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 433,
+                "votePct": 1.57
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 135,
+                "votePct": 0.49
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 122,
+                "votePct": 0.44
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 86,
+                "votePct": 0.31
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 41119,
+                    "eevpCap": 99.0
+                },
+                "total": 27550,
+                "registered": 43136
+            },
+            "precinctsReportingActual": 35,
+            "precinctsReportingProportional": 23
+        }
+    },
+    "summary": {
+        "statePostal": "CA",
+        "stateName": "California",
+        "reportingunitID": "5",
+        "reportingunitLevel": 1,
+        "pollClosingTime": "2024-11-06T04:00:00.000000Z",
+        "level": "state",
+        "electTotal": 54,
+        "lastUpdated": "2024-11-17T17:45:36.701000Z",
+        "precinctsReporting": 23115,
+        "eevp": 93.16,
+        "precinctsTotal": 24811,
+        "precinctsReportingPct": 93.16,
+        "candidates": [
+            {
+                "candidateID": "64984",
+                "voteCount": 8879703,
+                "winner": "X",
+                "electWon": 54,
+                "votePct": 58.79,
+                "calledAt": "2024-11-06T04:00:06.346Z",
+                "colorIndex": 0
+            },
+            {
+                "candidateID": "8639",
+                "voteCount": 5747743,
+                "votePct": 38.05,
+                "colorIndex": 1
+            },
+            {
+                "candidateID": "71841",
+                "voteCount": 186813,
+                "votePct": 1.24
+            },
+            {
+                "candidateID": "895",
+                "voteCount": 158553,
+                "votePct": 1.05
+            },
+            {
+                "candidateID": "73180",
+                "voteCount": 68318,
+                "votePct": 0.45
+            },
+            {
+                "candidateID": "69459",
+                "voteCount": 63630,
+                "votePct": 0.42
+            }
+        ],
+        "parameters": {
+            "vote": {
+                "expected": {
+                    "actual": 16213030,
+                    "eevpCap": 99.0
+                },
+                "total": 15104760,
+                "registered": 22310352
+            },
+            "precinctsReportingActual": 17296,
+            "precinctsReportingProportional": 23115
+        },
+        "raceID": "20241105CA0",
+        "test": false,
+        "resultsType": "live"
+    }
+}
